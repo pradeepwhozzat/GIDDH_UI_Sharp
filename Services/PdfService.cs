@@ -51,8 +51,8 @@ namespace GiddhTemplate.Services
 
             // Render Razor template to HTML string
             string headerTemplatePath = Path.Combine(TemplateInitialPath, "Header.cshtml");
-            string footerTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Footer.cshtml");
-            string bodyTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Body.cshtml");
+            string footerTemplatePath = Path.Combine(TemplateInitialPath, "Footer.cshtml");
+            string bodyTemplatePath = Path.Combine(TemplateInitialPath, "Body.cshtml");
 
             string header = await _razorTemplateService.RenderTemplateAsync(headerTemplatePath, request);
             string footer = await _razorTemplateService.RenderTemplateAsync(footerTemplatePath, request);
@@ -81,9 +81,10 @@ namespace GiddhTemplate.Services
             // Uncomment below line to get HTML string
             // Console.WriteLine("HTML"+ pdf.ToHtmlString());
 
-            string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
-            string filePath = Path.Combine(rootPath, "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf");
-            pdf.SaveAs(filePath);
+            // Uncomment below line to save PDF file in local 
+            // string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
+            // string filePath = Path.Combine(rootPath, "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf");
+            // pdf.SaveAs(filePath);
 
             // Return Base64 string
             return Convert.ToBase64String(pdf.BinaryData);
