@@ -1,0 +1,319 @@
+/* Fonts */
+/* Roboto Light (200) */
+@font-face {
+  font-family: "Roboto";
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Light.ttf")
+    format("truetype");
+  font-weight: 200;
+  font-style: normal;
+}
+
+/* Roboto Light Italic (200 Italic) */
+@font-face {
+  font-family: "Roboto";
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-LightItalic.ttf")
+    format("truetype");
+  font-weight: 200;
+  font-style: italic;
+}
+
+/* Roboto Regular (400) */
+@font-face {
+  font-family: "Roboto";
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Regular.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Roboto Italic (400 Italic) */
+@font-face {
+  font-family: "Roboto";
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Italic.ttf")
+    format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* Roboto Regular (500) */
+@font-face {
+    font-family: "Roboto";
+    src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Medium.ttf")
+      format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  /* Roboto Italic (500 Italic) */
+  @font-face {
+    font-family: "Roboto";
+    src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-MediumItalic.ttf")
+      format("truetype");
+    font-weight: 500;
+    font-style: italic;
+  }
+
+/* Roboto Bold (700) */
+@font-face {
+  font-family: "Roboto";
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Bold.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Roboto Bold Italic (700 Italic) */
+@font-face {
+  font-family: "Roboto";
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-BoldItalic.ttf")
+    format("truetype");
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* Global CSS Variables */
+@property --header-footer-body-padding {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 15px;
+}
+
+@property --font-family {
+  syntax: "<string>";
+  inherits: true;
+  initial-value: "Roboto";
+}
+
+@property --font-weight-200 {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 200;
+}
+
+@property --font-weight-400 {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 400;
+}
+
+@property --font-weight-500 {
+    syntax: "<integer>";
+    inherits: false;
+    initial-value: 500;
+  }
+
+@property --font-weight-700 {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 700;
+}
+
+@property --font-size-default {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 16px;
+}
+
+@property --font-size-large {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 20px;
+}
+
+@property --font-size-medium {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 12px;
+}
+@property --font-size-small {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 10px;
+}
+
+@property --color-primary {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #181b50;
+}
+
+@property --color-secondary {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #ffffff;
+}
+
+@property --color-light {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #262626;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box !important;
+  font-size: var(--font-size-medium, 12px);
+}
+
+html,
+body {
+  color: #121212;
+  font-family: var(--font-family, "Roboto");
+  font-size: var(--font-size-medium, 12px);
+  font-weight: var(--font-weight-200, 200);
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  font-size: var(--font-size-medium, 12px);
+}
+
+/* Utility */
+.color-primary {
+  color: var(--color-primary);
+}
+
+.color-secondary {
+  color: var(--color-secondary);
+}
+
+.color-light {
+  color: var(--color-light) !important;
+}
+
+.font-size-default {
+ font-size: var(--font-size-default, 16px) !important;
+}
+
+.font-size-large {
+  font-size: var(--font-size-large, 20px) !important;
+}
+
+.font-size-medium {
+  font-size: var(--font-size-medium, 12px) !important;
+}
+.font-size-small {
+  font-size: var(--font-size-small, 10px) !important;
+}
+
+strong {
+  font-weight: var(--font-weight-500, 500);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse !important;
+  page-break-inside: auto;
+  page-break-after: auto;
+}
+
+table tr th,
+table tr td {
+  font-weight: var(--font-weight-200, 200);
+  border: 1px solid currentColor;
+  text-align: left;
+  padding: 6px 4px;
+  word-break: break-word;
+}
+
+table.table-row-height tr td {
+  height: 50px;
+}
+
+table tr.border-top-none th {
+  border-top: none !important;
+}
+
+.vertical-align-top {
+  vertical-align: top;
+}
+
+.vertical-align-middle {
+  vertical-align: middle;
+}
+
+.vertical-align-bottom {
+  vertical-align: bottom;
+}
+
+.border-none {
+  border: none;
+}
+
+.border-top {
+  border-top: 1px solid currentColor;
+}
+
+.border-bottom {
+  border-bottom: 1px solid currentColor;
+}
+
+.border-left {
+  border-left: 1px solid currentColor;
+}
+
+.border-right {
+  border-right: 1px solid currentColor;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.mr-l1 {
+  margin-left: 10px !important;
+}
+
+.mr-r1 {
+  margin-right: 10px !important;
+}
+
+.mr-t1 {
+  margin-top: 10px !important;
+}
+
+.mr-b1 {
+  margin-bottom: 10px !important;
+}
+
+.p-0 {
+  padding: 0;
+}
+.pd-l1 {
+  padding-left: 10px !important;
+}
+
+.pd-r1 {
+  padding-right: 10px !important;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+/* Need to correct name */
+.no-wrap {
+  white-space: nowrap;
+}
+/* Need to correct name */
+.word-break{
+  word-wrap: break-word;
+}
+/* Need to correct name */
+.capitalize {
+  text-transform: capitalize;
+}
+
+/* Print Media CSS */
+.page-break-inside-avoid {
+  page-break-inside: avoid;
+}

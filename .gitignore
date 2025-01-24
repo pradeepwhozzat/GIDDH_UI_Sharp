@@ -1,0 +1,68 @@
+# Visual Studio/VS Code
+*.suo
+*.user
+*.vspscc
+*.scc
+*.tmp
+*.log
+*.sync
+*.opensdf
+*.ncb
+*.sdf
+*.ipch
+*.pdb
+*.userprefs
+*.VC.db
+*.opendb
+*.VC.db
+*.VC.vsscc
+*.vssscc
+*.ncb
+*.idb
+*.opendb
+*.VC.db
+*.VC.vcproj.user
+*.VC.user
+*.SLN
+*.suo
+*.user
+*.vspscc
+*.scc
+*.tmp
+*.log
+*.sync
+*.opensdf
+*.ncb
+*.sdf
+*.ipch
+*.pdb
+*.userprefs
+*.VC.db
+*.opendb
+*.VC.db
+*.VC.vsscc
+*.vssscc
+*.ncb
+*.idb
+*.opendb
+*.VC.db
+*.VC.vcproj.user
+*.VC.user
+# Build artifacts
+*.dll
+*.exe
+*.pdb
+*.xml
+*.json (except for package.json or other necessary JSON files)
+# Binaries
+bin/
+obj/
+# NuGet packages
+packages/
+# VS Code
+.vscode/
+# Rider
+.idea/
+# Others
+*.user
+*.config

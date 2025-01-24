@@ -1,0 +1,69 @@
+@model InvoiceData.Root
+@using InvoiceData
+
+@functions {
+    public string GetLabel(string settingName)
+    {
+        var setting = GetSetting(settingName);
+        return setting?.Display == true ? setting.Label : string.Empty;
+    }
+
+    public bool GetDisplayStatus(string settingName)
+    {
+        var setting = GetSetting(settingName);
+        return setting?.Display == true;
+    }
+
+    private Setting? GetSetting(string settingName)
+    {
+        return Model?.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
+    }
+}
+
+<footer>
+    <table>
+        <tbody>
+            <tr>
+                <td class="border-none border-top padding-0">
+                    <table>
+                        <tr>
+                            <td class="border-none" width="50%" rowspan="2">
+                                @if (GetDisplayStatus("Message1"))
+                                {
+                                    <u><strong>Declaration: </strong></u>
+                                    <p class="margin-0">
+                                        @GetLabel("Message1")
+                                    </p>
+                                }
+                            </td>
+                            @if (GetDisplayStatus("FooterCompanyName"))
+                            {
+                                <td class="border-none text-right" width="50%">
+                                    for @Model?.Company?.Name
+                                </td>
+                            }
+                        </tr>
+                        @if (GetDisplayStatus("TextUnderSlogan") || GetDisplayStatus("ImageSignature"))
+                        {
+                            <tr>
+                                <td class="border-none text-right">
+                                    @if (GetDisplayStatus("ImageSignature"))
+                                    {
+                                        <div>
+                                            <img src="@GetLabel("ImageSignature")" alt="digital-signature" height="60px" />
+                                        </div>
+                                    }
+
+                                    @if (GetDisplayStatus("TextUnderSlogan"))
+                                    {
+                                        @GetLabel("TextUnderSlogan")
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</footer>

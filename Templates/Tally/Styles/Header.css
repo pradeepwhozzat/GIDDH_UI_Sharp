@@ -1,0 +1,17 @@
+/* Header CSS */
+header {
+  padding: 0 var(--header-footer-body-padding, 15px);
+}
+
+header .qr-code-image {
+  aspect-ratio: 1/1;
+}
+
+header .pdf-title {
+  font-size: var(--font-size-large, 20px);
+}
+
+header address {
+  white-space: pre-line;
+  font-style: normal;
+}

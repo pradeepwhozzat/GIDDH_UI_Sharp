@@ -1,0 +1,306 @@
+@model InvoiceData.Root
+@using InvoiceData
+
+@functions {
+    public string GetLabel(string settingName)
+    {
+        var setting = GetSetting(settingName);
+        return setting?.Display == true ? setting.Label : string.Empty;
+    }
+
+    public bool GetDisplayStatus(string settingName)
+    {
+        var setting = GetSetting(settingName);
+        return setting?.Display == true;
+    }
+
+    private Setting? GetSetting(string settingName)
+    {
+        return Model.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
+    }
+}
+
+<header>
+    <table>
+        <tbody>
+            <tr>
+                <td class="p-0 border-none">
+                    <table>
+                        <tr>
+                            <td class="border-none" width="33%"></td>
+                            <td class="border-none" width="33%">
+                                @if (GetDisplayStatus("FormNameInvoice") || GetDisplayStatus("FormNameTaxInvoice"))
+                                {
+                                    <h1 class="text-center mr-b1 pdf-title">
+                                        <strong>
+                                            @if (GetDisplayStatus("FormNameInvoice")) {
+                                                @GetLabel("FormNameInvoice")
+                                            } else {
+                                                @GetLabel("FormNameTaxInvoice")
+                                            }
+                                        </strong>
+                                    </h1>
+                                }
+                            </td>
+                            <td class="border-none text-right" width="33%">
+                                @* NEED TO CHECK *@
+                                @* @if (GetDisplayStatus("typeOfInvoice")) {
+                                <p>($typeOfInvoice)</p>
+                                } *@
+                            </td>
+                        </tr>
+                        @if (GetDisplayStatus("DisplayExportMessage"))
+                        {
+                            <tr>
+                                <td colspan="100%" class="border-none text-center">
+                                    @GetLabel("DisplayExportMessage")
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    @* Need to check irnNumber *@
+                    @if (
+                    (
+                    GetDisplayStatus("ShowQrCode") &&
+                    (GetDisplayStatus("IsBusinessToCustomerInvoice") || GetDisplayStatus("IsBusinessToBusinessInvoice"))
+                    ) || GetDisplayStatus("ShowEInvoiceDetails")
+                    )
+                    {
+                        <table>
+                            <tr>
+                                @if (GetDisplayStatus("ShowEInvoiceDetails"))
+                                {
+                                    <td class="border-none vertical-align-bottom">
+                                        <table>
+                                            <tr>
+                                                <td class="border-none p-0" width="100px">IRN</td>
+                                                <td class="border-none p-0">: @Model?.EInvoiceDetails?.IrnNumber</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-none p-0" width="100px">Ack No</td>
+                                                <td class="border-none p-0">: @Model?.EInvoiceDetails?.AcknowledgementNumber</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-none p-0" width="100px">Ack Date</td>
+                                                <td class="border-none p-0">: @Model?.EInvoiceDetails?.AcknowledgementDate</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                }
+
+                                @if (GetDisplayStatus("ShowQrCode"))
+                                {
+                                    <td id="qr-code-section" class="border-none text-right vertical-align-bottom">
+                                        @{
+                                            var qrCodeSrc = "data:image/png;base64," + Model?.QRCodeBase64String;
+                                        }
+                                        <img src="@qrCodeSrc" class="qr-code-image" width="120px" alt="QR Logo" />
+                                    </td>
+                                }
+                            </tr>
+                        </table>
+                    }
+
+                    <table>
+                        <tr>
+                            <td width="50%" class="p-0">
+                                <table>
+                                    @if (GetDisplayStatus("ShowLogo") || GetDisplayStatus("ShowCompanyAddress") ||
+                                    GetDisplayStatus("HeaderCompanyName"))
+                                    {
+                                        <tr>
+                                            <td class="border-none">
+                                                <table>
+                                                    <tr>
+                                                        @if (GetDisplayStatus("ShowLogo"))
+                                                        {
+                                                            <td class="p-0 border-none pd-r1" width="@Model?.Company?.Logo?.Size">
+                                                                <figure class="m-0">
+                                                                    <img src="@Model?.Company?.Logo?.Url"
+                                                                        width="@Model?.Company?.Logo?.Size" height="auto"
+                                                                        alt="Company logo" />
+                                                                </figure>
+                                                            </td>
+                                                        }
+
+                                                        <td class="p-0 border-none">
+                                                            @if (GetDisplayStatus("HeaderCompanyName"))
+                                                            {
+                                                                <h2 class="word-break">
+                                                                    <strong>@Model?.Company?.Name</strong>
+                                                                </h2>
+                                                            }
+
+                                                            @if (GetDisplayStatus("ShowCompanyAddress"))
+                                                            {
+                                                                <p class="m-0">
+                                                                    <address>
+                                                                        @Model?.Company?.Address
+                                                                    </address>
+                                                                </p>
+                                                            }
+
+                                                            @if (GetDisplayStatus("CompanyTaxNumber")) {
+                                                                <table>
+                                                                    <tr>
+                                                                        <td class="border-none p-0" width="100px">
+                                                                           @GetLabel("CompanyTaxNumber")
+                                                                        </td>
+                                                                        <td class="border-none p-0">: @Model?.Company?.TaxNumber</td>
+                                                                    </tr>
+                                                                </table>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                    @if (GetDisplayStatus("CustomerName")) {
+                                        <tr>
+                                            <td class="border-none border-top">
+                                                <table>
+                                                    <tr>
+                                                        <td class="border-none p-0" width="100px">
+                                                            Customer Name
+                                                        </td>
+                                                        <td class="border-none p-0">: @Model?.CustomerDetails?.Name</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                    @if (GetDisplayStatus("ShippingAddress")) {
+                                        <tr>
+                                            <td class="border-none border-top">
+                                                <p class="font-11">@GetLabel("ShippingAddress")</p>
+                                                <p>@Model?.Shipping?.Address</p>
+                                                <table>
+                                                    @if (GetDisplayStatus("ShippingTaxNumber")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">
+                                                                @GetLabel("ShippingTaxNumber")
+                                                            </td>
+                                                            <td class="border-none p-0">: @Model?.Shipping?.TaxNumber</td>
+                                                        </tr>
+                                                    }
+
+                                                    @if (GetDisplayStatus("ShippingStateCounty")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">
+                                                            @GetLabel("ShippingStateCounty")    
+                                                            </td>
+                                                            <td class="border-none p-0">: @Model?.Shipping?.StateCounty</td>
+                                                        </tr>
+                                                    }
+
+                                                    @if (GetDisplayStatus("AttentionTo")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">
+                                                                @* Contact person *@
+                                                                @GetLabel("AttentionTo")
+                                                            </td>
+                                                            <td class="border-none p-0">: @Model?.AttentionTo</td>
+                                                        </tr>
+                                                    }
+
+                                                    @if (GetDisplayStatus("CustomerEmail")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">
+                                                                @GetLabel("CustomerEmail")
+                                                            </td>
+                                                            <td class="border-none p-0">: @Model?.CustomerDetails?.Email</td>
+                                                        </tr>
+                                                    }
+
+                                                    @if (GetDisplayStatus("CustomerContactNumber")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">Contact</td>
+                                                            <td class="border-none p-0">: @Model?.CustomerDetails?.ContactNumber</td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    }
+
+                                    @if (GetDisplayStatus("BillingAddress")) {
+                                        <tr>
+                                            <td class="border-none border-top">
+                                                <p class="font-11">@GetLabel("BillingAddress")</p>
+                                                <p>@Model?.Billing?.Address</p>
+                                                <table>
+                                                    @if (GetDisplayStatus("BillingTaxNumber")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">
+                                                                @GetLabel("BillingTaxNumber")
+                                                            </td>
+                                                            <td class="border-none p-0">: @Model?.Billing?.TaxNumber</td>
+                                                        </tr>
+                                                    }
+
+                                                    @if (GetDisplayStatus("BillingStateCounty")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">
+                                                            @GetLabel("BillingStateCounty")    
+                                                            </td>
+                                                            <td class="border-none p-0">: @Model?.Billing?.StateCounty</td>
+                                                        </tr>
+                                                    }
+
+                                                    @if (GetDisplayStatus("AttentionTo")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">
+                                                                @* Contact person *@
+                                                                @GetLabel("AttentionTo")
+                                                            </td>
+                                                            <td class="border-none p-0">: @Model?.AttentionTo</td>
+                                                        </tr>
+                                                    }
+
+                                                    @if (GetDisplayStatus("CustomerEmail")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">
+                                                                @GetLabel("CustomerEmail")
+                                                            </td>
+                                                            <td class="border-none p-0">: @Model?.CustomerDetails?.Email</td>
+                                                        </tr>
+                                                    }
+
+                                                    @if (GetDisplayStatus("CustomerContactNumber")) {
+                                                        <tr>
+                                                            <td class="border-none p-0" width="100px">Contact</td>
+                                                            <td class="border-none p-0">: @Model?.CustomerDetails?.ContactNumber</td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                            <td width="50%" class="p-0 vertical-align-top">
+                                <table class="table-row-height">
+                                    @if (GetDisplayStatus("VoucherNumber") || GetDisplayStatus("VoucherDate")) {
+                                        <tr>
+                                            <td width="50%" class="border-none border-bottom border-right">
+                                                <span>@GetLabel("VoucherNumber")</span>
+                                                <p class="m-0"><strong>@Model?.VoucherNumber</strong></p>
+                                            </td>
+                                            <td width="50%" class="border-none border-bottom">
+                                                <span>@GetLabel("VoucherDate")</span>
+                                                <p class="m-0"><strong>@Model?.VoucherDate</strong></p>
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</header>
