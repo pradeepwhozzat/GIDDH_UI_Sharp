@@ -4,6 +4,17 @@ using InvoiceData;
 
 namespace GiddhTemplate.Controllers
 {
+
+    [ApiController]
+    public class MainController : ControllerBase
+    {
+        [HttpGet("/")]
+        public IActionResult Get()
+        {
+            return Ok("Hello from Giddh template!");
+        }
+    }
+
     [ApiController]
     [Route("api/v1/[controller]")]
     public class PdfController : ControllerBase
