@@ -18,8 +18,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <RuntimePack Include="IronPdf.Native.Chrome.Linux.Linux" Version="2025.1.8" />
-  </ItemGroup>
-
 </Project>
