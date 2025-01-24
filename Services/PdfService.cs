@@ -1,5 +1,6 @@
 using IronPdf;
 using IronPdf.Rendering;
+using System.IO;
 using System.Threading.Tasks;
 using InvoiceData;
 
@@ -9,84 +10,68 @@ namespace GiddhTemplate.Services
     {
         private readonly PdfRendererConfigService _rendererConfig;
         private readonly RazorTemplateService _razorTemplateService;
+        private readonly Lazy<(string Common, string Header, string Footer, string Body)> _styles;
 
         public PdfService()
         {
             _rendererConfig = new PdfRendererConfigService();
             _razorTemplateService = new RazorTemplateService();
+            
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
+            _styles = new Lazy<(string, string, string, string)>(() => LoadStyles(templatePath));
+        }
+
+        private string LoadFileContent(string filePath)
+        {
+            return File.Exists(filePath) ? File.ReadAllText(filePath) : string.Empty;
+        }
+
+        private (string Common, string Header, string Footer, string Body) LoadStyles(string basePath)
+        {
+            return (
+                Common: LoadFileContent(Path.Combine(basePath, "Styles", "Styles.css")),
+                Header: LoadFileContent(Path.Combine(basePath, "Styles", "Header.css")),
+                Footer: LoadFileContent(Path.Combine(basePath, "Styles", "Footer.css")),
+                Body: LoadFileContent(Path.Combine(basePath, "Styles", "Body.css"))
+            );
+        }
+
+        private async Task<string> RenderTemplate(string templatePath, Root request)
+        {
+            return await _razorTemplateService.RenderTemplateAsync(templatePath, request);
+        }
+
+        private HtmlHeaderFooter CreateHtmlHeaderFooter(string styles, string content)
+        {
+            return new HtmlHeaderFooter
+            {
+                HtmlFragment = $"<style>{styles}</style>{content}",
+                MaxHeight = HtmlHeaderFooter.FragmentHeight
+            };
         }
 
         public async Task<string> GeneratePdfAsync(Root request)
         {
             Console.WriteLine("PDF Generation Started ...");
+
             var renderer = _rendererConfig.GetConfiguredRenderer();
-            string TemplateInitialPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
+            var (commonStyles, headerStyles, footerStyles, bodyStyles) = _styles.Value;
 
-            // Load CSS from file
-            string commonStyles = "";
-            string headerStyles = "";
-            string footerStyles = "";
-            string bodyStyles = "";
+            string header = await RenderTemplate(Path.Combine(templatePath, "Header.cshtml"), request);
+            string footer = await RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request);
+            string body = await RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request);
 
-            string commonStylesPath = Path.Combine(TemplateInitialPath, "Styles", "Styles.css");
-            if (File.Exists(commonStylesPath))
-            {
-                commonStyles = File.ReadAllText(commonStylesPath);
-            }
-            string headerStylesPath = Path.Combine(TemplateInitialPath, "Styles", "Header.css");
-            if (File.Exists(headerStylesPath))
-            {
-                headerStyles = File.ReadAllText(headerStylesPath);
-            }
-            string footerStylesPath = Path.Combine(TemplateInitialPath, "Styles", "Footer.css");
-            if (File.Exists(footerStylesPath))
-            {
-                footerStyles = File.ReadAllText(footerStylesPath);
-            }
-            string bodyStylesPath = Path.Combine(TemplateInitialPath, "Styles", "Body.css");
-            if (File.Exists(bodyStylesPath))
-            {
-                bodyStyles = File.ReadAllText(bodyStylesPath);
-            }
-
-            // Render Razor template to HTML string
-            string headerTemplatePath = Path.Combine(TemplateInitialPath, "Header.cshtml");
-            string footerTemplatePath = Path.Combine(TemplateInitialPath, "Footer.cshtml");
-            string bodyTemplatePath = Path.Combine(TemplateInitialPath, "Body.cshtml");
-
-            string header = await _razorTemplateService.RenderTemplateAsync(headerTemplatePath, request);
-            string footer = await _razorTemplateService.RenderTemplateAsync(footerTemplatePath, request);
-            string body = await _razorTemplateService.RenderTemplateAsync(bodyTemplatePath, request);
-
-            // Header Code
-            renderer.RenderingOptions.HtmlHeader = new HtmlHeaderFooter()
-            {
-                HtmlFragment = $"<style>{commonStyles}{headerStyles}</style>{header}",
-                // Enable the dynamic height feature
-                MaxHeight = HtmlHeaderFooter.FragmentHeight,
-            };
-
-            // Footer Code
-            renderer.RenderingOptions.HtmlFooter = new HtmlHeaderFooter()
-            {
-                HtmlFragment = $"<style>{commonStyles}{footerStyles}</style>{footer}",
-                // Enable the dynamic height feature
-                MaxHeight = HtmlHeaderFooter.FragmentHeight,
-            };
-
-            // renderer.RenderingOptions.CustomCssUrl = commonStyles;
+            renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}", header);
+            renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}", footer);
 
             PdfDocument pdf = renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}</style>{body}");
 
-            // Uncomment below line to get HTML string
-            // Console.WriteLine("HTML"+ pdf.ToHtmlString());
-
             // Uncomment below line to save PDF file in local 
-            // string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
-            // string filePath = Path.Combine(rootPath, "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf");
-            // pdf.SaveAs(filePath);
+            string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
+            string filePath = Path.Combine(rootPath, "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf");
+            pdf.SaveAs(filePath);
 
-            // Return Base64 string
             return Convert.ToBase64String(pdf.BinaryData);
         }
     }

@@ -66,3 +66,4 @@ packages/
 # Others
 *.user
 *.config
+Downloads/*.pdf

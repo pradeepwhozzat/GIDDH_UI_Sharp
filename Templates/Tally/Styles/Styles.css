@@ -37,21 +37,21 @@
 
 /* Roboto Regular (500) */
 @font-face {
-    font-family: "Roboto";
-    src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Medium.ttf")
-      format("truetype");
-    font-weight: 500;
-    font-style: normal;
-  }
-  
-  /* Roboto Italic (500 Italic) */
-  @font-face {
-    font-family: "Roboto";
-    src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-MediumItalic.ttf")
-      format("truetype");
-    font-weight: 500;
-    font-style: italic;
-  }
+  font-family: "Roboto";
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Medium.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* Roboto Italic (500 Italic) */
+@font-face {
+  font-family: "Roboto";
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-MediumItalic.ttf")
+    format("truetype");
+  font-weight: 500;
+  font-style: italic;
+}
 
 /* Roboto Bold (700) */
 @font-face {
@@ -97,10 +97,10 @@
 }
 
 @property --font-weight-500 {
-    syntax: "<integer>";
-    inherits: false;
-    initial-value: 500;
-  }
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 500;
+}
 
 @property --font-weight-700 {
   syntax: "<integer>";
@@ -164,7 +164,13 @@ body {
   font-weight: var(--font-weight-200, 200);
 }
 
-p, h1, h2, h3, h4, h5, h6 {
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   padding: 0;
   font-size: var(--font-size-medium, 12px);
@@ -184,7 +190,7 @@ p, h1, h2, h3, h4, h5, h6 {
 }
 
 .font-size-default {
- font-size: var(--font-size-default, 16px) !important;
+  font-size: var(--font-size-default, 16px) !important;
 }
 
 .font-size-large {
@@ -204,9 +210,8 @@ strong {
 
 table {
   width: 100%;
-  border-collapse: collapse !important;
-  page-break-inside: auto;
-  page-break-after: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 table tr th,
@@ -243,27 +248,27 @@ table tr.border-top-none th {
 }
 
 .border-top {
-  border-top: 1px solid currentColor;
+  border-top: 1px solid currentColor !important;
 }
 
 .border-bottom {
-  border-bottom: 1px solid currentColor;
+  border-bottom: 1px solid currentColor !important;
 }
 
 .border-left {
-  border-left: 1px solid currentColor;
+  border-left: 1px solid currentColor !important;
 }
 
 .border-right {
-  border-right: 1px solid currentColor;
+  border-right: 1px solid currentColor !important;
 }
 
 .text-center {
-  text-align: center;
+  text-align: center !important;
 }
 
 .text-right {
-  text-align: right;
+  text-align: right !important;
 }
 
 .m-0 {
@@ -298,22 +303,46 @@ table tr.border-top-none th {
 }
 
 .text-uppercase {
-  text-transform: uppercase;
+  text-transform: uppercase !important;
 }
 /* Need to correct name */
 .no-wrap {
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 /* Need to correct name */
-.word-break{
-  word-wrap: break-word;
+.word-break {
+  word-wrap: break-word !important;
 }
 /* Need to correct name */
 .capitalize {
-  text-transform: capitalize;
+  text-transform: capitalize !important;
 }
 
 /* Print Media CSS */
-.page-break-inside-avoid {
-  page-break-inside: avoid;
+@media print {
+  table {
+    page-break-inside: auto;
+    page-break-after: auto;
+  }
+
+  tfoot {
+    display: table-row-group; /* Ensure it's treated as a group of rows */
+    visibility: hidden; /* Hide it by default */
+  }
+
+  table:last-of-type tfoot {
+    visibility: visible; /* Only show the footer on the last table */
+  }
+
+  table.repeated-header thead {
+    display: table-header-group !important; /* Ensure headers repeat on each page */
+  }
+
+  table.repeated-footer tfoot {
+    display: table-footer-group !important; /* Ensure footers repeat on each page */
+  }
+
+  table.page-break-inside-avoid {
+    page-break-inside: avoid !important; /* Prevent table from being cut between pages */
+  }
 }
