@@ -19,11 +19,9 @@ namespace GiddhTemplate.Services
         public async Task<string> GeneratePdfAsync(Root request)
         {
             Console.WriteLine("PDF Generation Started ...");
-            // Console.WriteLine("Request JSON: " + System.Text.Json.JsonSerializer.Serialize(request));
-
             var renderer = _rendererConfig.GetConfiguredRenderer();
-
             string TemplateInitialPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
+
             // Load CSS from file
             string commonStyles = "";
             string headerStyles = "";
@@ -56,14 +54,9 @@ namespace GiddhTemplate.Services
             string footerTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Footer.cshtml");
             string bodyTemplatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Body.cshtml");
 
-
             string header = await _razorTemplateService.RenderTemplateAsync(headerTemplatePath, request);
             string footer = await _razorTemplateService.RenderTemplateAsync(footerTemplatePath, request);
             string body = await _razorTemplateService.RenderTemplateAsync(bodyTemplatePath, request);
-            // string body = await _razorTemplateService.RenderTemplateAsync(bodyTemplatePath, request);
-            // string footer = "<h1 style='text-align: center'> This is Footer </h1>";
-            // string body = "<h1 style='text-align: center'> This is Body </h1>";
-
 
             // Header Code
             renderer.RenderingOptions.HtmlHeader = new HtmlHeaderFooter()
@@ -71,17 +64,14 @@ namespace GiddhTemplate.Services
                 HtmlFragment = $"<style>{commonStyles}{headerStyles}</style>{header}",
                 // Enable the dynamic height feature
                 MaxHeight = HtmlHeaderFooter.FragmentHeight,
-                // LoadStylesAndCSSFromMainHtmlDocument =  true
             };
 
             // Footer Code
             renderer.RenderingOptions.HtmlFooter = new HtmlHeaderFooter()
             {
                 HtmlFragment = $"<style>{commonStyles}{footerStyles}</style>{footer}",
-                // HtmlFragment = $"{footer}",
                 // Enable the dynamic height feature
                 MaxHeight = HtmlHeaderFooter.FragmentHeight,
-                // LoadStylesAndCSSFromMainHtmlDocument =  true
             };
 
             // renderer.RenderingOptions.CustomCssUrl = commonStyles;
