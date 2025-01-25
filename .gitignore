@@ -65,5 +65,4 @@ packages/
 .idea/
 # Others
 *.user
-*.config
 Downloads/*.pdf
