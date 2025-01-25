@@ -19,10 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Templates/**/*.cshtml" CopyToOutputDirectory="Always" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Templates/**" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
