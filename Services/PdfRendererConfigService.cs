@@ -10,8 +10,6 @@ namespace GiddhTemplate.Services
             Console.WriteLine("PdfRendererConfigService ... 1");
             IronPdf.License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY");
             Console.WriteLine("License Key: " + IronPdf.License.LicenseKey);
-            IronPdf.ChromePdfRenderer.Default.EnableDebugging(true);
-            Console.WriteLine("After debug enable ... ");
             ChromePdfRenderer renderer = new ChromePdfRenderer();
             Console.WriteLine("After ChromePdfRenderer ... ");
             // Set custom margin
