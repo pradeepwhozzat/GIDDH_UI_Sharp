@@ -8,6 +8,7 @@
     <RootNamespace>GiddhTemplate</RootNamespace>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
     <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
   </PropertyGroup>
 
