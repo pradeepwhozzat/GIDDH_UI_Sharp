@@ -7,15 +7,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>GiddhTemplate</RootNamespace>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
     <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="IronPdf.Native.Chrome.Linux" Version="2025.1.8" />
+    <PackageReference Include="IronPdf" Version="2025.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.11" />
     <PackageReference Include="RazorLight" Version="2.3.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Templates/**" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 </Project>
