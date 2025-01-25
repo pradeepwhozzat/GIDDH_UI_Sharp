@@ -8,7 +8,9 @@ namespace GiddhTemplate.Services
         public ChromePdfRenderer GetConfiguredRenderer()
         {
             IronPdf.License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY");
-            ChromePdfRenderer renderer = new ChromePdfRenderer();
+            // ChromePdfRenderer renderer = new ChromePdfRenderer(); // USE this locally
+            ChromePdfRenderer renderer = new ChromePdfRenderer("/usr/bin/google-chrome"); // USE this on server
+            
             // Set custom margin
             renderer.RenderingOptions.MarginTop = 0;
             renderer.RenderingOptions.MarginLeft = 0;
