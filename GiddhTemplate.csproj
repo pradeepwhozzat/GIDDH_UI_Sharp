@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Templates\**\*" CopyToOutputDirectory="Always" />
+    <None Update="Templates/**" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 </Project>
