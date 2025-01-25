@@ -7,9 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>GiddhTemplate</RootNamespace>
     <PreserveCompilationContext>true</PreserveCompilationContext>
-    <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
     <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
-    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
