@@ -7,7 +7,6 @@
   font-weight: 200;
   font-style: normal;
 }
-
 /* Roboto Light Italic (200 Italic) */
 @font-face {
   font-family: "Roboto";
@@ -16,7 +15,6 @@
   font-weight: 200;
   font-style: italic;
 }
-
 /* Roboto Regular (400) */
 @font-face {
   font-family: "Roboto";
@@ -25,7 +23,6 @@
   font-weight: 400;
   font-style: normal;
 }
-
 /* Roboto Italic (400 Italic) */
 @font-face {
   font-family: "Roboto";
@@ -34,7 +31,6 @@
   font-weight: 400;
   font-style: italic;
 }
-
 /* Roboto Regular (500) */
 @font-face {
   font-family: "Roboto";
@@ -43,7 +39,6 @@
   font-weight: 500;
   font-style: normal;
 }
-
 /* Roboto Italic (500 Italic) */
 @font-face {
   font-family: "Roboto";
@@ -52,7 +47,6 @@
   font-weight: 500;
   font-style: italic;
 }
-
 /* Roboto Bold (700) */
 @font-face {
   font-family: "Roboto";
@@ -61,7 +55,6 @@
   font-weight: 700;
   font-style: normal;
 }
-
 /* Roboto Bold Italic (700 Italic) */
 @font-face {
   font-family: "Roboto";
@@ -77,49 +70,41 @@
   inherits: false;
   initial-value: 15px;
 }
-
 @property --font-family {
   syntax: "<string>";
   inherits: true;
   initial-value: "Roboto";
 }
-
 @property --font-weight-200 {
   syntax: "<integer>";
   inherits: false;
   initial-value: 200;
 }
-
 @property --font-weight-400 {
   syntax: "<integer>";
   inherits: false;
   initial-value: 400;
 }
-
 @property --font-weight-500 {
   syntax: "<integer>";
   inherits: false;
   initial-value: 500;
 }
-
 @property --font-weight-700 {
   syntax: "<integer>";
   inherits: false;
   initial-value: 700;
 }
-
 @property --font-size-default {
   syntax: "<length>";
   inherits: false;
   initial-value: 16px;
 }
-
 @property --font-size-large {
   syntax: "<length>";
   inherits: false;
   initial-value: 20px;
 }
-
 @property --font-size-medium {
   syntax: "<length>";
   inherits: false;
@@ -130,19 +115,16 @@
   inherits: false;
   initial-value: 10px;
 }
-
 @property --color-primary {
   syntax: "<color>";
   inherits: false;
   initial-value: #181b50;
 }
-
 @property --color-secondary {
   syntax: "<color>";
   inherits: false;
   initial-value: #ffffff;
 }
-
 @property --color-light {
   syntax: "<color>";
   inherits: false;
@@ -158,7 +140,7 @@
 
 html,
 body {
-  color: #121212;
+  color: #000000;
   font-family: var(--font-family, "Roboto");
   font-size: var(--font-size-medium, 12px);
   font-weight: var(--font-weight-200, 200);
@@ -300,6 +282,9 @@ table tr.border-top-none th {
 
 .pd-r1 {
   padding-right: 10px !important;
+}
+.h-inherit {
+  height: inherit !important;
 }
 
 .text-uppercase {

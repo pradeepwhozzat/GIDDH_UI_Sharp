@@ -37,12 +37,12 @@
     }
 }
 
-<main>
+<main class="h-inherit">
     <table>
         <tbody>
             <tr>
-                <td class="p-0 border-none border-top">
-                    <table>
+                <td class="p-0 border-none border-top" style="height: 80mm;">
+                    <table class="h-inherit">
                         <thead>
                             <tr class="border-top-none">
                                 @if (GetDisplayStatus("SNo"))
@@ -84,7 +84,7 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="vertical-align-top">
                             @{
                                 var index = 0;
                             }
@@ -404,7 +404,8 @@
             {
             <tr>
                 <td class="p-0 border-none">
-                    <table class="page-break-inside-avoid">
+                    @* class="page-break-inside-avoid" *@
+                    <table class="border-none border-left border-right border-top">
                         <thead>
                             <tr>
                                 <th class="vertical-align-top text-center" rowspan="2" width="20%">
@@ -513,6 +514,53 @@
                 </td>
             </tr>
             }
+            <tr>
+                <table style="height:calc(42.5mm - 15px)">
+                    <tbody>
+                        <tr>
+                            <td class="p-0 vertical-align-bottom border-none border-left border-right border-bottom">
+                                <table>
+                                    <tr>
+                                        <td class="border-none border-right" width="50%" rowspan="2">
+                                            @if (GetDisplayStatus("Message1"))
+                                            {
+                                                <u><strong>Declaration: </strong></u>
+                                                <p class="margin-0">
+                                                    @GetLabel("Message1")
+                                                </p>
+                                            }
+                                        </td>
+                                        @if (GetDisplayStatus("FooterCompanyName"))
+                                        {
+                                            <td class="border-none border-top" width="50%">
+                                                for @Model?.Company?.Name
+                                            </td>
+                                        }
+                                    </tr>
+                                    @if (GetDisplayStatus("TextUnderSlogan") || GetDisplayStatus("ImageSignature"))
+                                    {
+                                        <tr>
+                                            <td class="border-none border-top text-right">
+                                                @if (GetDisplayStatus("ImageSignature"))
+                                                {
+                                                    <div>
+                                                        <img src="@GetLabel("ImageSignature")" alt="digital-signature" height="60px" />
+                                                    </div>
+                                                }
+
+                                                @if (GetDisplayStatus("TextUnderSlogan"))
+                                                {
+                                                    @GetLabel("TextUnderSlogan")
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </tr>
         </tbody>
     </table>
 </main>
