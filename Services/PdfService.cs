@@ -62,7 +62,7 @@ namespace GiddhTemplate.Services
             string footer = await RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request);
             string body = await RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request);
             // Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{headerStyles}</style>{header}");
-            Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{bodyStyles}{footerStyles}</style>{body}");
+            // Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{bodyStyles}{footerStyles}</style>{body}");
             // Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{footerStyles}</style>{footer}");
 
 
