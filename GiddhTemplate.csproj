@@ -9,6 +9,7 @@
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <RuntimeIdentifier>linux-arm64</RuntimeIdentifier>
     <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
