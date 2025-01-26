@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Templates/**" CopyToOutputDirectory="Always" />
-    <None Update=".ebextensions/**" CopyToOutputDirectory="Always" />
+    <Content Include="Templates/**" CopyToOutputDirectory="Always" />
+    <Content Include=".ebextensions/**" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 </Project>
