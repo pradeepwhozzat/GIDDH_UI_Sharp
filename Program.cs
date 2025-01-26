@@ -8,7 +8,7 @@ builder.WebHost.ConfigureKestrel(options => {
 });
 var app = builder.Build();
 // Eager initialization of the ChromePdfRenderer through PdfRendererConfigService
-// var rendererConfigService = app.Services.GetRequiredService<PdfRendererConfigService>();
-// rendererConfigService.GetConfiguredRenderer();
+var rendererConfigService = app.Services.GetRequiredService<PdfRendererConfigService>();
+rendererConfigService.GetConfiguredRenderer();
 app.MapControllers();
 app.Run();
