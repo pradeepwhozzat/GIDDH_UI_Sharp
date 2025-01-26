@@ -10,7 +10,7 @@
     <CopyRefAssembliesToPublishDirectory>true</CopyRefAssembliesToPublishDirectory>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
     <RazorCompileOnBuild>true</RazorCompileOnBuild>
-    <RazorCompileOnPublish>true</RazorCompileOnPublish>
+    <RazorCompileOnPublish>false</RazorCompileOnPublish>
   </PropertyGroup>
 
   <ItemGroup>
