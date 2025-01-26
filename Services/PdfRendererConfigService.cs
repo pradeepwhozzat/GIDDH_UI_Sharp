@@ -5,26 +5,30 @@ namespace GiddhTemplate.Services
 {
     public class PdfRendererConfigService
     {
+        private ChromePdfRenderer? _cachedRenderer;
+        
         public ChromePdfRenderer GetConfiguredRenderer()
         {
-            IronPdf.License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY");
-            ChromePdfRenderer renderer = new ChromePdfRenderer();
-            
-            // Set custom margin
-            renderer.RenderingOptions.MarginTop = 0;
-            renderer.RenderingOptions.MarginLeft = 0;
-            renderer.RenderingOptions.MarginRight = 0;
-            renderer.RenderingOptions.MarginBottom = 0;
+            if (_cachedRenderer == null) {
+                // Initialize the renderer if it has not been cached yet
+                IronPdf.License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY");
+                _cachedRenderer = new ChromePdfRenderer();
+                
+                // Set custom margin
+                _cachedRenderer.RenderingOptions.MarginTop = 0;
+                _cachedRenderer.RenderingOptions.MarginLeft = 0;
+                _cachedRenderer.RenderingOptions.MarginRight = 0;
+                _cachedRenderer.RenderingOptions.MarginBottom = 0;
 
-            // Additional rendering options
-            renderer.RenderingOptions.PrintHtmlBackgrounds = true;
-            renderer.RenderingOptions.PaperSize = PdfPaperSize.A4;
-            renderer.RenderingOptions.PaperOrientation = PdfPaperOrientation.Portrait;
+                // Additional rendering options
+                _cachedRenderer.RenderingOptions.PrintHtmlBackgrounds = true;
+                _cachedRenderer.RenderingOptions.PaperSize = PdfPaperSize.A4;
+                _cachedRenderer.RenderingOptions.PaperOrientation = PdfPaperOrientation.Portrait;
 
-            // Choose screen or print CSS media
-            renderer.RenderingOptions.CssMediaType = PdfCssMediaType.Print;
-
-            return renderer;
+                // Choose screen or print CSS media
+                _cachedRenderer.RenderingOptions.CssMediaType = PdfCssMediaType.Print;
+            }
+            return _cachedRenderer;
         }
     }
 }
