@@ -109,8 +109,8 @@ namespace InvoiceData
 
     public class Setting
     {
-        public string? Label { get; set; } = string.Empty;
-        public bool? Display { get; set; }
+        public string? Label { get; set; } = string.Empty; 
+        public bool? Display { get; set; } 
     }
 
     public class EInvoiceDetails

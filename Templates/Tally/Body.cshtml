@@ -416,7 +416,7 @@
                                 </th>
                                 @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                                 {
-                                    @foreach (var Tax in Model?.GstTaxesTotal)
+                                    @foreach (var Tax in Model.GstTaxesTotal)
                                     {
                                         <th class="text-center" colspan="2" width="25%">
                                             @if (Tax?.AccountName != null)
@@ -435,7 +435,7 @@
                             @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                             {
                                 <tr>
-                                    @foreach (var Tax in Model?.GstTaxesTotal)
+                                    @foreach (var Tax in Model.GstTaxesTotal)
                                     {
                                         <th class="text-center" width="12.5%">Rate</th>
                                         <th class="text-center" width="12.5%">Amount</th>
@@ -444,7 +444,7 @@
                             }
                         </thead>
                         <tbody>
-                            @foreach (var Bifurcation in Model?.TaxBifurcation)
+                            @foreach (var Bifurcation in Model.TaxBifurcation)
                             {
                                 <tr>
                                     <td>
@@ -497,7 +497,7 @@
 
                                 @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                                 {
-                                    @foreach (var Tax in Model?.GstTaxesTotal)
+                                    @foreach (var Tax in Model.GstTaxesTotal)
                                     {
                                         <td></td>
                                         <td class="text-center">

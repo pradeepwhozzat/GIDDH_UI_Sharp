@@ -37,7 +37,7 @@ namespace GiddhTemplate.Controllers
             try
             {
                 var base64Pdf = await _pdfService.GeneratePdfAsync(request);
-                return Ok(new { Base64Pdf = base64Pdf });
+                return Ok(base64Pdf);
             }
             catch (Exception ex)
             {
