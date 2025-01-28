@@ -26,7 +26,7 @@ namespace GiddhTemplate.Services
                 _cachedRenderer.RenderingOptions.PaperOrientation = PdfPaperOrientation.Portrait;
 
                 // Choose screen or print CSS media
-                _cachedRenderer.RenderingOptions.CssMediaType = PdfCssMediaType.Print;
+                _cachedRenderer.RenderingOptions.CssMediaType = PdfCssMediaType.Screen;
             }
             return _cachedRenderer;
         }
