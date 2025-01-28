@@ -49,9 +49,9 @@
                                 <td class="border-none text-right">
                                     @if (GetDisplayStatus("ImageSignature"))
                                     {
-                                        <div>
-                                            <img src="@GetLabel("ImageSignature")" alt="digital-signature" height="60px" />
-                                        </div>
+                                        <figure class="m-0">
+                                            <img src="@GetLabel("ImageSignature")" alt="digital-signature" height="60px" width="auto" />
+                                        </figure>
                                     }
 
                                     @if (GetDisplayStatus("TextUnderSlogan"))

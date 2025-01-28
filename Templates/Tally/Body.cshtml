@@ -37,11 +37,17 @@
     }
 }
 
-<main class="h-inherit">
+<main>
     <table>
         <tbody>
             <tr>
-                <td class="p-0 border-none border-top" style="height: 80mm;">
+                @{
+                    var bodyContentHeight = "80mm";
+                    if (GetDisplayStatus("ShowQrCode") && (Model?.IsBusinessToCustomerInvoice == true || Model?.IsBusinessToBusinessInvoice == true)){
+                        bodyContentHeight = "60mm";
+                    }
+                }
+                <td class="p-0 border-none" style="height: @bodyContentHeight">
                     <table class="h-inherit">
                         <thead>
                             <tr class="border-top-none">
@@ -107,7 +113,7 @@
                                                     <strong class="capitalize">
                                                         @Entry?.Stock?.Name
                                                     </strong>
-                                                    @if (Entry.Stock?.ShowVariant == true)
+                                                    @if (Entry?.Stock?.ShowVariant == true)
                                                     {
                                                         <span>-</span>
                                                         <span>@Entry.Stock.Variant?.Name</span>
@@ -139,14 +145,14 @@
                                                 }
 
                                                 <!-- Custom Fields -->
-                                                @if (Entry?.Stock != null && Entry?.Stock?.CustomField1 != null)
+                                                @if (Entry?.Stock?.CustomField1?.Value != null)
                                                 {
                                                     <p class="font-size-small color-light word-break">
                                                         @Entry.Stock.CustomField1?.Key : @Entry.Stock.CustomField1?.Value,
                                                     </p>
                                                 }
 
-                                                @if (Entry?.Stock != null && Entry?.Stock?.CustomField2 != null)
+                                                @if (Entry?.Stock?.CustomField2?.Value != null)
                                                 {
                                                     <p class="font-size-small color-light word-break">
                                                         @Entry.Stock.CustomField2?.Key : @Entry.Stock.CustomField2?.Value,
@@ -329,7 +335,7 @@
                                         <td class="border-none border-right text-right">
                                             @if (Tax?.Amount != null)
                                             {
-                                                <span>@Tax?.Amount.AmountForAccount</span>
+                                                <strong>@Tax?.Amount.AmountForAccount</strong>
                                             }
                                         </td>
                                     </tr>
@@ -418,14 +424,12 @@
                                 {
                                     @foreach (var Tax in Model.GstTaxesTotal)
                                     {
-                                        <th class="text-center" colspan="2" width="25%">
-                                            @if (Tax?.AccountName != null)
-                                            {
-                                                <strong class="text-uppercase">
-                                                    @Tax?.AccountName
-                                                </strong>
-                                            }
-                                        </th>
+                                    <th class="text-center" colspan="2" width="25%">
+                                        @if (Tax?.AccountName != null)
+                                        {
+                                            <span class="text-uppercase">@Tax?.AccountName</span>
+                                        }
+                                    </th>
                                     }
                                 }
                                 <th class="text-right vertical-align-top" rowspan="2">
@@ -435,54 +439,54 @@
                             @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                             {
                                 <tr>
-                                    @foreach (var Tax in Model.GstTaxesTotal)
-                                    {
-                                        <th class="text-center" width="12.5%">Rate</th>
-                                        <th class="text-center" width="12.5%">Amount</th>
-                                    }
+                                @foreach (var Tax in Model.GstTaxesTotal)
+                                {
+                                    <th class="text-center" width="12.5%">Rate</th>
+                                    <th class="text-center" width="12.5%">Amount</th>
+                                }
                                 </tr>
                             }
                         </thead>
                         <tbody>
                             @foreach (var Bifurcation in Model.TaxBifurcation)
                             {
-                                <tr>
-                                    <td>
-                                        @if (Bifurcation?.HsnSc != null)
-                                        {
-                                            <span>@Bifurcation?.HsnSc</span>
-                                        }
+                            <tr>
+                                <td>
+                                    @if (Bifurcation?.HsnSc != null)
+                                    {
+                                        <span>@Bifurcation?.HsnSc</span>
+                                    }
+                                </td>
+                                <td class="text-center">@Bifurcation?.TaxableValue</td>
+
+                                @if (Bifurcation?.Iamt != null && Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
+                                {
+                                    <td class="text-center">
+                                        @Bifurcation?.GstOrVatTaxRate %
                                     </td>
-                                    <td class="text-center">@Bifurcation?.TaxableValue</td>
+                                    <td class="text-center">
+                                        @Bifurcation?.Iamt
+                                    </td>
+                                }
 
-                                    @if (Bifurcation?.Iamt != null && Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
-                                    {
-                                        <td class="text-center">
-                                            @Bifurcation?.GstOrVatTaxRate %
-                                        </td>
-                                        <td class="text-center">
-                                            @Bifurcation?.Iamt
-                                        </td>
-                                    }
+                                @if ((Bifurcation?.Camt != null) || (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Count == 2))
+                                {
+                                    <td class="text-center">
+                                        @Bifurcation?.GstOrVatTaxRate %
+                                    </td>
+                                    <td class="text-center">
+                                        @Bifurcation?.Camt
+                                    </td>
+                                    <td class="text-center">
+                                        @Bifurcation?.GstOrVatTaxRate %
+                                    </td>
+                                    <td class="text-center">
+                                        @Bifurcation?.Samt
+                                    </td>
+                                }
 
-                                    @if ((Bifurcation?.Camt != null) || (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Count == 2))
-                                    {
-                                        <td class="text-center">
-                                            @Bifurcation?.GstOrVatTaxRate %
-                                        </td>
-                                        <td class="text-center">
-                                            @Bifurcation?.Camt
-                                        </td>
-                                        <td class="text-center">
-                                            @Bifurcation?.GstOrVatTaxRate %
-                                        </td>
-                                        <td class="text-center">
-                                            @Bifurcation?.Samt
-                                        </td>
-                                    }
-
-                                    <td class="text-right">@Bifurcation?.EntryTotal</td>
-                                </tr>
+                                <td class="text-right">@Bifurcation?.EntryTotal</td>
+                            </tr>
                             }
                         </tbody>
                         <tfoot>
@@ -515,7 +519,7 @@
             </tr>
             }
             <tr>
-                <table style="height:calc(42.5mm - 15px)">
+                <table class="page-break-inside-avoid" style="height:45mm">
                     <tbody>
                         <tr>
                             <td class="p-0 vertical-align-bottom border-none border-left border-right border-bottom">
@@ -524,7 +528,7 @@
                                         <td class="border-none border-right" width="50%" rowspan="2">
                                             @if (GetDisplayStatus("Message1"))
                                             {
-                                                <u><strong>Declaration: </strong></u>
+                                                <u>Declaration:</u>
                                                 <p class="margin-0">
                                                     @GetLabel("Message1")
                                                 </p>

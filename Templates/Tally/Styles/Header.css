@@ -1,6 +1,6 @@
 /* Header CSS */
 header {
-  padding: var(--header-footer-body-padding, 15px) var(--header-footer-body-padding, 15px) 10px var(--header-footer-body-padding, 15px);
+  padding: var(--header-footer-body-padding, 15px) var(--header-footer-body-padding, 15px) 0 var(--header-footer-body-padding, 15px);
 }
 
 header .qr-code-image {
@@ -9,9 +9,4 @@ header .qr-code-image {
 
 header .pdf-title {
   font-size: var(--font-size-large, 20px);
-}
-
-header address {
-  white-space: pre-line;
-  font-style: normal;
 }

@@ -186,8 +186,17 @@ h6 {
   font-size: var(--font-size-small, 10px) !important;
 }
 
+.font-weight-500 {
+  font-weight: var(--font-weight-500, 500);
+}
+
 strong {
   font-weight: var(--font-weight-500, 500);
+}
+
+address {
+  white-space: pre-line;
+  font-style: normal;
 }
 
 table {
@@ -308,6 +317,10 @@ table tr.border-top-none th {
   table {
     page-break-inside: auto;
     page-break-after: auto;
+  }
+
+  table tr {
+    page-break-inside: avoid;
   }
 
   tfoot {

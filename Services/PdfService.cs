@@ -74,6 +74,7 @@ namespace GiddhTemplate.Services
             // string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
             // string filePath = Path.Combine(rootPath, "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf");
             // pdf.SaveAs(filePath);
+            // Console.WriteLine("PDF Downloaded, Please check !");
 
             return Convert.ToBase64String(pdf.BinaryData);
         }
