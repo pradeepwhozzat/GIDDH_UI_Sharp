@@ -346,6 +346,7 @@ namespace InvoiceData
         public string? AttentionTo { get; set; }
         public string? TrackingNumber { get; set; }
         public string? CurrencyFormat { get; set; }
+        public string? ImageSignature { get; set; } = string.Empty;
         public string? TemplateType { get; set; }
         public List<GstTaxesTotal>? GstTaxesTotal { get; set; }
         public List<TaxBifurcation>? TaxBifurcation { get; set; }
