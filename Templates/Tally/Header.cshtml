@@ -84,13 +84,13 @@
                                         </td>
                                         }
 
-                                        @if (GetDisplayStatus("ShowQrCode"))
+                                        @if (GetDisplayStatus("ShowQrCode") && !string.IsNullOrEmpty(Model?.QRCodeBase64String))
                                         {
-                                            <td id="qr-code-section" class="border-none text-right vertical-align-bottom">
+                                            <td id="qr-code-section" class="border-none text-right vertical-align-bottom">                              
                                             @{
                                                 var qrCodeSrc = "data:image/png;base64," + Model?.QRCodeBase64String;
                                             }
-                                                <img src="@qrCodeSrc" class="qr-code-image" width="120px" alt="QR Logo" />
+                                                <img src="@qrCodeSrc" class="qr-code-image" width="120px" />
                                             </td>
                                         }
                                         </tr>
@@ -123,13 +123,12 @@
                                                                     <table>
                                                                         <tbody>
                                                                         <tr>
-                                                                            @if (GetDisplayStatus("ShowLogo"))
+                                                                            @if (GetDisplayStatus("ShowLogo") && !string.IsNullOrEmpty(Model?.Company?.Logo?.Url))
                                                                             {
                                                                                 <td class="p-0 border-none pd-r1 vertical-align-top" width="@Model?.Company?.Logo?.Size">
                                                                                     <figure class="m-0">
                                                                                         <img src="@Model?.Company?.Logo?.Url"
-                                                                                            width="@Model?.Company?.Logo?.Size" height="auto"
-                                                                                            alt="Company logo" />
+                                                                                            width="@Model?.Company?.Logo?.Size" height="auto" />
                                                                                     </figure>
                                                                                 </td>
                                                                             }

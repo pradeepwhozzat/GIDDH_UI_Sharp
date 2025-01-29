@@ -16,7 +16,7 @@ namespace GiddhTemplate.Services
         {
             _rendererConfig = new PdfRendererConfigService();
             _razorTemplateService = new RazorTemplateService();
-            
+
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
             _styles = new Lazy<(string, string, string, string)>(() => LoadStyles(templatePath));
         }
@@ -50,6 +50,35 @@ namespace GiddhTemplate.Services
             };
         }
 
+        private PdfDocument CreatePdfDocument(string header, string body, string footer, string commonStyles, string headerStyles, string footerStyles, string bodyStyles, ChromePdfRenderer renderer, Root request)
+        {
+            switch (request?.TemplateType?.ToUpper())
+            {
+                case "TALLY":
+                    if (request?.ShowSectionsInline == true)
+                    {
+                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{headerStyles}</style>{header}{body}");
+                    }
+                    else
+                    {
+                        renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}", header);
+                        // renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}", footer);
+                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}</style>{body}");
+                    }
+
+                default:
+                    return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{headerStyles}</style>{header}{body}");
+            }
+        }
+
+        private void GenerateLocalPdfFile(PdfDocument pdf)
+        {
+            string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
+            string filePath = Path.Combine(rootPath, "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf");
+            pdf.SaveAs(filePath);
+            Console.WriteLine("PDF Downloaded, Please check !");
+        }
+
         public async Task<string> GeneratePdfAsync(Root request)
         {
             Console.WriteLine("PDF Generation Started ...");
@@ -62,19 +91,13 @@ namespace GiddhTemplate.Services
             string footer = await RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request);
             string body = await RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request);
             // Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{headerStyles}</style>{header}");
-            // Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{bodyStyles}{footerStyles}</style>{body}");
-            // Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{footerStyles}</style>{footer}");
+            // Console.WriteLine("Body HTML:" + $"<style>{commonStyles}{bodyStyles}</style>{body}");
+            // Console.WriteLine("Footer HTML:" + $"<style>{commonStyles}{footerStyles}</style>{footer}");
 
-
-            renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}", header);
-            // renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}", footer);
-            PdfDocument pdf = renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{footerStyles}</style>{body}");
+            PdfDocument pdf = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, renderer, request);
 
             // Uncomment below line to save PDF file in local 
-            // string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
-            // string filePath = Path.Combine(rootPath, "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf");
-            // pdf.SaveAs(filePath);
-            // Console.WriteLine("PDF Downloaded, Please check !");
+            // GenerateLocalPdfFile(pdf);
 
             return Convert.ToBase64String(pdf.BinaryData);
         }

@@ -137,10 +137,10 @@
                                             @if (Entry?.Stock != null && !string.IsNullOrEmpty(Entry.Stock.Sku) ||
                                            Entry?.Stock?.CustomField1 != null || Entry?.Stock?.CustomField2 != null)
                                             {
-                                                @if (GetDisplayStatus("SkuCode"))
+                                                @if (GetDisplayStatus("SkuCode") && !string.IsNullOrEmpty(Entry.Stock.Sku))
                                                 {
                                                     <p class="color-light word-break">
-                                                        @GetLabel("SkuCode"): @Entry.Stock?.Sku
+                                                        SKU Code: @Entry.Stock?.Sku
                                                     </p>
                                                 }
 
@@ -545,10 +545,10 @@
                                     {
                                         <tr>
                                             <td class="border-none border-top text-right">
-                                                @if (GetDisplayStatus("ImageSignature"))
+                                                @if (GetDisplayStatus("ImageSignature") && !string.IsNullOrEmpty(GetLabel("ImageSignature")))
                                                 {
                                                     <div>
-                                                        <img src="@GetLabel("ImageSignature")" alt="digital-signature" height="60px" />
+                                                        <img src="@GetLabel("ImageSignature")" height="60px" />
                                                     </div>
                                                 }
 
