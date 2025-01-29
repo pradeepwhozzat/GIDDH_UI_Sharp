@@ -57,6 +57,10 @@ namespace GiddhTemplate.Services
                 case "TALLY":
                     if (request?.ShowSectionsInline == true)
                     {
+                        renderer.RenderingOptions.MarginTop = 0;
+                        renderer.RenderingOptions.MarginLeft = 0;
+                        renderer.RenderingOptions.MarginRight = 0;
+                        renderer.RenderingOptions.MarginBottom = 0;
                         return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{headerStyles}</style>{header}{body}");
                     }
                     else
@@ -67,6 +71,10 @@ namespace GiddhTemplate.Services
                     }
 
                 default:
+                    renderer.RenderingOptions.MarginTop = 0;
+                    renderer.RenderingOptions.MarginLeft = 0;
+                    renderer.RenderingOptions.MarginRight = 0;
+                    renderer.RenderingOptions.MarginBottom = 0;
                     return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{headerStyles}</style>{header}{body}");
             }
         }
@@ -97,7 +105,7 @@ namespace GiddhTemplate.Services
             PdfDocument pdf = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, renderer, request);
 
             // Uncomment below line to save PDF file in local 
-            // GenerateLocalPdfFile(pdf);
+            GenerateLocalPdfFile(pdf);
 
             return Convert.ToBase64String(pdf.BinaryData);
         }
