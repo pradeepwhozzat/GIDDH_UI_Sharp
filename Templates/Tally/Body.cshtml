@@ -386,10 +386,13 @@
                     </table>
                 </td>
             </tr>
+            @{
+                bool showTaxBifurcation = GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true;
+            }
              @if (GetDisplayStatus("TotalInWords"))
             {
             <tr>
-                <td class="p-0 border-none">
+                <td class="p-0 border-none @(showTaxBifurcation ? "" : "border-bottom")">
                     <table>
                         <tr>
                             <td class="border-none border-left" width="50%">Amount Chargeable (in words)</td>
@@ -406,7 +409,7 @@
                 </td>
             </tr>
             }
-            @if (GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true)
+            @if (showTaxBifurcation)
             {
             <tr>
                 <td class="p-0 border-none">
@@ -521,11 +524,15 @@
             <tr>
                 @{
                     var companyLogoHeight = "0px";
+                    var footerHeight = "52mm";
                     if (GetDisplayStatus("ShowLogo") && !string.IsNullOrEmpty(Model?.Company?.Logo?.Size)){
                         companyLogoHeight = Model.Company.Logo.Size;
                     }
+                    if (!showTaxBifurcation) {
+                        footerHeight = "90mm";
+                    }
                 }
-                <table class="page-break-inside-avoid" style="height: calc(52mm - @companyLogoHeight)">
+                <table class="page-break-inside-avoid" style="height: calc(@footerHeight - @companyLogoHeight)">
                     <tbody>
                         <tr>
                             <td class="p-0 vertical-align-bottom border-none border-left border-right border-bottom">
