@@ -82,9 +82,10 @@ namespace GiddhTemplate.Services
         private void GenerateLocalPdfFile(PdfDocument pdf)
         {
             string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
-            string filePath = Path.Combine(rootPath, "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf");
+            string pdfName = "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf";
+            string filePath = Path.Combine(rootPath, pdfName);
             pdf.SaveAs(filePath);
-            Console.WriteLine("PDF Downloaded, Please check !");
+            Console.WriteLine("PDF Downloaded, Please check -> " + pdfName);
         }
 
         public async Task<string> GeneratePdfAsync(Root request)

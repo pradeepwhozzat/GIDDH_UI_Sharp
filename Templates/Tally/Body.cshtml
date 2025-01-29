@@ -519,7 +519,13 @@
             </tr>
             }
             <tr>
-                <table class="page-break-inside-avoid" style="height:42mm">
+                @{
+                    var companyLogoHeight = "0px";
+                    if (GetDisplayStatus("ShowLogo") && !string.IsNullOrEmpty(Model?.Company?.Logo?.Size)){
+                        companyLogoHeight = Model.Company.Logo.Size;
+                    }
+                }
+                <table class="page-break-inside-avoid" style="height: calc(52mm - @companyLogoHeight)">
                     <tbody>
                         <tr>
                             <td class="p-0 vertical-align-bottom border-none border-left border-right border-bottom">
