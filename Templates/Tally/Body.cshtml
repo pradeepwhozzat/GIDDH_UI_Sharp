@@ -10,7 +10,7 @@
     public string GetLabel(string settingName)
     {
         var setting = GetSetting(settingName);
-        return setting?.Display == true ? setting.Label : string.Empty;
+        return setting?.Display == true ? setting.Label ?? string.Empty : string.Empty;
     }
 
     public bool GetDisplayStatus(string settingName)
@@ -94,7 +94,7 @@
                             @{
                                 var index = 0;
                             }
-                            @foreach (var Entry in Model?.Entries)
+                            @foreach (var Entry in Model?.Entries ?? [])
                             {
                                 index++;
                                 <tr>
@@ -202,17 +202,18 @@
                                     @if (GetDisplayStatus("Rate"))
                                     {
                                         <td class="border-none border-right text-right">
-                                            @if (Entry?.Stock != null && Entry.Stock.Rate != null)
+                                            @if (Entry?.Stock?.Rate != null)
                                             {
                                                 <p>
                                                     @GetCurrencyCodeOrSymbol()
-                                                    @Entry.Stock?.Rate?.AmountForAccount
+                                                    @Entry.Stock.Rate.AmountForAccount
                                                 </p>
-                                                @if (IsShowAmountForCompany())
+                                                
+                                                @if (IsShowAmountForCompany() && Entry.Stock.Rate?.AmountForCompany != null)
                                                 {
                                                     <p class="text-light pr-3 font-size-small">
                                                         @GetCurrencyCodeOrSymbol()
-                                                        @Entry.Stock.Rate?.AmountForCompany
+                                                        @Entry.Stock.Rate.AmountForCompany
                                                     </p>
                                                 }
                                             }
@@ -451,47 +452,50 @@
                             }
                         </thead>
                         <tbody>
-                            @foreach (var Bifurcation in Model.TaxBifurcation)
+                            @if (Model?.TaxBifurcation != null && Model.TaxBifurcation.Any())
                             {
-                            <tr>
-                                <td>
-                                    @if (Bifurcation?.HsnSc != null)
+                                @foreach (var Bifurcation in Model.TaxBifurcation)
+                                {
+                                <tr>
+                                    <td>
+                                        @if (Bifurcation?.HsnSc != null)
+                                        {
+                                            <span>@Bifurcation?.HsnSc</span>
+                                        }
+                                    </td>
+                                    <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">@Bifurcation?.TaxableValue</td>
+
+                                    @if (Bifurcation?.Iamt != null && Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                                     {
-                                        <span>@Bifurcation?.HsnSc</span>
+                                        <td class="text-center">
+                                            @Bifurcation?.GstOrVatTaxRate %
+                                        </td>
+                                        <td class="text-center">
+                                            @Bifurcation?.Iamt
+                                        </td>
                                     }
-                                </td>
-                                <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">@Bifurcation?.TaxableValue</td>
 
-                                @if (Bifurcation?.Iamt != null && Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
-                                {
-                                    <td class="text-center">
-                                        @Bifurcation?.GstOrVatTaxRate %
-                                    </td>
-                                    <td class="text-center">
-                                        @Bifurcation?.Iamt
-                                    </td>
+                                    @if ((Bifurcation?.Camt != null) || (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Count == 2))
+                                    {
+                                        <td class="text-center">
+                                            @Bifurcation?.GstOrVatTaxRate %
+                                        </td>
+                                        <td class="text-center">
+                                            @Bifurcation?.Camt
+                                        </td>
+                                        <td class="text-center">
+                                            @Bifurcation?.GstOrVatTaxRate %
+                                        </td>
+                                        <td class="text-center">
+                                            @Bifurcation?.Samt
+                                        </td>
+                                    }
+                                    @if (Model?.IsTaxesApplied == true)
+                                    {
+                                        <td class="text-right">@Bifurcation?.EntryTotal</td>
+                                    }
+                                </tr>
                                 }
-
-                                @if ((Bifurcation?.Camt != null) || (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Count == 2))
-                                {
-                                    <td class="text-center">
-                                        @Bifurcation?.GstOrVatTaxRate %
-                                    </td>
-                                    <td class="text-center">
-                                        @Bifurcation?.Camt
-                                    </td>
-                                    <td class="text-center">
-                                        @Bifurcation?.GstOrVatTaxRate %
-                                    </td>
-                                    <td class="text-center">
-                                        @Bifurcation?.Samt
-                                    </td>
-                                }
-                                @if (Model?.IsTaxesApplied == true)
-                                {
-                                    <td class="text-right">@Bifurcation?.EntryTotal</td>
-                                }
-                            </tr>
                             }
                         </tbody>
                         <tfoot>

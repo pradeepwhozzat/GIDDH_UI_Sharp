@@ -5,7 +5,7 @@
     public string GetLabel(string settingName)
     {
         var setting = GetSetting(settingName);
-        return setting?.Display == true ? setting.Label : string.Empty;
+        return setting?.Display == true ? setting.Label ?? string.Empty : string.Empty;
     }
 
     public bool GetDisplayStatus(string settingName)

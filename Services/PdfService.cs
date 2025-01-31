@@ -79,13 +79,18 @@ namespace GiddhTemplate.Services
             }
         }
 
-        private void GenerateLocalPdfFile(PdfDocument pdf)
+        private void GenerateLocalPdfFile(PdfDocument pdf, Root request)
         {
+            if (pdf == null) throw new ArgumentNullException(nameof(pdf));
+
             string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
-            string pdfName = "PDF_" + DateTimeOffset.Now.ToString("HHmmssfff") + ".pdf";
+            Directory.CreateDirectory(rootPath); // Ensure the directory exists
+
+            string pdfName = $"{(string.IsNullOrWhiteSpace(request?.PdfRename) ? "PDF" : request.PdfRename)} {DateTimeOffset.Now:HHmmssfff}.pdf";
             string filePath = Path.Combine(rootPath, pdfName);
+
             pdf.SaveAs(filePath);
-            Console.WriteLine("PDF Downloaded, Please check -> " + pdfName);
+            Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
         }
 
         public async Task<string> GeneratePdfAsync(Root request)
@@ -106,7 +111,7 @@ namespace GiddhTemplate.Services
             PdfDocument pdf = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, renderer, request);
 
             // Uncomment below line to save PDF file in local 
-            // GenerateLocalPdfFile(pdf);
+            // GenerateLocalPdfFile(pdf, request);
 
             return Convert.ToBase64String(pdf.BinaryData);
         }

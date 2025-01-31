@@ -324,7 +324,7 @@ namespace InvoiceData
         public Amount? GrandTotal { get; set; }
         public string? QRCodeBase64String { get; set; }
         public List<SumOfTax>? SumOfTaxes { get; set; }
-        public string? TcsTotalTax { get; set; }
+        public Amount? TcsTotalTax { get; set; }
         public double? PaidAmount { get; set; }
         public bool? IsBusinessToCustomerInvoice { get; set; }
         public bool? DisplayBaseCurrency { get; set; }
@@ -348,6 +348,7 @@ namespace InvoiceData
         public string? CurrencyFormat { get; set; }
         public string? ImageSignature { get; set; } = string.Empty;
         public string? TemplateType { get; set; }
+
         public List<GstTaxesTotal>? GstTaxesTotal { get; set; }
         public List<TaxBifurcation>? TaxBifurcation { get; set; }
 
@@ -358,5 +359,6 @@ namespace InvoiceData
         
         public List<Entry>? Entries { get; set; }
         public EInvoiceDetails? EInvoiceDetails { get; set; }
+        public string? PdfRename { get; set; } = string.Empty; // This key used only in local pdf generation to Rename based on request
     }
 }
