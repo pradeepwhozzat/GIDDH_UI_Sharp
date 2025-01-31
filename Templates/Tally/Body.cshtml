@@ -555,14 +555,14 @@
                                         @if (GetDisplayStatus("FooterCompanyName"))
                                         {
                                             <td class="border-none border-top" width="50%">
-                                                for @Model?.Company?.Name
+                                                <p class="text-right pd-r1">for @Model?.Company?.Name</p>
                                             </td>
                                         }
                                     </tr>
                                     @if (GetDisplayStatus("TextUnderSlogan") || GetDisplayStatus("ImageSignature"))
                                     {
                                         <tr>
-                                            <td class="border-none border-top text-right">
+                                            <td class="border-none text-right pd-r1">
                                                 @if (GetDisplayStatus("ImageSignature") && !string.IsNullOrEmpty(Model?.ImageSignature))
                                                 {
                                                     <div>
