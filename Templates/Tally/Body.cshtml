@@ -94,7 +94,9 @@
                             @{
                                 var index = 0;
                             }
-                            @foreach (var Entry in Model?.Entries ?? [])
+                            @if (Model?.Entries != null && Model.Entries.Any())
+                            {
+                            @foreach (var Entry in Model.Entries)
                             {
                                 index++;
                                 <tr>
@@ -258,6 +260,7 @@
                                         }
                                     </td>
                                 </tr>
+                            }
                             }
                         </tbody>
                         <tfoot>
