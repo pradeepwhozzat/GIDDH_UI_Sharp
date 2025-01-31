@@ -386,13 +386,10 @@
                     </table>
                 </td>
             </tr>
-            @{
-                bool showTaxBifurcation = GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true;
-            }
              @if (GetDisplayStatus("TotalInWords"))
             {
             <tr>
-                <td class="p-0 border-none @(showTaxBifurcation ? "" : "border-bottom")">
+                <td class="p-0 border-none @(GetDisplayStatus("TaxBifurcation") ? "" : "border-bottom")">
                     <table>
                         <tr>
                             <td class="border-none border-left" width="50%">Amount Chargeable (in words)</td>
@@ -409,7 +406,7 @@
                 </td>
             </tr>
             }
-            @if (showTaxBifurcation)
+            @if (GetDisplayStatus("TaxBifurcation"))
             {
             <tr>
                 <td class="p-0 border-none">
@@ -417,10 +414,10 @@
                     <table class="border-none border-left border-right border-top">
                         <thead>
                             <tr>
-                                <th class="vertical-align-top text-center" rowspan="2" width="20%">
+                                <th class="vertical-align-top text-center" rowspan="2" width=@(Model?.IsTaxesApplied == true ? "20%" : "40%")>
                                     @GetLabel("TaxBifurcation")
                                 </th>
-                                <th class="text-center vertical-align-top" rowspan="2">
+                                <th class="vertical-align-top @(Model?.IsTaxesApplied == true ? "text-center" : "text-right")" rowspan="2">
                                     Taxable Value
                                 </th>
                                 @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
@@ -435,9 +432,12 @@
                                     </th>
                                     }
                                 }
-                                <th class="text-right vertical-align-top" rowspan="2">
-                                    Total Tax Amount
-                                </th>
+                                @if (Model?.IsTaxesApplied == true)
+                                {
+                                    <th class="text-right vertical-align-top" rowspan="2">
+                                        Total Tax Amount
+                                    </th>
+                                }
                             </tr>
                             @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                             {
@@ -460,7 +460,7 @@
                                         <span>@Bifurcation?.HsnSc</span>
                                     }
                                 </td>
-                                <td class="text-center">@Bifurcation?.TaxableValue</td>
+                                <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">@Bifurcation?.TaxableValue</td>
 
                                 @if (Bifurcation?.Iamt != null && Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                                 {
@@ -487,8 +487,10 @@
                                         @Bifurcation?.Samt
                                     </td>
                                 }
-
-                                <td class="text-right">@Bifurcation?.EntryTotal</td>
+                                @if (Model?.IsTaxesApplied == true)
+                                {
+                                    <td class="text-right">@Bifurcation?.EntryTotal</td>
+                                }
                             </tr>
                             }
                         </tbody>
@@ -498,7 +500,7 @@
                                     <strong>Total</strong>
                                 </td>
 
-                                <td class="text-center">
+                                <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">
                                     <strong>@Model?.TaxableTotal?.AmountForAccount</strong>
                                 </td>
 
@@ -512,9 +514,12 @@
                                         </td>
                                     }
                                 }
-                                <td class="text-right">
-                                    <strong>@Model?.TaxBifurcationEntryTotal?.AmountForAccount</strong>
-                                </td>
+                                @if (Model?.IsTaxesApplied == true)
+                                {
+                                    <td class="text-right">
+                                        <strong>@Model?.TaxBifurcationEntryTotal?.AmountForAccount</strong>
+                                    </td>
+                                }
                             </tr>
                         </tfoot>
                     </table>
@@ -528,7 +533,7 @@
                     if (GetDisplayStatus("ShowLogo") && !string.IsNullOrEmpty(Model?.Company?.Logo?.Size)){
                         companyLogoHeight = Model.Company.Logo.Size;
                     }
-                    if (!showTaxBifurcation) {
+                    if (!GetDisplayStatus("TaxBifurcation")) {
                         footerHeight = "62mm";
                     }
                 }
