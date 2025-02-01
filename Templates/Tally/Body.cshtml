@@ -468,29 +468,29 @@
                                     </td>
                                     <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">@Bifurcation?.TaxableValue</td>
 
-                                    @if (Bifurcation?.Iamt != null && Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
+                                    @if (Bifurcation?.Iamt != null || (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Count == 1))
                                     {
                                         <td class="text-center">
-                                            @Bifurcation?.GstOrVatTaxRate %
+                                            @(Bifurcation?.Iamt != null && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
                                         </td>
                                         <td class="text-center">
-                                            @Bifurcation?.Iamt
+                                            @(Bifurcation?.Iamt >= 0 ? Bifurcation?.Iamt : "") 
                                         </td>
                                     }
 
                                     @if ((Bifurcation?.Camt != null) || (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Count == 2))
                                     {
                                         <td class="text-center">
-                                            @Bifurcation?.GstOrVatTaxRate %
+                                            @(Bifurcation?.Camt != null && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
                                         </td>
                                         <td class="text-center">
-                                            @Bifurcation?.Camt
+                                            @(Bifurcation?.Camt >= 0 ? Bifurcation?.Camt : "")
                                         </td>
                                         <td class="text-center">
-                                            @Bifurcation?.GstOrVatTaxRate %
+                                            @(Bifurcation?.Samt != null && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
                                         </td>
                                         <td class="text-center">
-                                            @Bifurcation?.Samt
+                                            @(Bifurcation?.Samt >= 0 ? Bifurcation?.Samt : "")
                                         </td>
                                     }
                                     @if (Model?.IsTaxesApplied == true)
