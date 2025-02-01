@@ -111,7 +111,7 @@ namespace GiddhTemplate.Services
             PdfDocument pdf = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, renderer, request);
 
             // Uncomment below line to save PDF file in local 
-            GenerateLocalPdfFile(pdf, request);
+            // GenerateLocalPdfFile(pdf, request);
 
             return Convert.ToBase64String(pdf.BinaryData);
         }
