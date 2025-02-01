@@ -20,12 +20,53 @@
     }
 }
 
-<footer style="height:calc(42.5mm)">
-    <table class="h-inherit">
+<footer>
+    <table class="page-break-inside-avoid">
         <tbody>
             <tr>
-                <td class="border-top p-0">
-                    Footer
+                <td class="p-0 border-none border-left border-bottom border-right vertical-align-bottom">
+                    <table class="mr-t1">
+                        <tr>
+                            <td class="border-none border-right" width="50%" rowspan="2">
+                                @if (GetDisplayStatus("Message1"))
+                                {
+                                    <u>Declaration:</u>
+                                    <p class="margin-0">
+                                        @GetLabel("Message1")
+                                    </p>
+                                }
+                            </td>
+                            @if (GetDisplayStatus("FooterCompanyName"))
+                            {
+                                <td class="border-none border-top" width="50%">
+                                    <p class="text-right pd-r1">for @Model?.Company?.Name</p>
+                                </td>
+                            }
+                        </tr>
+                        @if (GetDisplayStatus("TextUnderSlogan") || GetDisplayStatus("ImageSignature"))
+                        {
+                            <tr>
+                                <td class="border-none text-right pd-r1">
+                                    @if (GetDisplayStatus("ImageSignature") && !string.IsNullOrEmpty(Model?.ImageSignature))
+                                    {
+                                        <div>
+                                            <img src="@Model.ImageSignature" height="60px" />
+                                        </div>
+                                    }
+
+                                    @if (GetDisplayStatus("TextUnderSlogan"))
+                                    {
+                                        @GetLabel("TextUnderSlogan")
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td class="p-0 border-none">
+                    <center><i>{page} of {total-pages}<i></center>
                 </td>
             </tr>
         </tbody>

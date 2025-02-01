@@ -57,25 +57,20 @@ namespace GiddhTemplate.Services
                 case "TALLY":
                     if (request?.ShowSectionsInline == true)
                     {
-                        renderer.RenderingOptions.MarginTop = 0;
-                        renderer.RenderingOptions.MarginLeft = 0;
-                        renderer.RenderingOptions.MarginRight = 0;
-                        renderer.RenderingOptions.MarginBottom = 0;
-                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{headerStyles}</style>{header}{body}");
+                        // Need to work on in line view of sections
+                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{headerStyles}{footerStyles}</style>{header}{body}{footer}");
                     }
                     else
                     {
                         renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}", header);
-                        // renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}", footer);
+                        renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}", footer);
                         return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}</style>{body}");
                     }
 
                 default:
-                    renderer.RenderingOptions.MarginTop = 0;
-                    renderer.RenderingOptions.MarginLeft = 0;
-                    renderer.RenderingOptions.MarginRight = 0;
-                    renderer.RenderingOptions.MarginBottom = 0;
-                    return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{headerStyles}</style>{header}{body}");
+                    renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}", header);
+                    renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}", footer);
+                    return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}</style>{body}");
             }
         }
 
