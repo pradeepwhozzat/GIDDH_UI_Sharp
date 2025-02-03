@@ -230,13 +230,13 @@ namespace InvoiceData
         public decimal? Samt { get; set; }
         public decimal? TaxableValue { get; set; }
         public decimal? GstOrVatTaxRate { get; set; }
-        public int? CsTaxRate { get; set; }
+        public decimal? CsTaxRate { get; set; }
         public string? HsnSc { get; set; }
         public string? CessUniqueName { get; set; }
-        public string? Vatamt { get; set; }
+        public decimal? Vatamt { get; set; }
         public decimal? OthTaxRate { get; set; }
-        public List<string>? CsAmountList { get; set; } = new List<string>();
-        public List<string>? OthAmountList { get; set; } = new List<string>();
+        public List<decimal>? CsAmountList { get; set; } = new List<decimal>();
+        public List<decimal>? OthAmountList { get; set; } = new List<decimal>();
         public bool? HsnStatus { get; set; }
     }
 
