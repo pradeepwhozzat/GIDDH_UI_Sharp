@@ -132,7 +132,7 @@ namespace GiddhTemplate.Services
             pdf.AddHtmlFooters(pageNumber, 1, evenPageIndices);
 
             // Uncomment below line to save PDF file in local 
-            GenerateLocalPdfFile(pdf, request);
+            // GenerateLocalPdfFile(pdf, request);
 
             return Convert.ToBase64String(pdf.BinaryData);
         }

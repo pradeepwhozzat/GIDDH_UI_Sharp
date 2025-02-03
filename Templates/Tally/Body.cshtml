@@ -2,9 +2,9 @@
 @using InvoiceData
 @using System;
 @using System.Collections.Generic;
-@using Microsoft.AspNetCore.Html
 @using System.Reflection
 @using System.Linq;
+@using System.Net;
 
 @functions {
     public string GetLabel(string settingName)
@@ -22,8 +22,8 @@
     public object GetCurrencyCodeOrSymbol()
     {
         return Model?.CurrencyFormat == "CODE"
-        ? Model?.AccountCurrency?.Code ?? ""
-        : new HtmlString(Model?.AccountCurrency?.Symbol);
+        ? Model?.AccountCurrency?.Code ?? string.Empty
+        : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol) ?? string.Empty;
     }
 
     public bool IsShowAmountForCompany()
