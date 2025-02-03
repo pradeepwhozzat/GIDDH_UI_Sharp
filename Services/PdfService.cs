@@ -56,9 +56,25 @@ namespace GiddhTemplate.Services
             {
                 case "TALLY":
                     if (request?.ShowSectionsInline == true)
-                    {
+                    {   
+                        string overideCSS = @"
+                            body {
+                                background: unset !important;
+                            }
+                            main table.remove-left-right-border tr th:first-child,
+                            main table.remove-left-right-border tr td:first-child {
+                                border-left: 1px solid currentColor !important;
+                            }
+
+                            main table.remove-left-right-border tr th:last-child,
+                            main table.remove-left-right-border tr td:last-child {
+                                border-right: 1px solid currentColor !important;
+                            }
+                        ";
+                        renderer.RenderingOptions.MarginTop = 10;
+                        renderer.RenderingOptions.MarginBottom = 10;
                         // Need to work on in line view of sections
-                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{headerStyles}{footerStyles}</style>{header}{body}{footer}");
+                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{overideCSS}</style>{header}{body}{footer}");
                     }
                     else
                     {
@@ -99,11 +115,22 @@ namespace GiddhTemplate.Services
             string header = await RenderTemplate(Path.Combine(templatePath, "Header.cshtml"), request);
             string footer = await RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request);
             string body = await RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request);
+            
             // Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{headerStyles}</style>{header}");
             // Console.WriteLine("Body HTML:" + $"<style>{commonStyles}{bodyStyles}</style>{body}");
             // Console.WriteLine("Footer HTML:" + $"<style>{commonStyles}{footerStyles}</style>{footer}");
 
             PdfDocument pdf = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, renderer, request);
+           
+            //  Add Page Number in Footer
+            var allPageIndices = Enumerable.Range(0, pdf.PageCount);
+            var evenPageIndices = allPageIndices.Where(i => i > 0);
+            HtmlHeaderFooter pageNumber = new HtmlHeaderFooter()
+            {
+                HtmlFragment = "<center style='font-size: 14px'>({page})</center>"
+            };
+
+            pdf.AddHtmlFooters(pageNumber, 1, evenPageIndices);
 
             // Uncomment below line to save PDF file in local 
             // GenerateLocalPdfFile(pdf, request);

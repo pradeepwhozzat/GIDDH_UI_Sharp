@@ -37,7 +37,7 @@
     }
 }
 
-<main>
+<main style="margin-top: @(GetDisplayStatus("ShowSectionsInline") ? "8px" : "0")">
     <table class="h-inherit">
         <tbody>
             <tr>
@@ -46,7 +46,7 @@
                         <tbody>
                             <tr>
                                 <td class="p-0 border-none">
-                                    <table class="remove-left-right-border">
+                                    <table class="entry-table remove-left-right-border repeated-header">
                                         <thead>
                                             <tr class="border-top-none">
                                                 @if (GetDisplayStatus("SNo"))
@@ -100,13 +100,13 @@
                                                 <tr>
                                                     @if (GetDisplayStatus("SNo"))
                                                     {
-                                                        <td class="border-none border-right border-left text-center vertical-align-top">
+                                                        <td class="py-0 border-none border-right border-left text-center vertical-align-top">
                                                             @index
                                                         </td>
                                                     }
                                                     @if (GetDisplayStatus("Item"))
                                                     {
-                                                        <td class="border-none border-right">
+                                                        <td class="py-0 border-none border-right">
                                                             @if (Entry?.Stock != null && !string.IsNullOrEmpty(Entry.Stock.Name))
                                                             {
                                                                 <p class="word-break">
@@ -171,7 +171,7 @@
 
                                                     @if (GetDisplayStatus("HsnSac"))
                                                     {
-                                                        <td class="border-none border-right text-center">
+                                                        <td class="py-0 border-none border-right text-center">
                                                             @if (Entry?.HsnNumber != null)
                                                             {
                                                                 <span>@Entry.HsnNumber</span>
@@ -185,7 +185,7 @@
 
                                                     @if (GetDisplayStatus("Quantity"))
                                                     {
-                                                        <td class="border-none border-right text-center">
+                                                        <td class="py-0 border-none border-right text-center">
                                                             @if (Entry?.Stock != null && Entry.Stock.Quantity != null)
                                                             {
                                                                 <strong class="no-wrap">
@@ -201,7 +201,7 @@
 
                                                     @if (GetDisplayStatus("Rate"))
                                                     {
-                                                        <td class="border-none border-right text-right">
+                                                        <td class="py-0 border-none border-right text-right">
                                                             @if (Entry?.Stock?.Rate != null)
                                                             {
                                                                 <p>
@@ -220,7 +220,7 @@
                                                         </td>
                                                     }
 
-                                                    <td class="border-none border-right text-center">
+                                                    <td class="py-0 border-none border-right text-center">
                                                         @if (Entry?.Stock != null && Entry.Stock.StockUnit != null &&
                                                     !string.IsNullOrEmpty(Entry.Stock.StockUnit.Code))
                                                         {
@@ -230,14 +230,14 @@
 
                                                     @if (GetDisplayStatus("Discount"))
                                                     {
-                                                        <td class="border-none border-right text-center">
+                                                        <td class="py-0 border-none border-right text-center">
                                                             @if (Entry?.SumOfDiscounts != null && Entry.SumOfDiscounts.AmountForAccount >= 0)
                                                             {
                                                                 <span>@GetCurrencyCodeOrSymbol() - @Entry?.SumOfDiscounts?.AmountForAccount</span>
                                                             }
                                                         </td>
                                                     }
-                                                    <td class="border-none border-right text-right">
+                                                    <td class="py-0 border-none border-right text-right">
                                                         @if (Entry?.EntryTotal != null)
                                                         {
                                                             <p>
@@ -412,7 +412,7 @@
                             {
                             <tr>
                                 <td class="p-0 border-none">
-                                    <table class="remove-left-right-border page-break-inside-avoid">
+                                    <table class="remove-left-right-border repeated-header">
                                         <thead>
                                             <tr>
                                                 <th class="vertical-align-top text-center" rowspan="2" width=@(Model?.IsTaxesApplied == true ? "20%" : "40%")>
