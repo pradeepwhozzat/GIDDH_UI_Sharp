@@ -73,7 +73,6 @@ namespace GiddhTemplate.Services
                         ";
                         renderer.RenderingOptions.MarginTop = 10;
                         renderer.RenderingOptions.MarginBottom = 10;
-                        // Need to work on in line view of sections
                         return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{overideCSS}</style>{header}{body}{footer}");
                     }
                     else
