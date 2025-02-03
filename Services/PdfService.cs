@@ -3,6 +3,7 @@ using IronPdf.Rendering;
 using System.IO;
 using System.Threading.Tasks;
 using InvoiceData;
+using System.Net;
 
 namespace GiddhTemplate.Services
 {
@@ -57,6 +58,16 @@ namespace GiddhTemplate.Services
                 case "TALLY":
                     if (request?.ShowSectionsInline == true)
                     {   
+
+                        string input = "&#x062f;&#x002e;&#x0625;";
+                        string decoded = WebUtility.HtmlDecode(input);
+                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.WriteLine($"Decoded: {decoded}"); // Expected: د.إ
+                        foreach (char c in decoded)
+                        {
+                            Console.WriteLine($"Char: {c}, Unicode: {((int)c):X4}");
+                        }
+
                         string overideCSS = @"
                             body {
                                 background: unset !important;
@@ -77,6 +88,15 @@ namespace GiddhTemplate.Services
                     }
                     else
                     {
+                        string input = "&#x062f;&#x002e;&#x0625;";
+                        string decoded = WebUtility.HtmlDecode(input);
+                        Console.OutputEncoding = System.Text.Encoding.UTF8;
+                        Console.WriteLine($"Decoded: {decoded}"); // Expected: د.إ
+                        foreach (char c in decoded)
+                        {
+                            Console.WriteLine($"Char: {c}, Unicode: {((int)c):X4}");
+                        }
+                        
                         renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}", header);
                         renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}", footer);
                         return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}</style>{body}");
