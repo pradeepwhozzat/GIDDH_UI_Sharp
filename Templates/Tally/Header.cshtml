@@ -32,13 +32,13 @@
                                     @if (GetDisplayStatus("FormNameInvoice") || GetDisplayStatus("FormNameTaxInvoice"))
                                     {
                                         <h1 class="text-center pdf-title font-weight-500"> 
-                                            @if (GetDisplayStatus("FormNameInvoice"))
+                                            @if (GetDisplayStatus("FormNameTaxInvoice"))
                                             {
-                                                @GetLabel("FormNameInvoice")
+                                                @GetLabel("FormNameTaxInvoice")
                                             }
                                             else
                                             {
-                                                @GetLabel("FormNameTaxInvoice")
+                                                @GetLabel("FormNameInvoice")
                                             }
                                         </h1>
                                     }
