@@ -15,10 +15,10 @@ namespace GiddhTemplate.Services
                 _cachedRenderer = new ChromePdfRenderer();
                 
                 // Set custom margin
-                _cachedRenderer.RenderingOptions.MarginTop = 10;
+                _cachedRenderer.RenderingOptions.MarginTop = 0;
                 _cachedRenderer.RenderingOptions.MarginLeft = 0;
                 _cachedRenderer.RenderingOptions.MarginRight = 0;
-                _cachedRenderer.RenderingOptions.MarginBottom = 10;
+                _cachedRenderer.RenderingOptions.MarginBottom = 0;
 
                 // Additional rendering options
                 _cachedRenderer.RenderingOptions.PrintHtmlBackgrounds = true;
@@ -26,7 +26,7 @@ namespace GiddhTemplate.Services
                 _cachedRenderer.RenderingOptions.PaperOrientation = PdfPaperOrientation.Portrait;
 
                 // Choose screen or print CSS media
-                _cachedRenderer.RenderingOptions.CssMediaType = PdfCssMediaType.Screen;
+                _cachedRenderer.RenderingOptions.CssMediaType = PdfCssMediaType.Print;
             }
             return _cachedRenderer;
         }

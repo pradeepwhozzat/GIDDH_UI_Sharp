@@ -265,7 +265,10 @@ table tr.border-top-none th {
 .m-0 {
   margin: 0;
 }
-
+.my-0 {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
 .mr-l1 {
   margin-left: 10px !important;
 }
@@ -284,6 +287,13 @@ table tr.border-top-none th {
 
 .p-0 {
   padding: 0;
+}
+
+.py-0 {
+  /* Need to optmise this code for entry table */
+  padding-top: 1px !important;
+  padding-bottom: 1px !important;
+
 }
 .pd-l1 {
   padding-left: 10px !important;
@@ -319,9 +329,6 @@ table tr.border-top-none th {
     page-break-after: auto;
   }
 
-  table tr {
-    page-break-inside: avoid;
-  }
 
   tfoot {
     display: table-row-group; /* Ensure it's treated as a group of rows */

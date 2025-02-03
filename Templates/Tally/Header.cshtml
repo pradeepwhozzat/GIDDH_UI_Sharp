@@ -32,7 +32,6 @@
                                     @if (GetDisplayStatus("FormNameInvoice") || GetDisplayStatus("FormNameTaxInvoice"))
                                     {
                                         <h1 class="text-center pdf-title font-weight-500"> 
-                                            Divyanshu
                                             @if (GetDisplayStatus("FormNameInvoice"))
                                             {
                                                 @GetLabel("FormNameInvoice")
@@ -98,18 +97,10 @@
                                     </tbody>
                                 </table>
                     }
-                    @{
-                        var headerContentHeight = "100mm";
-                        if (GetDisplayStatus("ShowQrCode") && (Model?.IsBusinessToCustomerInvoice == true || Model?.IsBusinessToBusinessInvoice == true)){
-                            headerContentHeight = "80mm";
-                        } else if (GetDisplayStatus("ShowEInvoiceDetails")) {
-                            headerContentHeight = "90mm";
-                        }
-                    }
                     <table>
                         <tbody>
                             <tr>
-                                <td class="p-0 vertical-align-top" style="height: @headerContentHeight">
+                                <td class="p-0 vertical-align-top">
                                     <table class="h-inherit">
                                         <tbody>
                                             <tr>

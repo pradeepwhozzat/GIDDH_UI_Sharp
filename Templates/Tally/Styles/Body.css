@@ -1,3 +1,23 @@
 main {
   padding: 0 var(--header-footer-body-padding, 15px);
+  height: -webkit-fill-available;
+}
+
+main table.remove-left-right-border tr th:first-child,
+main table.remove-left-right-border tr td:first-child {
+  border-left: none !important;
+}
+
+main table.remove-left-right-border tr th:last-child,
+main table.remove-left-right-border tr td:last-child {
+  border-right: none !important;
+}
+
+body {
+  /* Do not Change This Code !!!     Start */
+  background-image: url("/page-left-right-border-as-background.png");
+  background-repeat: repeat;
+  background-position-x: -0.4px;
+  background-size: 210mm;
+  /* Do not Change This Code !!!     End */
 }
