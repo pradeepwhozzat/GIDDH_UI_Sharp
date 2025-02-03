@@ -238,12 +238,12 @@
                                                         </td>
                                                     }
                                                     <td class="py-0 border-none border-right text-right">
-                                                        @if (Entry?.EntryTotal != null)
+                                                        @if (Entry?.TaxableValue != null)
                                                         {
                                                             <p>
                                                                 <strong>
                                                                     @GetCurrencyCodeOrSymbol()
-                                                                    @Entry?.EntryTotal?.AmountForAccount
+                                                                    @Entry?.TaxableValue?.AmountForAccount
                                                                 </strong>
                                                             </p>
                                                             @if (IsShowAmountForCompany())
@@ -251,7 +251,7 @@
                                                                 <p class="text-right text-light">
                                                                     <strong class="text-light font-size-small">
                                                                         @GetCurrencyCodeOrSymbol()
-                                                                        @Entry?.EntryTotal?.AmountForCompany
+                                                                        @Entry?.TaxableValue?.AmountForCompany
                                                                     </strong>
                                                                 </p>
                                                             }
