@@ -235,6 +235,8 @@ namespace InvoiceData
         public string? CessUniqueName { get; set; }
         public decimal? Vatamt { get; set; }
         public decimal? OthTaxRate { get; set; }
+        public decimal? CessAmount { get; set; }
+        public decimal? OtherAmount { get; set; }
         public List<decimal>? CsAmountList { get; set; } = new List<decimal>();
         public List<decimal>? OthAmountList { get; set; } = new List<decimal>();
         public bool? HsnStatus { get; set; }

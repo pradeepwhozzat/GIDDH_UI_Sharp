@@ -53,21 +53,22 @@ namespace GiddhTemplate.Services
 
         private PdfDocument CreatePdfDocument(string header, string body, string footer, string commonStyles, string headerStyles, string footerStyles, string bodyStyles, ChromePdfRenderer renderer, Root request)
         {
+            // Set Dynamic Theme
+            string themeCSS = $@"
+                        html {{
+                            --font-family: ""{request?.Theme?.Font?.Family}"" !important;
+                            --font-size-default: {request?.Theme?.Font?.FontSizeDefault}px !important;
+                            --font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;
+                            --font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;
+                            --color-primary: {request?.Theme?.PrimaryColor};
+                            --color-secondary: {request?.Theme?.SecondaryColor};
+                            }}
+                        ";
             switch (request?.TemplateType?.ToUpper())
             {
                 case "TALLY":
                     if (request?.ShowSectionsInline == true)
-                    {   
-
-                        string input = "&#x062f;&#x002e;&#x0625;";
-                        string decoded = WebUtility.HtmlDecode(input);
-                        Console.OutputEncoding = System.Text.Encoding.UTF8;
-                        Console.WriteLine($"Decoded: {decoded}"); // Expected: د.إ
-                        foreach (char c in decoded)
-                        {
-                            Console.WriteLine($"Char: {c}, Unicode: {((int)c):X4}");
-                        }
-
+                    {
                         string overideCSS = @"
                             body {
                                 background: unset !important;
@@ -84,28 +85,19 @@ namespace GiddhTemplate.Services
                         ";
                         renderer.RenderingOptions.MarginTop = 10;
                         renderer.RenderingOptions.MarginBottom = 10;
-                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{overideCSS}</style>{header}{body}{footer}");
+                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}{overideCSS}</style>{header}{body}{footer}");
                     }
                     else
                     {
-                        string input = "&#x062f;&#x002e;&#x0625;";
-                        string decoded = WebUtility.HtmlDecode(input);
-                        Console.OutputEncoding = System.Text.Encoding.UTF8;
-                        Console.WriteLine($"Decoded: {decoded}"); // Expected: د.إ
-                        foreach (char c in decoded)
-                        {
-                            Console.WriteLine($"Char: {c}, Unicode: {((int)c):X4}");
-                        }
-                        
-                        renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}", header);
-                        renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}", footer);
-                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}</style>{body}");
+                        renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}{themeCSS}", header);
+                        renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}{themeCSS}", footer);
+                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{themeCSS}</style>{body}");
                     }
 
                 default:
-                    renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}", header);
-                    renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}", footer);
-                    return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}</style>{body}");
+                    renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}{themeCSS}", header);
+                    renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}{themeCSS}", footer);
+                    return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{themeCSS}</style>{body}");
             }
         }
 
@@ -134,13 +126,13 @@ namespace GiddhTemplate.Services
             string header = await RenderTemplate(Path.Combine(templatePath, "Header.cshtml"), request);
             string footer = await RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request);
             string body = await RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request);
-            
+
             // Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{headerStyles}</style>{header}");
             // Console.WriteLine("Body HTML:" + $"<style>{commonStyles}{bodyStyles}</style>{body}");
             // Console.WriteLine("Footer HTML:" + $"<style>{commonStyles}{footerStyles}</style>{footer}");
 
             PdfDocument pdf = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, renderer, request);
-           
+
             //  Add Page Number in Footer
             var allPageIndices = Enumerable.Range(0, pdf.PageCount);
             var evenPageIndices = allPageIndices.Where(i => i > 0);

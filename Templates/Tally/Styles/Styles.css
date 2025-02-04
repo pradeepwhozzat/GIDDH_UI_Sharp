@@ -2,66 +2,145 @@
 /* Roboto Light (200) */
 @font-face {
   font-family: "Roboto";
-  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Light.ttf")
-    format("truetype");
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Light.ttf") format("truetype");
   font-weight: 200;
   font-style: normal;
+  unicode-range: U+0020-007E, U+00A0-00FF;
 }
+
 /* Roboto Light Italic (200 Italic) */
 @font-face {
   font-family: "Roboto";
-  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-LightItalic.ttf")
-    format("truetype");
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-LightItalic.ttf") format("truetype");
   font-weight: 200;
   font-style: italic;
+  unicode-range: U+0020-007E, U+00A0-00FF;
 }
+
 /* Roboto Regular (400) */
 @font-face {
   font-family: "Roboto";
-  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Regular.ttf")
-    format("truetype");
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
+  unicode-range: U+0020-007E, U+00A0-00FF;
 }
+
 /* Roboto Italic (400 Italic) */
 @font-face {
   font-family: "Roboto";
-  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Italic.ttf")
-    format("truetype");
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Italic.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
+  unicode-range: U+0020-007E, U+00A0-00FF;
 }
-/* Roboto Regular (500) */
+
+/* Roboto Medium (500) */
 @font-face {
   font-family: "Roboto";
-  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Medium.ttf")
-    format("truetype");
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
+  unicode-range: U+0020-007E, U+00A0-00FF;
 }
-/* Roboto Italic (500 Italic) */
+
+/* Roboto Medium Italic (500 Italic) */
 @font-face {
   font-family: "Roboto";
-  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-MediumItalic.ttf")
-    format("truetype");
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-MediumItalic.ttf") format("truetype");
   font-weight: 500;
   font-style: italic;
+  unicode-range: U+0020-007E, U+00A0-00FF;
 }
+
 /* Roboto Bold (700) */
 @font-face {
   font-family: "Roboto";
-  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Bold.ttf")
-    format("truetype");
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
+  unicode-range: U+0020-007E, U+00A0-00FF;
 }
+
 /* Roboto Bold Italic (700 Italic) */
 @font-face {
   font-family: "Roboto";
-  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-BoldItalic.ttf")
-    format("truetype");
+  src: url("/Templates/Tally/Styles/Fonts/Roboto/Roboto-BoldItalic.ttf") format("truetype");
   font-weight: 700;
   font-style: italic;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+
+/* OpenSans Light (200) */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/Templates/Tally/Styles/Fonts/OpenSans/OpenSans-Light.ttf") format("truetype");
+  font-weight: 200;
+  font-style: normal;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+
+/* OpenSans Light Italic (200 Italic) */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/Templates/Tally/Styles/Fonts/OpenSans/OpenSans-LightItalic.ttf") format("truetype");
+  font-weight: 200;
+  font-style: italic;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+
+/* OpenSans Regular (400) */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/Templates/Tally/Styles/Fonts/OpenSans/OpenSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+
+/* OpenSans Italic (400 Italic) */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/Templates/Tally/Styles/Fonts/OpenSans/OpenSans-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+
+/* OpenSans Medium (500) */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/Templates/Tally/Styles/Fonts/OpenSans/OpenSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+
+/* OpenSans Medium Italic (500 Italic) */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/Templates/Tally/Styles/Fonts/OpenSans/OpenSans-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+
+/* OpenSans Bold (700) */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/Templates/Tally/Styles/Fonts/OpenSans/OpenSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  unicode-range: U+0020-007E, U+00A0-00FF;
+}
+
+/* OpenSans Bold Italic (700 Italic) */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/Templates/Tally/Styles/Fonts/OpenSans/OpenSans-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  unicode-range: U+0020-007E, U+00A0-00FF;
 }
 
 /* Global CSS Variables */
@@ -73,7 +152,7 @@
 @property --font-family {
   syntax: "<string>";
   inherits: true;
-  initial-value: "Roboto";
+  initial-value: "Roboto"; /* 'Roboto' | 'Open Sans' | 'sans-serif' */
 }
 @property --font-weight-200 {
   syntax: "<integer>";
