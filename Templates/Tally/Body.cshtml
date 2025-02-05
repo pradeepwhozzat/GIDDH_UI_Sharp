@@ -19,11 +19,18 @@
         return setting?.Display == true;
     }
 
-    public object GetCurrencyCodeOrSymbol()
+    public object GetAccountCurrencyCodeOrSymbol()
     {
         return Model?.CurrencyFormat == "CODE"
         ? Model?.AccountCurrency?.Code ?? string.Empty
         : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol) ?? string.Empty;
+    }
+
+    public object GetCompanyCurrencyCodeOrSymbol()
+    {
+        return Model?.CurrencyFormat == "CODE"
+        ? Model?.Company?.Currency?.Code ?? string.Empty
+        : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol) ?? string.Empty;
     }
 
     public bool IsShowAmountForCompany()
@@ -205,14 +212,14 @@
                                                             @if (Entry?.Stock?.Rate != null)
                                                             {
                                                                 <p>
-                                                                    @GetCurrencyCodeOrSymbol()
+                                                                    @GetAccountCurrencyCodeOrSymbol()
                                                                     @Entry.Stock.Rate.AmountForAccount
                                                                 </p>
                                                                 
                                                                 @if (IsShowAmountForCompany() && Entry.Stock.Rate?.AmountForCompany != null)
                                                                 {
                                                                     <p class="text-light pr-3 font-size-small">
-                                                                        @GetCurrencyCodeOrSymbol()
+                                                                        @GetCompanyCurrencyCodeOrSymbol()
                                                                         @Entry.Stock.Rate.AmountForCompany
                                                                     </p>
                                                                 }
@@ -233,7 +240,7 @@
                                                         <td class="py-0 border-none border-right text-center">
                                                             @if (Entry?.SumOfDiscounts != null && Entry.SumOfDiscounts.AmountForAccount >= 0)
                                                             {
-                                                                <span>@GetCurrencyCodeOrSymbol() - @Entry?.SumOfDiscounts?.AmountForAccount</span>
+                                                                <span>@GetAccountCurrencyCodeOrSymbol() - @Entry?.SumOfDiscounts?.AmountForAccount</span>
                                                             }
                                                         </td>
                                                     }
@@ -242,7 +249,7 @@
                                                         {
                                                             <p>
                                                                 <strong>
-                                                                    @GetCurrencyCodeOrSymbol()
+                                                                    @GetAccountCurrencyCodeOrSymbol()
                                                                     @Entry?.TaxableValue?.AmountForAccount
                                                                 </strong>
                                                             </p>
@@ -250,7 +257,7 @@
                                                             {
                                                                 <p class="text-right text-light">
                                                                     <strong class="text-light font-size-small">
-                                                                        @GetCurrencyCodeOrSymbol()
+                                                                        @GetCompanyCurrencyCodeOrSymbol()
                                                                         @Entry?.TaxableValue?.AmountForCompany
                                                                     </strong>
                                                                 </p>
@@ -379,7 +386,7 @@
                                                 }
                                                 <td class="text-right">
                                                     <strong>
-                                                        @GetCurrencyCodeOrSymbol()
+                                                        @GetAccountCurrencyCodeOrSymbol()
                                                         @Model?.GstEntriesTotal?.AmountForAccount
                                                     </strong>
                                                 </td>
