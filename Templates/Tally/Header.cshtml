@@ -54,48 +54,53 @@
                             }
                         </tbody>
                     </table>
-                    @if (
-                        (GetDisplayStatus("ShowQrCode") && (Model?.IsBusinessToCustomerInvoice == true || Model?.IsBusinessToBusinessInvoice == true)) 
-                        || GetDisplayStatus("ShowEInvoiceDetails")
-                    )
+                    @if (Model?.EInvoiceDetails != null)
                     {
+                    <table>
+                        <tbody>
+                            <tr>
+                                @if (GetDisplayStatus("ShowEInvoiceDetails"))
+                                {
+                            <td class="border-none vertical-align-bottom">
                                 <table>
                                     <tbody>
+                                        @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.IrnNumber))
+                                        {
                                         <tr>
-                                        @if (GetDisplayStatus("ShowEInvoiceDetails"))
-                                        {
-                                        <td class="border-none vertical-align-bottom">
-                                            <table>
-                                                <tbody>
-                                                    <tr>
-                                                        <td class="border-none p-0" width="100px">IRN</td>
-                                                        <td class="border-none p-0">: @Model?.EInvoiceDetails?.IrnNumber</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="border-none p-0" width="100px">Ack No</td>
-                                                        <td class="border-none p-0">: @Model?.EInvoiceDetails?.AcknowledgementNumber</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="border-none p-0" width="100px">Ack Date</td>
-                                                        <td class="border-none p-0">: @Model?.EInvoiceDetails?.AcknowledgementDate</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </td>
-                                        }
-
-                                        @if (GetDisplayStatus("ShowQrCode") && !string.IsNullOrEmpty(Model?.QRCodeBase64String))
-                                        {
-                                            <td id="qr-code-section" class="border-none text-right vertical-align-bottom">                              
-                                            @{
-                                                var qrCodeSrc = "data:image/png;base64," + Model?.QRCodeBase64String;
-                                            }
-                                                <img src="@qrCodeSrc" class="qr-code-image" width="120px" />
-                                            </td>
-                                        }
+                                            <td class="border-none p-0" width="100px">IRN</td>
+                                            <td class="border-none p-0">: @Model?.EInvoiceDetails?.IrnNumber</td>
                                         </tr>
+                                        }
+                                            @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementNumber))
+                                            {
+                                        <tr>
+                                            <td class="border-none p-0" width="100px">Ack No</td>
+                                            <td class="border-none p-0">: @Model?.EInvoiceDetails?.AcknowledgementNumber</td>
+                                        </tr>
+                                            }
+                                        @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementDate))
+                                        {
+                                        <tr>
+                                            <td class="border-none p-0" width="100px">Ack Date</td>
+                                            <td class="border-none p-0">: @Model?.EInvoiceDetails?.AcknowledgementDate</td>
+                                        </tr>
+                                        }
                                     </tbody>
                                 </table>
+                            </td>
+                            }
+                            @if (GetDisplayStatus("ShowQrCode") && (Model?.IsBusinessToCustomerInvoice == true || Model?.IsBusinessToBusinessInvoice == true) && !string.IsNullOrEmpty(Model?.QRCodeBase64String))
+                            {
+                                <td id="qr-code-section" class="border-none text-right vertical-align-bottom">                              
+                                @{
+                                    var qrCodeSrc = "data:image/png;base64," + Model?.QRCodeBase64String;
+                                }
+                                    <img src="@qrCodeSrc" class="qr-code-image" width="120px" />
+                                </td>
+                            }
+                            </tr>
+                        </tbody>
+                    </table>
                     }
                     <table>
                         <tbody>
