@@ -350,6 +350,48 @@
                                                     </tr>
                                                 }
                                             }
+                                            @if (Model?.RoundOff != null)
+                                            {
+                                            <tr>
+                                                 @if (GetDisplayStatus("SNo"))
+                                                {
+                                                    <td class="border-none border-right border-left"></td>
+                                                }
+                                                @if (GetDisplayStatus("Item"))
+                                                {
+                                                    <td class="border-none border-right text-right">
+                                                         <strong>
+                                                            Round Off
+                                                         </strong>
+                                                    </td>
+                                                }
+                                                @if (GetDisplayStatus("HsnSac"))
+                                                {
+                                                    <td class="border-none border-right"></td>
+                                                }
+                                                @if (GetDisplayStatus("Quantity"))
+                                                {
+                                                    <td class="border-none border-right"></td>
+                                                }
+                                                @if (GetDisplayStatus("Rate"))
+                                                {
+                                                    <td class="border-none border-right"></td>
+                                                }
+
+                                                <td class="border-none border-right"></td>
+
+                                                @if (GetDisplayStatus("Discount"))
+                                                {
+                                                    <td class="border-none border-right"></td>
+                                                }
+                                                <td class="border-none border-right border-top text-right">
+                                                    <strong>
+                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                        @Model?.RoundOff
+                                                    </strong>
+                                                </td>
+                                            </tr>
+                                            }
 
                                             <tr>
                                                 @if (GetDisplayStatus("SNo"))
