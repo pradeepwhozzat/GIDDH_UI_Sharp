@@ -1,7 +1,7 @@
 
 main {
-  padding: 0 var(--header-footer-body-padding, 15px);
-  height: -webkit-fill-available;
+  padding-left: var(--header-footer-body-padding, 15px);
+  padding-right: var(--header-footer-body-padding, 15px);
 }
 
 main table.remove-left-right-border tr th:first-child,

@@ -1,6 +1,7 @@
 /* Header CSS */
 header {
-  padding: var(--header-footer-body-padding, 15px) var(--header-footer-body-padding, 15px) 0 var(--header-footer-body-padding, 15px);
+  padding-left: var(--header-footer-body-padding, 15px);
+  padding-right: var(--header-footer-body-padding, 15px);
 }
 
 header .qr-code-image {

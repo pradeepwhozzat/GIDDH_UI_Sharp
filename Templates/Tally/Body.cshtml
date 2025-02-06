@@ -44,7 +44,7 @@
     }
 }
 
-<main style="margin-top: @(GetDisplayStatus("ShowSectionsInline") ? "8px" : "0")">
+<main style="@(Model?.ShowSectionsInline == true ? "" : "margin-top: 8px; height: -webkit-fill-available;")">
    <table class="h-inherit">
         <tbody>
             <tr>

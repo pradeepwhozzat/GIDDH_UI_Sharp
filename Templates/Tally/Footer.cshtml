@@ -20,11 +20,11 @@
     }
 }
 
-<footer class="mr-b1">
-    <table class="page-break-inside-avoid">
+<footer class="@(Model?.ShowSectionsInline == true ? "" : "mr-b1")" style="@(Model?.ShowSectionsInline == true ? "flex-grow: 1" : "")">
+    <table class="page-break-inside-avoid h-100">
         <tbody>
             <tr>
-                <td class="p-0 border-none border-left border-right border-bottom">
+                <td class="p-0 border-none border-left border-right border-bottom vertical-align-bottom">
                     <table style="margin-top: 50px;">
                         <tbody>
                             <tr>

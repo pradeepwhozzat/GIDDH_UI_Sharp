@@ -15,10 +15,10 @@ namespace GiddhTemplate.Services
                 _cachedRenderer = new ChromePdfRenderer();
                 
                 // Set custom margin
-                _cachedRenderer.RenderingOptions.MarginTop = 0;
+                _cachedRenderer.RenderingOptions.MarginTop = 8;
                 _cachedRenderer.RenderingOptions.MarginLeft = 0;
                 _cachedRenderer.RenderingOptions.MarginRight = 0;
-                _cachedRenderer.RenderingOptions.MarginBottom = 0;
+                _cachedRenderer.RenderingOptions.MarginBottom = 8;
 
                 // Additional rendering options
                 _cachedRenderer.RenderingOptions.PrintHtmlBackgrounds = true;

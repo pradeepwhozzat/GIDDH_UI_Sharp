@@ -385,6 +385,10 @@ table tr.border-top-none th {
   height: inherit !important;
 }
 
+.h-100 {
+  height: 100% !important;
+}
+
 .text-uppercase {
   text-transform: uppercase !important;
 }
@@ -424,6 +428,10 @@ table tr.border-top-none th {
 
   table.repeated-footer tfoot {
     display: table-footer-group !important; /* Ensure footers repeat on each page */
+  }
+
+  table.repeated-header tr {
+    break-inside: avoid; /* Prevent rows from being cut between pages */
   }
 
   table.page-break-inside-avoid {

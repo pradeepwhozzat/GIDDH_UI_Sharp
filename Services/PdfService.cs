@@ -83,9 +83,7 @@ namespace GiddhTemplate.Services
                                 border-right: 1px solid currentColor !important;
                             }
                         ";
-                        renderer.RenderingOptions.MarginTop = 10;
-                        renderer.RenderingOptions.MarginBottom = 10;
-                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}{overideCSS}</style>{header}{body}{footer}");
+                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}{overideCSS}</style><div style='display: flex; flex-direction: column; height: -webkit-fill-available;'>{header}{body}{footer}</div>");
                     }
                     else
                     {
