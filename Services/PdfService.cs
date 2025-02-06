@@ -55,15 +55,16 @@ namespace GiddhTemplate.Services
         {
             // Set Dynamic Theme
             string themeCSS = $@"
-                        html {{
-                            --font-family: ""{request?.Theme?.Font?.Family}"" !important;
-                            --font-size-default: {request?.Theme?.Font?.FontSizeDefault}px !important;
-                            --font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;
-                            --font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;
-                            --color-primary: {request?.Theme?.PrimaryColor};
-                            --color-secondary: {request?.Theme?.SecondaryColor};
-                            }}
-                        ";
+            html, body {{
+                --font-family: ""{request?.Theme?.Font?.Family}"";
+                --font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;
+                --font-size-large: {request?.Theme?.Font?.FontSizeDefault + 4}px;
+                --font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;
+                --font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;
+                --color-primary: {request?.Theme?.PrimaryColor};
+                --color-secondary: {request?.Theme?.SecondaryColor};
+                }}
+            ";
             switch (request?.TemplateType?.ToUpper())
             {
                 case "TALLY":

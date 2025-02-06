@@ -146,7 +146,7 @@
 /* Global CSS Variables */
 @property --header-footer-body-padding {
   syntax: "<length>";
-  inherits: false;
+  inherits: true;
   initial-value: 15px;
 }
 @property --font-family {
@@ -156,57 +156,57 @@
 }
 @property --font-weight-200 {
   syntax: "<integer>";
-  inherits: false;
+  inherits: true;
   initial-value: 200;
 }
 @property --font-weight-400 {
   syntax: "<integer>";
-  inherits: false;
+  inherits: true;
   initial-value: 400;
 }
 @property --font-weight-500 {
   syntax: "<integer>";
-  inherits: false;
+  inherits: true;
   initial-value: 500;
 }
 @property --font-weight-700 {
   syntax: "<integer>";
-  inherits: false;
+  inherits: true;
   initial-value: 700;
 }
 @property --font-size-default {
   syntax: "<length>";
-  inherits: false;
-  initial-value: 16px;
+  inherits: true;
+  initial-value: 14px;
 }
 @property --font-size-large {
   syntax: "<length>";
-  inherits: false;
-  initial-value: 20px;
+  inherits: true;
+  initial-value: 18px;
 }
 @property --font-size-medium {
   syntax: "<length>";
-  inherits: false;
+  inherits: true;
   initial-value: 12px;
 }
 @property --font-size-small {
   syntax: "<length>";
-  inherits: false;
+  inherits: true;
   initial-value: 10px;
 }
 @property --color-primary {
   syntax: "<color>";
-  inherits: false;
+  inherits: true;
   initial-value: #181b50;
 }
 @property --color-secondary {
   syntax: "<color>";
-  inherits: false;
+  inherits: true;
   initial-value: #ffffff;
 }
 @property --color-light {
   syntax: "<color>";
-  inherits: false;
+  inherits: true;
   initial-value: #262626;
 }
 
@@ -214,14 +214,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box !important;
-  font-size: var(--font-size-medium, 12px);
+  font-size: inherit;
 }
 
 html,
 body {
   color: #000000;
   font-family: var(--font-family, "Roboto");
-  font-size: var(--font-size-medium, 12px);
+  font-size: var(--font-size-default, 14px);
   font-weight: var(--font-weight-200, 200);
 }
 
@@ -234,7 +234,7 @@ h5,
 h6 {
   margin: 0;
   padding: 0;
-  font-size: var(--font-size-medium, 12px);
+  font-size: var(--font-size-default, 14px);
 }
 
 /* Utility */
@@ -251,11 +251,11 @@ h6 {
 }
 
 .font-size-default {
-  font-size: var(--font-size-default, 16px) !important;
+  font-size: var(--font-size-default, 14px) !important;
 }
 
 .font-size-large {
-  font-size: var(--font-size-large, 20px) !important;
+  font-size: var(--font-size-large, 18px) !important;
 }
 
 .font-size-medium {
