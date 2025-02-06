@@ -9,4 +9,5 @@ header .qr-code-image {
 
 header .pdf-title {
   font-size: var(--font-size-large, 20px);
+  text-transform: capitalize;
 }
