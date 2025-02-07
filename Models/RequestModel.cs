@@ -234,6 +234,8 @@ namespace InvoiceData
         public string? HsnSc { get; set; }
         public string? CessUniqueName { get; set; }
         public decimal? Vatamt { get; set; }
+        public decimal? SalesTaxAmount { get; set; }
+        public decimal? SalesTaxRate { get; set; }
         public decimal? OthTaxRate { get; set; }
         public decimal? CessAmount { get; set; }
         public decimal? OtherAmount { get; set; }
@@ -341,7 +343,6 @@ namespace InvoiceData
         public Currency? AccountCurrency { get; set; }
         public Amount? TotalTax { get; set; }
         public Amount? TaxableTotal { get; set; }
-        public List<object>? OtherTotal { get; set; }
         public AmountAsString? TotalInWords { get; set; }
         public Amount? GstEntriesTotal { get; set; }
         public Amount? TaxBifurcationEntryTotal { get; set; }
@@ -352,6 +353,10 @@ namespace InvoiceData
         public string? TemplateType { get; set; }
 
         public List<GstTaxesTotal>? GstTaxesTotal { get; set; }
+        public List<GstTaxesTotal>? GstTaxesTotalOnly { get; set; }
+        public List<GstTaxesTotal>? CessTotal { get; set; }
+        public List<GstTaxesTotal>? OtherTotal { get; set; }
+
         public List<TaxBifurcation>? TaxBifurcation { get; set; }
 
         

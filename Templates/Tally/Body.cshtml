@@ -463,25 +463,73 @@
                                 <td class="p-0 border-none">
                                     <table class="remove-left-right-border repeated-header">
                                         <thead>
+                                            @{
+                                                int taxCount = 0;
+                                                bool CgstSgstIsApplied = false;
+                                                bool CessIsApplied = false;
+                                                bool OtherTaxIsApplied = false;
+
+                                                bool ShowHSNSAC = false;
+                                            }
                                             <tr>
-                                                <th class="vertical-align-top text-center" rowspan="2" width=@(Model?.IsTaxesApplied == true ? "20%" : "40%")>
+                                                @if (GetLabel("TaxBifurcation") == "HSN/SAC")
+                                                {
+                                                ShowHSNSAC = true;
+                                                <th class="vertical-align-top text-center" rowspan="2">
                                                     @GetLabel("TaxBifurcation")
                                                 </th>
+                                                }
                                                 <th class="vertical-align-top @(Model?.IsTaxesApplied == true ? "text-center" : "text-right")" rowspan="2">
                                                     Taxable Value
                                                 </th>
-                                                @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
+                                                @* IGST/ (CGST/SGST)  / VAT / Sales Tax /  *@
+                                                @if (Model?.GstTaxesTotalOnly != null && Model.GstTaxesTotalOnly.Any())
                                                 {
-                                                    @foreach (var Tax in Model.GstTaxesTotal)
+                                                    CgstSgstIsApplied = Model.GstTaxesTotalOnly.Count == 2;
+                                                    @foreach (var Tax in Model.GstTaxesTotalOnly)
                                                     {
-                                                    <th class="text-center" colspan="2" width="25%">
+                                                    taxCount++;
+                                                    <th class="text-center" colspan="2">
                                                         @if (Tax?.AccountName != null)
                                                         {
                                                             <span class="text-uppercase">@Tax?.AccountName</span>
                                                         }
                                                     </th>
+                                                    }
                                                 }
+
+                                                @* CESS (It may be more then 1) *@
+                                                @if (Model?.CessTotal != null && Model.CessTotal.Any())
+                                                {
+                                                    CessIsApplied = true;
+                                                    @foreach (var Cess in Model.CessTotal)
+                                                    {
+                                                    taxCount++;
+                                                    <th class="text-center" colspan="2">
+                                                        @if (Cess?.AccountName != null)
+                                                        {
+                                                            <span class="text-uppercase">@Cess?.AccountName</span>
+                                                        }
+                                                    </th>
+                                                    }
                                                 }
+
+                                                @* Other Tax (It may be more then 1) *@
+                                                @if (Model?.OtherTotal != null && Model.OtherTotal.Any())
+                                                {
+                                                    OtherTaxIsApplied = true;
+                                                    @foreach (var OtherTax in Model.OtherTotal)
+                                                    {
+                                                    taxCount++;
+                                                    <th class="text-center" colspan="2">
+                                                        @if (OtherTax?.AccountName != null)
+                                                        {
+                                                            <span class="text-uppercase">@OtherTax?.AccountName</span>
+                                                        }
+                                                    </th>
+                                                    }
+                                                }
+
                                                 @if (Model?.IsTaxesApplied == true)
                                                 {
                                                     <th class="text-right vertical-align-top" rowspan="2">
@@ -491,13 +539,13 @@
                                             </tr>
                                             @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                                             {
-                                                <tr>
-                                                @foreach (var Tax in Model.GstTaxesTotal)
+                                            <tr>
+                                                @for(int i = 0; i < taxCount; i++)
                                                 {
-                                                    <th class="text-center" width="12.5%">Rate</th>
-                                                    <th class="text-center" width="12.5%">Amount</th>
+                                                    <th class="text-center" width="80px">Rate</th>
+                                                    <th class="text-center" width="80px">Amount</th>
                                                 }
-                                                </tr>
+                                            </tr>
                                             }
                                         </thead>
                                         <tbody>
@@ -506,28 +554,33 @@
                                                 @foreach (var Bifurcation in Model.TaxBifurcation)
                                                 {
                                                 <tr>
+                                                    @if (ShowHSNSAC == true)
+                                                    {
                                                     <td>
                                                         @if (Bifurcation?.HsnSc != null)
                                                         {
                                                             <span>@Bifurcation?.HsnSc</span>
                                                         }
                                                     </td>
+                                                    }
                                                     <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">@Bifurcation?.TaxableValue</td>
 
-                                                    @if (Bifurcation?.Iamt != null || (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Count == 1))
+                                                    @* IGST *@
+                                                    @if (Bifurcation?.Iamt != null)
                                                     {
                                                         <td class="text-center">
-                                                            @(Bifurcation?.Iamt != null && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
+                                                            @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
                                                         </td>
                                                         <td class="text-center">
                                                             @(Bifurcation?.Iamt >= 0 ? Bifurcation?.Iamt : "") 
                                                         </td>
                                                     }
 
-                                                    @if ((Bifurcation?.Camt != null) || (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Count == 2))
+                                                    @* CGST/SGST *@
+                                                    @if (CgstSgstIsApplied == true && Bifurcation?.Camt != null)
                                                     {
                                                         <td class="text-center">
-                                                            @(Bifurcation?.Camt != null && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
+                                                            @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
                                                         </td>
                                                         <td class="text-center">
                                                             @(Bifurcation?.Camt >= 0 ? Bifurcation?.Camt : "")
@@ -539,6 +592,56 @@
                                                             @(Bifurcation?.Samt >= 0 ? Bifurcation?.Samt : "")
                                                         </td>
                                                     }
+                                                    @* VAT *@
+                                                    @if (Bifurcation?.Vatamt != null)
+                                                    {
+                                                        <td class="text-center">
+                                                            @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @(Bifurcation?.Vatamt >= 0 ? Bifurcation?.Vatamt : "") 
+                                                        </td>
+                                                    }
+
+                                                    @* SALES TAX *@
+                                                    @if (Bifurcation?.SalesTaxAmount != null)
+                                                    {
+                                                        <td class="text-center">
+                                                            @(Bifurcation?.SalesTaxAmount != null && Bifurcation?.SalesTaxRate >= 0 ? $"{Bifurcation?.SalesTaxRate}%" : "") 
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @(Bifurcation?.SalesTaxAmount >= 0 ? Bifurcation?.SalesTaxAmount : "") 
+                                                        </td>
+                                                    }
+
+                                                    @* CESS (It may be more then 1) *@
+                                                    @if (CessIsApplied == true)
+                                                    {
+                                                        @foreach (var Cess in Bifurcation?.CsAmountList)
+                                                        { 
+                                                            <td class="text-center">
+                                                                @(Cess > 0 && Bifurcation?.CsTaxRate >= 0 ? $"{Bifurcation?.CsTaxRate}%" : "") 
+                                                            </td>
+                                                            <td class="text-center">
+                                                                @(Cess > 0 ? Cess : "") 
+                                                            </td>
+                                                        }
+                                                    }
+
+                                                    @* Other Tax (It may be more then 1) *@
+                                                    @if (OtherTaxIsApplied == true)
+                                                    {
+                                                        @foreach (var OtherTax in Bifurcation?.OthAmountList)
+                                                        { 
+                                                            <td class="text-center">
+                                                                @(OtherTax > 0 && Bifurcation?.OthTaxRate >= 0 ? $"{Bifurcation?.OthTaxRate}%" : "") 
+                                                            </td>
+                                                            <td class="text-center">
+                                                                @(OtherTax > 0 ? OtherTax : "") 
+                                                            </td>
+                                                        }
+                                                    }
+
                                                     @if (Model?.IsTaxesApplied == true)
                                                     {
                                                         <td class="text-right">@Bifurcation?.EntryTotal</td>
@@ -549,24 +652,57 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
+                                                @if (ShowHSNSAC == true)
+                                                {
                                                 <td class="text-right">
                                                     <strong>Total</strong>
                                                 </td>
+                                                }
 
                                                 <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">
                                                     <strong>@Model?.TaxableTotal?.AmountForAccount</strong>
                                                 </td>
 
-                                                @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
+                                                @if (Model?.GstTaxesTotalOnly != null && Model.GstTaxesTotalOnly.Any())
                                                 {
-                                                    @foreach (var Tax in Model.GstTaxesTotal)
+                                                    @foreach (var Tax in Model.GstTaxesTotalOnly)
                                                     {
-                                                        <td></td>
+                                                    <td class="text-center"></td>
+                                                     <td class="text-center">
+                                                       <strong>@Tax?.Amount?.AmountForAccount</strong>
+                                                    </td>
+                                                    }
+                                                }
+
+
+                                                @* CESS (It may be more then 1) *@
+                                                @if (CessIsApplied == true)
+                                                {
+                                                    @foreach (var Cess in Model.CessTotal)
+                                                    { 
                                                         <td class="text-center">
-                                                            <strong>@Tax?.Amount?.AmountForAccount</strong>
+                                                            <strong></strong>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <strong>@Cess?.Amount?.AmountForAccount</strong>
                                                         </td>
                                                     }
                                                 }
+
+                                                @* Other Tax (It may be more then 1) *@
+                                                @if (OtherTaxIsApplied == true)
+                                                {
+                                                    @foreach (var OtherTax in Model.OtherTotal)
+                                                    { 
+                                                        <td class="text-center">
+                                                            <strong></strong>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <strong>@OtherTax?.Amount?.AmountForAccount</strong>
+                                                        </td>
+                                                    }
+                                                }
+
                                                 @if (Model?.IsTaxesApplied == true)
                                                 {
                                                     <td class="text-right">
