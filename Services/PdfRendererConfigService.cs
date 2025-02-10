@@ -1,34 +1,39 @@
 using IronPdf;
 using IronPdf.Rendering;
+using System;
 
 namespace GiddhTemplate.Services
 {
     public class PdfRendererConfigService
     {
-        private ChromePdfRenderer? _cachedRenderer;
-        
-        public ChromePdfRenderer GetConfiguredRenderer()
+        private readonly Lazy<ChromePdfRenderer> _cachedRenderer;
+
+        public PdfRendererConfigService()
         {
-            if (_cachedRenderer == null) {
-                // Initialize the renderer if it has not been cached yet
-                IronPdf.License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY");
-                _cachedRenderer = new ChromePdfRenderer();
-                
+            _cachedRenderer = new Lazy<ChromePdfRenderer>(() =>
+            {
+                IronPdf.License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY"); // Or your preferred way to set the license
+
+                var renderer = new ChromePdfRenderer();
+
                 // Set custom margin
-                _cachedRenderer.RenderingOptions.MarginTop = 8;
-                _cachedRenderer.RenderingOptions.MarginLeft = 0;
-                _cachedRenderer.RenderingOptions.MarginRight = 0;
-                _cachedRenderer.RenderingOptions.MarginBottom = 8;
+                renderer.RenderingOptions.MarginTop = 8;
+                renderer.RenderingOptions.MarginLeft = 0;
+                renderer.RenderingOptions.MarginRight = 0;
+                renderer.RenderingOptions.MarginBottom = 8;
 
                 // Additional rendering options
-                _cachedRenderer.RenderingOptions.PrintHtmlBackgrounds = true;
-                _cachedRenderer.RenderingOptions.PaperSize = PdfPaperSize.A4;
-                _cachedRenderer.RenderingOptions.PaperOrientation = PdfPaperOrientation.Portrait;
+                renderer.RenderingOptions.PrintHtmlBackgrounds = true;
+                renderer.RenderingOptions.PaperSize = PdfPaperSize.A4;
+                renderer.RenderingOptions.PaperOrientation = PdfPaperOrientation.Portrait;
 
                 // Choose screen or print CSS media
-                _cachedRenderer.RenderingOptions.CssMediaType = PdfCssMediaType.Print;
-            }
-            return _cachedRenderer;
+                renderer.RenderingOptions.CssMediaType = PdfCssMediaType.Print;
+
+                return renderer;
+            });
         }
+
+        public ChromePdfRenderer GetConfiguredRenderer() => _cachedRenderer.Value;
     }
 }

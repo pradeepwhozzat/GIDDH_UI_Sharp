@@ -1,9 +1,11 @@
 using IronPdf;
 using IronPdf.Rendering;
+using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
 using InvoiceData;
-using System.Net;
 
 namespace GiddhTemplate.Services
 {
@@ -11,7 +13,7 @@ namespace GiddhTemplate.Services
     {
         private readonly PdfRendererConfigService _rendererConfig;
         private readonly RazorTemplateService _razorTemplateService;
-        private readonly Lazy<(string Common, string Header, string Footer, string Body)> _styles;
+        private readonly Lazy<(string Common, string Header, string Footer, string Body, string BackgroundStyles)> _styles;
 
         public PdfService()
         {
@@ -19,7 +21,7 @@ namespace GiddhTemplate.Services
             _razorTemplateService = new RazorTemplateService();
 
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
-            _styles = new Lazy<(string, string, string, string)>(() => LoadStyles(templatePath));
+            _styles = new Lazy<(string, string, string, string, string)>(() => LoadStyles(templatePath));
         }
 
         private string LoadFileContent(string filePath)
@@ -27,13 +29,14 @@ namespace GiddhTemplate.Services
             return File.Exists(filePath) ? File.ReadAllText(filePath) : string.Empty;
         }
 
-        private (string Common, string Header, string Footer, string Body) LoadStyles(string basePath)
+        private (string Common, string Header, string Footer, string Body, string Background) LoadStyles(string basePath)
         {
             return (
-                Common: LoadFileContent(Path.Combine(basePath, "Styles", "Styles.css")),
-                Header: LoadFileContent(Path.Combine(basePath, "Styles", "Header.css")),
-                Footer: LoadFileContent(Path.Combine(basePath, "Styles", "Footer.css")),
-                Body: LoadFileContent(Path.Combine(basePath, "Styles", "Body.css"))
+                LoadFileContent(Path.Combine(basePath, "Styles", "Styles.css")),
+                LoadFileContent(Path.Combine(basePath, "Styles", "Header.css")),
+                LoadFileContent(Path.Combine(basePath, "Styles", "Footer.css")),
+                LoadFileContent(Path.Combine(basePath, "Styles", "Body.css")),
+                LoadFileContent(Path.Combine(basePath, "Styles", "Background.css"))
             );
         }
 
@@ -51,53 +54,84 @@ namespace GiddhTemplate.Services
             };
         }
 
-        private PdfDocument CreatePdfDocument(string header, string body, string footer, string commonStyles, string headerStyles, string footerStyles, string bodyStyles, ChromePdfRenderer renderer, Root request)
+        private PdfDocument CreatePdfDocument(string header, string body, string footer, string commonStyles, string headerStyles, string footerStyles, string bodyStyles, ChromePdfRenderer renderer, Root request, string backgroundStyles)
         {
-            // Set Dynamic Theme
-            string themeCSS = $@"
-            html, body {{
-                --font-family: ""{request?.Theme?.Font?.Family}"";
-                --font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;
-                --font-size-large: {request?.Theme?.Font?.FontSizeDefault + 4}px;
-                --font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;
-                --font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;
-                --color-primary: {request?.Theme?.PrimaryColor};
-                --color-secondary: {request?.Theme?.SecondaryColor};
-                }}
-            ";
-            switch (request?.TemplateType?.ToUpper())
+            // Dynamic Theme
+            var themeCSS = new StringBuilder();
+            if (request?.Theme?.Font?.Family == "Open Sans")
             {
-                case "TALLY":
-                    if (request?.ShowSectionsInline == true)
-                    {
-                        string overideCSS = @"
-                            body {
-                                background: unset !important;
-                            }
-                            main table.remove-left-right-border tr th:first-child,
-                            main table.remove-left-right-border tr td:first-child {
-                                border-left: 1px solid currentColor !important;
-                            }
-
-                            main table.remove-left-right-border tr th:last-child,
-                            main table.remove-left-right-border tr td:last-child {
-                                border-right: 1px solid currentColor !important;
-                            }
-                        ";
-                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}{overideCSS}</style><div style='display: flex; flex-direction: column; height: -webkit-fill-available;'>{header}{body}{footer}</div>");
-                    }
-                    else
-                    {
-                        renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}{themeCSS}", header);
-                        renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}{themeCSS}", footer);
-                        return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{themeCSS}</style>{body}");
-                    }
-
-                default:
-                    renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter($"{commonStyles}{headerStyles}{themeCSS}", header);
-                    renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter($"{commonStyles}{footerStyles}{themeCSS}", footer);
-                    return renderer.RenderHtmlAsPdf($"<style>{commonStyles}{bodyStyles}{themeCSS}</style>{body}");
+                themeCSS.Append(LoadOpenSansFontCSS());
             }
+            else if (request?.Theme?.Font?.Family == "Roboto")
+            {
+                Console.WriteLine("LoadRobotoFontCSS");
+                themeCSS.Append(LoadRobotoFontCSS());
+            }
+
+            themeCSS.Append("html, body {");
+            themeCSS.Append($"--font-family: \"{request?.Theme?.Font?.Family}\";");
+            themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;");
+            themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault + 4}px;");
+            themeCSS.Append($"--font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;");
+            themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
+            themeCSS.Append($"--color-primary: {request?.Theme?.PrimaryColor};");
+            themeCSS.Append($"--color-secondary: {request?.Theme?.SecondaryColor};");
+            themeCSS.Append("}");
+
+            var allStyles = $"{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS.ToString()}"; // Combine all styles
+
+            if (request?.TemplateType?.ToUpper() == "TALLY" && request?.ShowSectionsInline == true)
+            {
+                return renderer.RenderHtmlAsPdf($"<style>{allStyles}</style><div style='display: flex; flex-direction: column; height: -webkit-fill-available;'>{header}{body}{footer}</div>");
+            }
+            else
+            {
+                renderer.RenderingOptions.HtmlHeader = CreateHtmlHeaderFooter(allStyles, header);
+                renderer.RenderingOptions.HtmlFooter = CreateHtmlHeaderFooter(allStyles, footer);
+                return renderer.RenderHtmlAsPdf($"<style>{allStyles}{backgroundStyles}</style>{body}");
+            }
+        }
+
+        private string _openSansFontCSS = ""; // Cache the Open Sans CSS
+        private string _openRobotoFontCSS = ""; // Cache the Open Sans CSS
+
+        private string LoadOpenSansFontCSS()
+        {
+            if (_openSansFontCSS != null) // Load only once
+            {
+                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "OpenSans");
+                _openSansFontCSS = $@"
+                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Light.ttf') format('truetype'); font-weight: 200; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-LightItalic.ttf') format('truetype'); font-weight: 200; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-MediumItalic.ttf') format('truetype'); font-weight: 500; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                    ";
+            }
+            return _openSansFontCSS;
+        }
+        private string LoadRobotoFontCSS()
+        {
+            if (_openRobotoFontCSS != null) // Load only once
+            {
+                Console.WriteLine("_openRobotoFontCSS");
+                string fontName = "Roboto";
+                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "Roboto");
+                _openRobotoFontCSS = $@"
+                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Light.ttf') format('truetype'); font-weight: 200; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-LightItalic.ttf') format('truetype'); font-weight: 200; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-MediumItalic.ttf') format('truetype'); font-weight: 500; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                    ";
+            }
+            return _openRobotoFontCSS;
         }
 
         private void GenerateLocalPdfFile(PdfDocument pdf, Root request)
@@ -105,7 +139,7 @@ namespace GiddhTemplate.Services
             if (pdf == null) throw new ArgumentNullException(nameof(pdf));
 
             string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
-            Directory.CreateDirectory(rootPath); // Ensure the directory exists
+            Directory.CreateDirectory(rootPath);
 
             string pdfName = $"{(string.IsNullOrWhiteSpace(request?.PdfRename) ? "PDF" : request.PdfRename)} {DateTimeOffset.Now:HHmmssfff}.pdf";
             string filePath = Path.Combine(rootPath, pdfName);
@@ -120,27 +154,28 @@ namespace GiddhTemplate.Services
 
             var renderer = _rendererConfig.GetConfiguredRenderer();
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
-            var (commonStyles, headerStyles, footerStyles, bodyStyles) = _styles.Value;
+            var (commonStyles, headerStyles, footerStyles, bodyStyles, BackgroundStyles) = _styles.Value;
 
-            string header = await RenderTemplate(Path.Combine(templatePath, "Header.cshtml"), request);
-            string footer = await RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request);
-            string body = await RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request);
-
-            // Console.WriteLine("Header HTML:" + $"<style>{commonStyles}{headerStyles}</style>{header}");
-            // Console.WriteLine("Body HTML:" + $"<style>{commonStyles}{bodyStyles}</style>{body}");
-            // Console.WriteLine("Footer HTML:" + $"<style>{commonStyles}{footerStyles}</style>{footer}");
-
-            PdfDocument pdf = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, renderer, request);
-
-            //  Add Page Number in Footer
-            var allPageIndices = Enumerable.Range(0, pdf.PageCount);
-            var evenPageIndices = allPageIndices.Where(i => i > 0);
-            HtmlHeaderFooter pageNumber = new HtmlHeaderFooter()
+            // Run template rendering in parallel
+            var renderTasks = new[]
             {
-                HtmlFragment = "<center style='font-size: 14px'>({page})</center>"
+                RenderTemplate(Path.Combine(templatePath, "Header.cshtml"), request),
+                RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request),
+                RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request)
             };
 
-            pdf.AddHtmlFooters(pageNumber, 1, evenPageIndices);
+            await Task.WhenAll(renderTasks);
+
+            string header = renderTasks[0].Result;
+            string footer = renderTasks[1].Result;
+            string body = renderTasks[2].Result;
+
+
+            PdfDocument pdf = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, renderer, request, BackgroundStyles);
+
+            // Add Page Number in Footer
+            var pageNumber = new HtmlHeaderFooter { HtmlFragment = "<center style='font-size: 14px'>({page})</center>" };
+            pdf.AddHtmlFooters(pageNumber, 1, Enumerable.Range(1, pdf.PageCount - 1)); // Pages 2 and up
 
             // Uncomment below line to save PDF file in local 
             // GenerateLocalPdfFile(pdf, request);
