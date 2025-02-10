@@ -465,6 +465,7 @@
                                         <thead>
                                             @{
                                                 int taxCount = 0;
+                                                bool TaxIsApplied = false;
                                                 bool CgstSgstIsApplied = false;
                                                 bool CessIsApplied = false;
                                                 bool OtherTaxIsApplied = false;
@@ -482,10 +483,11 @@
                                                 <th class="vertical-align-top @(Model?.IsTaxesApplied == true ? "text-center" : "text-right")" rowspan="2">
                                                     Taxable Value
                                                 </th>
-                                                @* IGST/ (CGST/SGST)  / VAT / Sales Tax /  *@
+                                                @* IGST/ (CGST/SGST) / VAT  *@
                                                 @if (Model?.GstTaxesTotalOnly != null && Model.GstTaxesTotalOnly.Any())
                                                 {
                                                     CgstSgstIsApplied = Model.GstTaxesTotalOnly.Count == 2;
+                                                    TaxIsApplied = true;
                                                     @foreach (var Tax in Model.GstTaxesTotalOnly)
                                                     {
                                                     taxCount++;
@@ -565,19 +567,23 @@
                                                     }
                                                     <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">@Bifurcation?.TaxableValue</td>
 
-                                                    @* IGST *@
-                                                    @if (Bifurcation?.Iamt != null)
+                                                    @* IGST / VAT *@
+                                                    @if (TaxIsApplied == true && CgstSgstIsApplied == false)
                                                     {
                                                         <td class="text-center">
                                                             @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
                                                         </td>
                                                         <td class="text-center">
-                                                            @(Bifurcation?.Iamt >= 0 ? Bifurcation?.Iamt : "") 
+                                                            @if (Bifurcation?.Iamt != null) {
+                                                                @(Bifurcation?.Iamt >= 0 ? Bifurcation?.Iamt : "")
+                                                            } else if(Bifurcation?.Vatamt != null) {
+                                                                @(Bifurcation?.Vatamt >= 0 ? Bifurcation?.Vatamt : "") 
+                                                            }
                                                         </td>
                                                     }
 
                                                     @* CGST/SGST *@
-                                                    @if (CgstSgstIsApplied == true && Bifurcation?.Camt != null)
+                                                    @if (CgstSgstIsApplied == true)
                                                     {
                                                         <td class="text-center">
                                                             @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
@@ -592,19 +598,9 @@
                                                             @(Bifurcation?.Samt >= 0 ? Bifurcation?.Samt : "")
                                                         </td>
                                                     }
-                                                    @* VAT *@
-                                                    @if (Bifurcation?.Vatamt != null)
-                                                    {
-                                                        <td class="text-center">
-                                                            @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @(Bifurcation?.Vatamt >= 0 ? Bifurcation?.Vatamt : "") 
-                                                        </td>
-                                                    }
 
-                                                    @* SALES TAX *@
-                                                    @if (Bifurcation?.SalesTaxAmount != null)
+                                                    @* SALES TAX  - Note - currently not support Sales Tax *@
+                                                    @* @if (Bifurcation?.SalesTaxAmount != null)
                                                     {
                                                         <td class="text-center">
                                                             @(Bifurcation?.SalesTaxAmount != null && Bifurcation?.SalesTaxRate >= 0 ? $"{Bifurcation?.SalesTaxRate}%" : "") 
@@ -612,7 +608,7 @@
                                                         <td class="text-center">
                                                             @(Bifurcation?.SalesTaxAmount >= 0 ? Bifurcation?.SalesTaxAmount : "") 
                                                         </td>
-                                                    }
+                                                    } *@
 
                                                     @* CESS (It may be more then 1) *@
                                                     @if (CessIsApplied == true)
