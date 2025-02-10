@@ -14,6 +14,8 @@ namespace GiddhTemplate.Services
         private readonly PdfRendererConfigService _rendererConfig;
         private readonly RazorTemplateService _razorTemplateService;
         private readonly Lazy<(string Common, string Header, string Footer, string Body, string BackgroundStyles)> _styles;
+        private string _openSansFontCSS = ""; // Cache the Open Sans CSS
+        private string _openRobotoFontCSS = ""; // Cache the Roboto CSS
 
         public PdfService()
         {
@@ -91,9 +93,6 @@ namespace GiddhTemplate.Services
                 return renderer.RenderHtmlAsPdf($"<style>{allStyles}{backgroundStyles}</style>{body}");
             }
         }
-
-        private string _openSansFontCSS = ""; // Cache the Open Sans CSS
-        private string _openRobotoFontCSS = ""; // Cache the Open Sans CSS
 
         private string LoadOpenSansFontCSS()
         {
