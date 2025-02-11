@@ -13,6 +13,7 @@ namespace GiddhTemplate.Services
             _cachedRenderer = new Lazy<ChromePdfRenderer>(() =>
             {
                 IronPdf.License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY"); // Or your preferred way to set the license
+                IronPdf.Installation.SkipInitialization = true;
 
                 var renderer = new ChromePdfRenderer();
 
