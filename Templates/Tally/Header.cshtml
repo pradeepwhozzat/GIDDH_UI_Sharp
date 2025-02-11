@@ -102,8 +102,7 @@
                                 @{
                                     var qrCodeSrc = "data:image/png;base64," + Model?.QRCodeBase64String;
                                 }
-                                @* @qrCodeSrc *@
-                                    <img src="https://docs.lightburnsoftware.com/legacy/img/QRCode/ExampleCode.png" class="qr-code-image" width="120px" />
+                                    <img src="@qrCodeSrc" class="qr-code-image" width="120px" />
                                 </td>
                             }
                             </tr>
