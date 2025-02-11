@@ -149,10 +149,10 @@ namespace GiddhTemplate.Services
         {
             Console.WriteLine("PDF Generation Started ...");
             // Method 1: Using DateTime.Now (Returns DateTime object)
-            Console.WriteLine("First : " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.SSS"));
+            Console.WriteLine("First : " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
             var renderer = _rendererConfig.GetConfiguredRenderer();
-            Console.WriteLine("Get RendererConfig " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.SSS"));
+            Console.WriteLine("Get RendererConfig " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
             var (commonStyles, headerStyles, footerStyles, bodyStyles, BackgroundStyles) = _styles.Value;
@@ -174,10 +174,10 @@ namespace GiddhTemplate.Services
             string footer = renderTasks[1].Result;
             string body = renderTasks[2].Result;
 
-            Console.WriteLine("Get Templates " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.SSS"));
+            Console.WriteLine("Get Templates " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
             PdfDocument pdf = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, renderer, request, BackgroundStyles);
-            Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.SSS"));
+            Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
             // Add Page Number in Footer
             var pageNumber = new HtmlHeaderFooter { HtmlFragment = "<center style='font-size: 14px'>({page})</center>" };
@@ -185,7 +185,7 @@ namespace GiddhTemplate.Services
 
             // Uncomment below line to save PDF file in local 
             // GenerateLocalPdfFile(pdf, request);
-            Console.WriteLine("Get Page count " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.SSS"));
+            Console.WriteLine("Get Page count " + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
 
             return Convert.ToBase64String(pdf.BinaryData);
         }
