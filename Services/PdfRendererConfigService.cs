@@ -30,6 +30,8 @@ namespace GiddhTemplate.Services
                 // Choose screen or print CSS media
                 renderer.RenderingOptions.CssMediaType = PdfCssMediaType.Print;
 
+                PdfDocument pdf = renderer.RenderHtmlAsPdf("<h1>Warmup the Chrome Renderer !</h1>");
+
                 return renderer;
             });
         }
