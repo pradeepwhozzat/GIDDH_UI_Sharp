@@ -111,7 +111,7 @@
                                                     @if (GetDisplayStatus("SNo"))
                                                     {
                                                         <td class="py-0 border-none border-right border-left text-center vertical-align-top">
-                                                            @index
+                                                            <span>@index</span>
                                                         </td>
                                                     }
                                                     @if (GetDisplayStatus("Item"))
@@ -234,7 +234,7 @@
                                                         @if (Entry?.Stock != null && Entry.Stock.StockUnit != null &&
                                                     !string.IsNullOrEmpty(Entry.Stock.StockUnit.Code))
                                                         {
-                                                            @Entry.Stock.StockUnit.Code
+                                                            <span>@Entry.Stock.StockUnit.Code</span>
                                                         }
                                                     </td>
 

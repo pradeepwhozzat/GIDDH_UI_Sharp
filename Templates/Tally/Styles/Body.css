@@ -12,3 +12,7 @@ main table.remove-left-right-border tr th:last-child,
 main table.remove-left-right-border tr td:last-child {
   border-right: none !important;
 }
+
+.entry-table tbody tr td > * {
+  line-height: calc(var(--font-size-default, 14px) * 1.25);
+}
