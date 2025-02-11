@@ -1,22 +1,28 @@
-@model InvoiceData.Root
-@using InvoiceData
+@model InvoiceData.Root;
+@using InvoiceData;
+@using System.Collections.Generic;
 
 @functions {
+    private readonly Dictionary<string, Setting> _settingCache = new Dictionary<string, Setting>();
+
     public string GetLabel(string settingName)
     {
-        var setting = GetSetting(settingName);
-        return setting?.Display == true ? setting.Label ?? string.Empty : string.Empty;
+        if (!_settingCache.TryGetValue(settingName, out var setting))
+        {
+            setting = Model.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
+            _settingCache[settingName] = setting ??= new Setting();
+        }
+        return setting?.Display == true ? setting?.Label ?? string.Empty : string.Empty;
     }
 
     public bool GetDisplayStatus(string settingName)
     {
-        var setting = GetSetting(settingName);
+        if (!_settingCache.TryGetValue(settingName, out var setting))
+        {
+            setting = Model.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
+            _settingCache[settingName] = setting ??= new Setting();
+        }
         return setting?.Display == true;
-    }
-
-    private Setting? GetSetting(string settingName)
-    {
-        return Model?.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
     }
 }
 

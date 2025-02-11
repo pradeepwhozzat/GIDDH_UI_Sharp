@@ -66,7 +66,6 @@ namespace GiddhTemplate.Services
             }
             else if (request?.Theme?.Font?.Family == "Roboto")
             {
-                Console.WriteLine("LoadRobotoFontCSS");
                 themeCSS.Append(LoadRobotoFontCSS());
             }
 
@@ -110,13 +109,12 @@ namespace GiddhTemplate.Services
                         @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
                     ";
             }
-            return _openSansFontCSS;
+            return _openSansFontCSS ?? string.Empty;
         }
         private string LoadRobotoFontCSS()
         {
             if (_openRobotoFontCSS != null) // Load only once
             {
-                Console.WriteLine("_openRobotoFontCSS");
                 string fontName = "Roboto";
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "Roboto");
                 _openRobotoFontCSS = $@"
@@ -130,7 +128,7 @@ namespace GiddhTemplate.Services
                         @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
                     ";
             }
-            return _openRobotoFontCSS;
+            return _openRobotoFontCSS ?? string.Empty;
         }
 
         private void GenerateLocalPdfFile(PdfDocument pdf, Root request)
