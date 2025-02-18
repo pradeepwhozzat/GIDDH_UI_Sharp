@@ -12,7 +12,11 @@ namespace GiddhTemplate.Services
         {
             _cachedRenderer = new Lazy<ChromePdfRenderer>(() =>
             {
-                IronPdf.License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY");
+                License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY");
+                // Add Logger
+                IronPdf.Logging.Logger.LoggingMode = IronPdf.Logging.Logger.LoggingModes.All;
+                IronPdf.Logging.Logger.LogFilePath = "Defaultimg.log";
+
 
                 var renderer = new ChromePdfRenderer();
 
