@@ -65,6 +65,10 @@
   initial-value: #262626;
 }
 
+:root {
+    --header-height: 0px;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -292,5 +296,10 @@ table tr.border-top-none th {
 
   table.page-break-inside-avoid {
     page-break-inside: avoid !important; /* Prevent table from being cut between pages */
+  }
+
+  .main-wrapper { /* A wrapper for your main content */
+    background-color: green;
+   /* margin-top: var(--header-height); /* Use the CSS variable */
   }
 }

@@ -14,8 +14,7 @@ namespace GiddhTemplate.Services
             {
                 License.LicenseKey = Environment.GetEnvironmentVariable("IRON_PDF_LICENSE_KEY");
                 // Add Logger
-                IronPdf.Logging.Logger.LoggingMode = IronPdf.Logging.Logger.LoggingModes.All;
-                IronPdf.Logging.Logger.LogFilePath = "Defaultimg.log";
+                // IronPdf.Loggclearing.Logger.LogFilePath = "Defaultimg.log";
 
 
                 var renderer = new ChromePdfRenderer();

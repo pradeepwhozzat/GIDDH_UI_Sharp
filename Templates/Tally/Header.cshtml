@@ -26,7 +26,7 @@
     }
 }
 
-<header>
+<header id="myHeader">
     <table>
         <tbody>
             <tr>
@@ -360,3 +360,22 @@
         </tbody>
     </table>
 </header>
+<script>
+    window.addEventListener('load', function() { // Wait for the header to load
+        const header = document.getElementById('myHeader');
+        if (header) {
+            const headerHeight = header.offsetHeight; // Get the rendered height
+            document.documentElement.style.setProperty('--header-height', `${headerHeight}px`); // Set CSS variable
+        }
+    });
+
+    // If you need it to recalculate on resize (less common):
+    window.addEventListener('resize', function() {
+        const header = document.getElementById('myHeader');
+        if (header) {
+            const headerHeight = header.offsetHeight;
+            document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+        }
+    });
+
+</script>
