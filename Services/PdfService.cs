@@ -29,7 +29,7 @@ namespace GiddhTemplate.Services
                                 _browser = (Browser?)Puppeteer.LaunchAsync(new LaunchOptions
                                 {
                                     Headless = true,
-                                    ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+                                    ExecutablePath = "/usr/bin/google-chrome"
                                 }).Result;
                             }
                             catch (PuppeteerSharp.ProcessException ex)
