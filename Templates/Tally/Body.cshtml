@@ -51,8 +51,8 @@
      @if (Model?.ShowSectionsInline != true)
      {
       <thead>
-        <tr class="hide-background-border">
-          <td class="p-0 border-none">
+        <tr>
+          <td class="p-0 border-none hide-background-border">
             <div style="height: var(--header-height)"></div>
           </td>
         </tr>
@@ -61,18 +61,18 @@
       <tbody>
         <tr>
           <td class="p-0 border-none">
-            <main style="height: 100%;">
-                <table class="h-inherit">
+            <main>
+                <table>
                     <tbody>
                         @if (GetDisplayStatus("DisplayExportMessage"))
                         {
-                        <tr class="hide-background-border">
-                            <td class="border-none text-center">
+                        <tr>
+                            <td class="border-none border-top text-center">
                                 @GetLabel("DisplayExportMessage")
                             </td>
                         </tr>
                         }
-                        <tr class="hide-background-border">
+                        <tr>
                             <td class="p-0 border-none">
                                 @if (Model?.EInvoiceDetails != null)
                                 {
@@ -129,7 +129,7 @@
                                 <table>
                                     <tbody>
                                         <tr>
-                                            <td class="p-0 vertical-align-top">
+                                            <td class="p-0 vertical-align-top border-none border-top @(Model?.ShowSectionsInline == true ? "border-left border-right" : "")">
                                                 <table class="h-inherit">
                                                     <tbody>
                                                         <tr>
@@ -431,7 +431,7 @@
                                             <td class="p-0 border-none">
                                                 <table class="entry-table repeated-header @(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
                                                     <thead>
-                                                        <tr class="border-top-none">
+                                                        <tr>
                                                             @if (GetDisplayStatus("SNo"))
                                                             {
                                                                 <th class="text-center">@GetLabel("SNo")</th>
@@ -1100,7 +1100,7 @@
       @if (Model?.ShowSectionsInline != true)
       {
       <tfoot>
-        <tr class="hide-background-border">
+        <tr>
           <td class="p-0 border-none">
             <div style="height: var(--footer-height);"></div>
           </td>

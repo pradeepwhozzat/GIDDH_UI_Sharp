@@ -30,7 +30,7 @@
     <table class="page-break-inside-avoid h-100">
         <tbody>
             <tr>
-                <td class="p-0 border-none border-left border-right border-bottom vertical-align-bottom">
+                <td class="p-0 border-none border-bottom vertical-align-bottom @(Model?.ShowSectionsInline == true ? "border-left border-right" : "")">
                     <table style="margin-top: 50px;">
                         <tbody>
                             <tr>
@@ -56,7 +56,7 @@
                                         @if (GetDisplayStatus("TextUnderSlogan") || GetDisplayStatus("ImageSignature"))
                                         {
                                             <tr>
-                                                <td class="border-none pd-r1">
+                                                <td class="border-none pd-r1 text-right">
                                                     @if (GetDisplayStatus("ImageSignature") && !string.IsNullOrEmpty(Model?.ImageSignature))
                                                     {
                                                     <div>

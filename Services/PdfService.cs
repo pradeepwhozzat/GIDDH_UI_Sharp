@@ -1,11 +1,8 @@
 using PuppeteerSharp;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Text;
 using InvoiceData;
 using PuppeteerSharp.Media;
+using System.Threading.Tasks;
 
 namespace GiddhTemplate.Services
 {
@@ -15,6 +12,40 @@ namespace GiddhTemplate.Services
         private readonly Lazy<(string Common, string Header, string Footer, string Body, string BackgroundStyles)> _styles;
         private string _openSansFontCSS = ""; // Cache the Open Sans CSS
         private string _openRobotoFontCSS = ""; // Cache the Roboto CSS
+        private static Browser? _browser;
+        private static readonly object _lock = new object(); // Add a lock for thread safety
+        public static async Task<Browser> GetBrowserAsync()
+        {
+            if (_browser == null || !_browser.IsConnected)
+            {
+                await Task.Run(() => // Run browser creation on a background thread
+                {
+                    lock (_lock)
+                    {
+                        if (_browser == null || !_browser.IsConnected)
+                        {
+                            try
+                            {
+                                _browser = (Browser?)Puppeteer.LaunchAsync(new LaunchOptions
+                                {
+                                    Headless = true,
+                                    ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+                                }).Result;
+                            }
+                            catch (PuppeteerSharp.ProcessException ex)
+                            {
+                                Console.WriteLine($"Error launching browser: {ex.Message}");
+                                _browser = null;
+                                throw;
+                            }
+                        }
+                    }
+                });
+            }
+            #pragma warning disable CS8603 // Possible null reference return.
+            return _browser;
+            #pragma warning restore CS8603 // Possible null reference return.
+        }
         public PdfService()
         {
             _razorTemplateService = new RazorTemplateService();
@@ -70,6 +101,7 @@ namespace GiddhTemplate.Services
 
             if (request?.TemplateType?.ToUpper() == "TALLY")
             {
+                //  {(repeatHeaderFooter ? backgroundStyles : string.Empty)}
                 bool repeatHeaderFooter = request?.ShowSectionsInline != true;
                 return $@"<html> 
                                 <head> 
@@ -154,20 +186,15 @@ namespace GiddhTemplate.Services
         public async Task<string> GeneratePdfAsync(Root request)
         {
             Console.WriteLine("PDF Generation Started ...");
-            // Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
+            Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
-            using var browser = await Puppeteer.LaunchAsync(new LaunchOptions
-            {
-                Headless = true,
-                ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" // Example path for regular Chrome.  Correct this!
-            });
-            using var page = await browser.NewPageAsync();
+            using var page = await (await GetBrowserAsync()).NewPageAsync();
 
-            // Console.WriteLine("Get RendererConfig " + DateTime.Now.ToString("HH:mm:ss.fff"));
+            Console.WriteLine("Get RendererConfig " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
             var (commonStyles, headerStyles, footerStyles, bodyStyles, BackgroundStyles) = _styles.Value;
-            // Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
+            Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
 
             // Run template rendering in parallel
             var renderTasks = new[]
@@ -183,12 +210,11 @@ namespace GiddhTemplate.Services
             string footer = renderTasks[1].Result;
             string body = renderTasks[2].Result;
 
-            // Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
+            Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
             string template = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, request, BackgroundStyles);
-            // Console.WriteLine("Check - " + template);
-            // Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
-            Console.WriteLine(template);
+            Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
+            // Console.WriteLine(template);
             await page.SetContentAsync(template);
 
             // Define the PDF options with header and footer
@@ -216,7 +242,7 @@ namespace GiddhTemplate.Services
             // await page.PdfAsync(pdfName, pdfOptions);
 
             var pdfBytes = await page.PdfDataAsync(pdfOptions);
-            // Console.WriteLine("pdfBytes " + DateTime.Now.ToString("HH:mm:ss.fff"));
+            Console.WriteLine("pdfBytes " + DateTime.Now.ToString("HH:mm:ss.fff"));
             return Convert.ToBase64String(pdfBytes);
         }
     }

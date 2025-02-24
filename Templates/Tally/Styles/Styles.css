@@ -158,10 +158,6 @@ table.table-row-height tr td {
   height: 50px;
 }
 
-table tr.border-top-none th {
-  border-top: none !important;
-}
-
 .vertical-align-top {
   vertical-align: top;
 }
@@ -273,7 +269,6 @@ table tr.border-top-none th {
     page-break-after: auto;
   }
 
-
   tfoot {
     display: table-row-group; /* Ensure it's treated as a group of rows */
     visibility: hidden; /* Hide it by default */
@@ -289,10 +284,6 @@ table tr.border-top-none th {
 
   table.repeated-footer tfoot {
     display: table-footer-group !important; /* Ensure footers repeat on each page */
-  }
-
-  table.repeated-header tr {
-    break-inside: avoid; /* Prevent rows from being cut between pages */
   }
 
   table.page-break-inside-avoid {
