@@ -3,3 +3,12 @@ footer {
   padding-left: var(--header-footer-body-padding, 15px);
   padding-right: var(--header-footer-body-padding, 15px);
 }
+
+body.repeat-header-footer footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 9;
+  width: 100%;
+  background-color: #ffffff;
+}

@@ -15,13 +15,6 @@ namespace GiddhTemplate.Services
         private readonly Lazy<(string Common, string Header, string Footer, string Body, string BackgroundStyles)> _styles;
         private string _openSansFontCSS = ""; // Cache the Open Sans CSS
         private string _openRobotoFontCSS = ""; // Cache the Roboto CSS
-        public class TemplateResult // Or a struct if appropriate
-        {
-            public bool RepeatHeaderFooter { get; set; }
-            public string? Header { get; set; }
-            public string? Body { get; set; }  
-            public string? Footer { get; set; }
-        }
         public PdfService()
         {
             _razorTemplateService = new RazorTemplateService();
@@ -50,7 +43,7 @@ namespace GiddhTemplate.Services
             return await _razorTemplateService.RenderTemplateAsync(templatePath, request);
         }
 
-        private TemplateResult CreatePdfDocument(string header, string body, string footer, string commonStyles, string headerStyles, string footerStyles, string bodyStyles, Root request, string backgroundStyles)
+        private string CreatePdfDocument(string header, string body, string footer, string commonStyles, string headerStyles, string footerStyles, string bodyStyles, Root request, string backgroundStyles)
         {
             // Dynamic Theme
             var themeCSS = new StringBuilder();
@@ -73,25 +66,41 @@ namespace GiddhTemplate.Services
             themeCSS.Append($"--color-secondary: {request?.Theme?.SecondaryColor};");
             themeCSS.Append("}");
 
-            var allStyles = $"{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS.ToString()}"; // Combine all styles
-            if (request?.TemplateType?.ToUpper() == "TALLY" && request?.ShowSectionsInline == true)
+            var allStyles = $"{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}"; // Combine all styles
+
+            if (request?.TemplateType?.ToUpper() == "TALLY")
             {
-                Console.WriteLine($"<html> <head> <style>{allStyles}</style></head> <body> <div class='main-wrapper' style='display: flex; flex-direction: column; height: -webkit-fill-available;'>{header}{body}{footer}</div> </body> </html>");
-                return new TemplateResult
-                {
-                    RepeatHeaderFooter = true,
-                    Body = $"<html> <head> <style>{allStyles}</style></head> <body> <div class='main-wrapper' style='display: flex; flex-direction: column; height: -webkit-fill-available;'>{header}{body}{footer}</div> </body> </html>"
-                };
+                bool repeatHeaderFooter = request?.ShowSectionsInline != true;
+                return $@"<html> 
+                                <head> 
+                                    <style>
+                                        {allStyles}
+                                        {(repeatHeaderFooter ? backgroundStyles : string.Empty)}
+                                    </style>
+                                </head> 
+                                <body class={(repeatHeaderFooter ? "repeat-header-footer" : "")}>
+                                    <div style='display: flex; flex-direction: column; height: -webkit-fill-available;'>
+                                        {header}
+                                        {body}
+                                        {footer}
+                                    </div>
+                                </body> 
+                                </html>";
             }
             else
             {
-                return new TemplateResult
-                {
-                    RepeatHeaderFooter = false,
-                    Header = $"<style>{allStyles}{backgroundStyles}</style>{header}",
-                    Body = $"<style>{allStyles}{backgroundStyles}</style>{body}",
-                    Footer = $"<style>{allStyles}{backgroundStyles}</style>{footer}"
-                };
+                return $@"<html> 
+                                <head> 
+                                    <style>
+                                        {allStyles}
+                                    </style>
+                                </head> 
+                                <body>
+                                    {header}
+                                    {body}
+                                    {footer}
+                                </body> 
+                                </html>";
             }
         }
 
@@ -176,101 +185,35 @@ namespace GiddhTemplate.Services
 
             // Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
-            TemplateResult template = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, request, BackgroundStyles);
-            // Console.WriteLine("Check - "+template);
+            string template = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, request, BackgroundStyles);
+            // Console.WriteLine("Check - " + template);
             // Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
-            
-            await page.SetContentAsync(template.Body);
+            Console.WriteLine(template);
+            await page.SetContentAsync(template);
 
             // Define the PDF options with header and footer
             var pdfOptions = new PdfOptions
             {
-                 // 1. Format: Paper size and orientation
-                Format = PaperFormat.A4, // Common formats: A4, Letter, Legal, etc.  See PaperFormat enum
-                // Orientation:
-                Landscape = false, // Default is portrait. Set to true for landscape
-
-                // 2. Margins
+                Format = PaperFormat.A4,
+                Landscape = false,
                 MarginOptions = new MarginOptions
                 {
                     Top = "5mm", // String values are also accepted: "1in", "2cm", etc.
                     Bottom = "5mm",
-                    Left = "5mm",
-                    Right = "5mm"
+                    Left = "0mm",
+                    Right = "0mm"
                 },
-
-                // 4. Backgrounds
                 PrintBackground = true, // Include background colors and images in the PDF
-
-                // 5. Page Ranges (for multi-page PDFs)
-                // PageRanges = "1-5", // Print only pages 1 through 5 (or any range you specify)
-
-                // 6. Scale
-                // Scale = 1.0, // Adjust the scaling of the PDF content.  1.0 is normal size.
-
-                // 7. PreferCSSPageSize
-                // PreferCSSPageSize = false, // Whether to use the page size defined in CSS
-
-                // 8. EmulateMediaType
-                // EmulateMediaType = MediaType.Print, // Emulate 'print' media type.  Useful for styling.
-
-                // 9. OmitBackground
-                // OmitBackground = false, // Whether to omit the background
-
-                // 10. Title (PDF metadata)
-                // Title = "Giddh Invoice",
-
-                // 11. Author (PDF metadata)
-                // Author = "Divyanshu",
-
-                // 12. Keywords (PDF metadata)
-                // Keywords = "pdf, generation, puppeteer",
-
-                // 13. Producer (PDF metadata)
-                // Producer = "My PDF Generator",
-
-                // 14. Creator (PDF metadata)
-                // Creator = "My Application",
-
-                // 15. Create a tagged PDF (Accessibility)
-                // Tagged = false, // Set to true to create a tagged PDF for better accessibility
-
-                // 16. Format as PDF/A (Archiving)
-                // PdfA = PdfAConformance.PDF_A_1a, // Or other PDF/A conformance levels
-
-                // 17. Page ranges to print
-                // PageRanges = "1-3, 5", // Example: Print pages 1, 2, 3, and 5
-
-                // 18. Outline (Bookmarks)
-                // This is more complex and usually done by manipulating the DOM before printing.
-
-                // 19. Compression
-                // PuppeteerSharp itself doesn't directly offer compression options.  You might need to use a separate PDF library after generating the PDF if you need to compress it.
-
-                // 20. Watermarks
-                // Watermarks are usually added by manipulating the HTML content before generating the PDF.
-
-                // 21. Encryption/Security
-                // PuppeteerSharp doesn't directly support PDF encryption. You'll need to use a separate PDF library after generating the PDF.
+                DisplayHeaderFooter = false
             };
-
-            if (template.RepeatHeaderFooter == true) {
-                // Console.WriteLine(template);
-                Console.WriteLine($"template.RepeatHeaderFooter -> ");
-                pdfOptions.DisplayHeaderFooter = true;
-                pdfOptions.HeaderTemplate = template.Header;
-                pdfOptions.FooterTemplate = template.Footer;
-            }
 
             // Set EmulateMediaType (important for CSS)
             await page.EmulateMediaTypeAsync(MediaType.Print);
-            
-            // Uncomment below line to save PDF file in local 
-            string pdfName = GetFileNameWithPath(request);
-            Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
-            // Console.WriteLine("Options  " + pdfOptions);
 
-            await page.PdfAsync(pdfName, pdfOptions);
+            // Uncomment below line to save PDF file in local 
+            // string pdfName = GetFileNameWithPath(request);
+            // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
+            // await page.PdfAsync(pdfName, pdfOptions);
 
             var pdfBytes = await page.PdfDataAsync(pdfOptions);
             // Console.WriteLine("pdfBytes " + DateTime.Now.ToString("HH:mm:ss.fff"));

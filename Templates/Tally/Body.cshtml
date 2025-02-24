@@ -47,677 +47,1064 @@
     }
 }
 
-<main style="@(Model?.ShowSectionsInline == true ? "" : "margin-top: 8px; height: -webkit-fill-available;")">
-   <table class="h-inherit">
-        <tbody>
-            <tr>
-                <td class="p-0 border-none vertical-align-top">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td class="p-0 border-none">
-                                    <table class="entry-table repeated-header @(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
-                                        <thead>
-                                            <tr class="border-top-none">
-                                                @if (GetDisplayStatus("SNo"))
+    <table class="repeated-header repeated-footer">
+     @if (Model?.ShowSectionsInline != true)
+     {
+      <thead>
+        <tr class="hide-background-border">
+          <td class="p-0 border-none">
+            <div style="height: var(--header-height)"></div>
+          </td>
+        </tr>
+      </thead>
+      }
+      <tbody>
+        <tr>
+          <td class="p-0 border-none">
+            <main style="height: 100%;">
+                <table class="h-inherit">
+                    <tbody>
+                        @if (GetDisplayStatus("DisplayExportMessage"))
+                        {
+                        <tr class="hide-background-border">
+                            <td class="border-none text-center">
+                                @GetLabel("DisplayExportMessage")
+                            </td>
+                        </tr>
+                        }
+                        <tr class="hide-background-border">
+                            <td class="p-0 border-none">
+                                @if (Model?.EInvoiceDetails != null)
+                                {
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                @if (GetDisplayStatus("ShowEInvoiceDetails"))
                                                 {
-                                                    <th class="text-center">@GetLabel("SNo")</th>
+                                                    <td class="border-none vertical-align-bottom">
+                                                        <table>
+                                                            <tbody>
+                                                                @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.IrnNumber))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="border-none p-0" width="100px">IRN</td>
+                                                                        <td class="border-none p-0">: @Model?.EInvoiceDetails?.IrnNumber</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementNumber))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="border-none p-0" width="100px">Ack No</td>
+                                                                        <td class="border-none p-0">:
+                                                                            @Model?.EInvoiceDetails?.AcknowledgementNumber</td>
+                                                                    </tr>
+                                                                }
+                                                                @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementDate))
+                                                                {
+                                                                    <tr>
+                                                                        <td class="border-none p-0" width="100px">Ack Date</td>
+                                                                        <td class="border-none p-0">:
+                                                                            @Model?.EInvoiceDetails?.AcknowledgementDate</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
                                                 }
-                                                @if (GetDisplayStatus("Item"))
+                                                @* && !string.IsNullOrEmpty(Model?.QRCodeBase64String) *@
+                                                @if (GetDisplayStatus("ShowQrCode") && (Model?.IsBusinessToCustomerInvoice == true ||
+                                            Model?.IsBusinessToBusinessInvoice == true))
                                                 {
-                                                    <th width="35%">@GetLabel("Item")</th>
+                                                    <td id="qr-code-section" class="border-none text-right vertical-align-bottom">
+                                                        @{
+                                                            var qrCodeSrc = "data:image/png;base64," + Model?.QRCodeBase64String;
+                                                        }
+                                                        <img src="@qrCodeSrc" class="qr-code-image" width="120px" />
+                                                    </td>
                                                 }
-                                                @if (GetDisplayStatus("HsnSac"))
-                                                {
-                                                    <th class="text-center">@GetLabel("HsnSac")</th>
-                                                }
-                                                @if (GetDisplayStatus("Quantity"))
-                                                {
-                                                    <th class="text-center">@GetLabel("Quantity")</th>
-                                                }
-                                                @if (GetDisplayStatus("Rate"))
-                                                {
-                                                    <th class="text-right">@GetLabel("Rate")</th>
-                                                }
-
-                                                <th class="text-center">per</th>
-
-                                                @if (GetDisplayStatus("Discount"))
-                                                {
-                                                    <th class="text-center">@GetLabel("Discount")</th>
-                                                }
-                                                <th class="text-right no-wrap">
-                                                    @if (GetDisplayStatus("Total"))
-                                                    {
-                                                        @GetLabel("Total")
-                                                    }
-                                                    else
-                                                    {
-                                                        <span>Amount</span>
-                                                    }
-                                                </th>
                                             </tr>
-                                        </thead>
-                                        <tbody class="vertical-align-top">
-                                            @{
-                                                var index = 0;
-                                            }
-                                            @if (Model?.Entries != null && Model.Entries.Any())
-                                            {
-                                            @foreach (var Entry in Model.Entries)
-                                            {
-                                                index++;
-                                                <tr>
-                                                    @if (GetDisplayStatus("SNo"))
-                                                    {
-                                                        <td class="py-0 border-none border-right border-left text-center vertical-align-top">
-                                                            <span>@index</span>
-                                                        </td>
-                                                    }
-                                                    @if (GetDisplayStatus("Item"))
-                                                    {
-                                                        <td class="py-0 border-none border-right">
-                                                            @if (Entry?.Stock != null && !string.IsNullOrEmpty(Entry.Stock.Name))
-                                                            {
-                                                                <p class="word-break">
-                                                                    <strong class="capitalize">
-                                                                        @Entry?.Stock?.Name
-                                                                    </strong>
-                                                                    @if (Entry?.Stock?.ShowVariant == true)
-                                                                    {
-                                                                        <span>-</span>
-                                                                        <span>@Entry.Stock.Variant?.Name</span>
-                                                                    }
-                                                                </p>
-                                                            }
-                                                            else if (Entry?.AccountName != null)
-                                                            {
-                                                                <strong class="word-break capitalize">
-                                                                    @Entry.AccountName
-                                                                </strong>
-                                                            }
-
-                                                            @if (Entry?.Description != null)
-                                                            {
-                                                                <p class="color-light word-break">
-                                                                    @Entry.Description
-                                                                </p>
-                                                            }
-
-                                                            @if (Entry?.Stock != null && !string.IsNullOrEmpty(Entry.Stock.Sku) ||
-                                                        Entry?.Stock?.CustomField1 != null || Entry?.Stock?.CustomField2 != null)
-                                                            {
-                                                                @if (GetDisplayStatus("SkuCode") && !string.IsNullOrEmpty(Entry.Stock.Sku))
-                                                                {
-                                                                    <p class="color-light word-break">
-                                                                        SKU Code: @Entry.Stock?.Sku
-                                                                    </p>
-                                                                }
-
-                                                                <!-- Custom Fields -->
-                                                                @if (Entry?.Stock?.CustomField1?.Value != null)
-                                                                {
-                                                                    <p class="font-size-small color-light word-break">
-                                                                        @Entry.Stock.CustomField1?.Key : @Entry.Stock.CustomField1?.Value,
-                                                                    </p>
-                                                                }
-
-                                                                @if (Entry?.Stock?.CustomField2?.Value != null)
-                                                                {
-                                                                    <p class="font-size-small color-light word-break">
-                                                                        @Entry.Stock.CustomField2?.Key : @Entry.Stock.CustomField2?.Value,
-                                                                    </p>
-                                                                }
-                                                            }
-
-                                                            @if (GetDisplayStatus("Date") && Entry?.Date != null)
-                                                            {
-                                                                <p class="font-size-small color-light">
-                                                                    @Entry.Date
-                                                                </p>
-                                                            }
-                                                        </td>
-                                                    }
-
-                                                    @if (GetDisplayStatus("HsnSac"))
-                                                    {
-                                                        <td class="py-0 border-none border-right text-center">
-                                                            @if (Entry?.HsnNumber != null)
-                                                            {
-                                                                <span>@Entry.HsnNumber</span>
-                                                            }
-                                                            else if (Entry?.SacNumber != null)
-                                                            {
-                                                                <span>@Entry.SacNumber</span>
-                                                            }
-                                                        </td>
-                                                    }
-
-                                                    @if (GetDisplayStatus("Quantity"))
-                                                    {
-                                                        <td class="py-0 border-none border-right text-center">
-                                                            @if (Entry?.Stock != null && Entry.Stock.Quantity != null)
-                                                            {
-                                                                <strong class="no-wrap">
-                                                                    @Entry.Stock?.Quantity
-                                                                    @if (Entry?.Stock != null && Entry.Stock.StockUnit != null)
-                                                                    {
-                                                                        @Entry.Stock?.StockUnit?.Code
-                                                                    }
-                                                                </strong>
-                                                            }
-                                                        </td>
-                                                    }
-
-                                                    @if (GetDisplayStatus("Rate"))
-                                                    {
-                                                        <td class="py-0 border-none border-right text-right">
-                                                            @if (Entry?.Stock?.Rate != null)
-                                                            {
-                                                                <p>
-                                                                    @GetAccountCurrencyCodeOrSymbol()
-                                                                    @Entry.Stock.Rate.AmountForAccount
-                                                                </p>
-                                                                
-                                                                @if (IsShowAmountForCompany() && Entry.Stock.Rate?.AmountForCompany != null)
-                                                                {
-                                                                    <p class="text-light pr-3 font-size-small">
-                                                                        @GetCompanyCurrencyCodeOrSymbol()
-                                                                        @Entry.Stock.Rate.AmountForCompany
-                                                                    </p>
-                                                                }
-                                                            }
-                                                        </td>
-                                                    }
-
-                                                    <td class="py-0 border-none border-right text-center">
-                                                        @if (Entry?.Stock != null && Entry.Stock.StockUnit != null &&
-                                                    !string.IsNullOrEmpty(Entry.Stock.StockUnit.Code))
-                                                        {
-                                                            <span>@Entry.Stock.StockUnit.Code</span>
-                                                        }
-                                                    </td>
-
-                                                    @if (GetDisplayStatus("Discount"))
-                                                    {
-                                                        <td class="py-0 border-none border-right text-center">
-                                                            @if (Entry?.SumOfDiscounts != null && Entry.SumOfDiscounts.AmountForAccount >= 0)
-                                                            {
-                                                                <span>@GetAccountCurrencyCodeOrSymbol() - @Entry?.SumOfDiscounts?.AmountForAccount</span>
-                                                            }
-                                                        </td>
-                                                    }
-                                                    <td class="py-0 border-none border-right text-right">
-                                                        @if (Entry?.TaxableValue != null)
-                                                        {
-                                                            <p>
-                                                                <strong>
-                                                                    @GetAccountCurrencyCodeOrSymbol()
-                                                                    @Entry?.TaxableValue?.AmountForAccount
-                                                                </strong>
-                                                            </p>
-                                                            @if (IsShowAmountForCompany())
-                                                            {
-                                                                <p class="text-right text-light">
-                                                                    <strong class="text-light font-size-small">
-                                                                        @GetCompanyCurrencyCodeOrSymbol()
-                                                                        @Entry?.TaxableValue?.AmountForCompany
-                                                                    </strong>
-                                                                </p>
-                                                            }
-                                                        }
-                                                    </td>
-                                                </tr>
-                                            }
-                                            }
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                @if (GetDisplayStatus("SNo"))
-                                                {
-                                                    <td class="border-none border-right border-left"></td>
-                                                }
-                                                @if (GetDisplayStatus("Item"))
-                                                {
-                                                    <td class="border-none border-right"></td>
-                                                }
-                                                @if (GetDisplayStatus("HsnSac"))
-                                                {
-                                                    <td class="border-none border-right"></td>
-                                                }
-                                                @if (GetDisplayStatus("Quantity"))
-                                                {
-                                                    <td class="border-none border-right"></td>
-                                                }
-                                                @if (GetDisplayStatus("Rate"))
-                                                {
-                                                    <td class="border-none border-right"></td>
-                                                }
-
-                                                <td class="border-none border-right"></td>
-
-                                                @if (GetDisplayStatus("Discount"))
-                                                {
-                                                    <td class="border-none border-right"></td>
-                                                }
-                                                <td class="border-none border-right border-top text-right">
-                                                    <strong> @Model?.TaxableTotal?.AmountForAccount</strong>
-                                                </td>
-                                            </tr>
-
-                                            @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
-                                            {
-                                                @foreach (var Tax in Model.GstTaxesTotal)
-                                                {
-                                                    <tr>
-                                                        @if (GetDisplayStatus("SNo"))
-                                                        {
-                                                            <td class="border-none border-right border-left"></td>
-                                                        }
-                                                        @if (GetDisplayStatus("Item"))
-                                                        {
-                                                            <td class="border-none border-right text-right">
-                                                                @if (Tax?.AccountName != null)
-                                                                {
-                                                                    <strong class="text-uppercase">
-                                                                        @Tax?.AccountName
-                                                                    </strong>
-                                                                }
-                                                            </td>
-                                                        }
-                                                        @if (GetDisplayStatus("HsnSac"))
-                                                        {
-                                                            <td class="border-none border-right"></td>
-                                                        }
-                                                        @if (GetDisplayStatus("Quantity"))
-                                                        {
-                                                            <td class="border-none border-right"></td>
-                                                        }
-                                                        @if (GetDisplayStatus("Rate"))
-                                                        {
-                                                            <td class="border-none border-right"></td>
-                                                        }
-
-                                                        <td class="border-none border-right"></td>
-
-                                                        @if (GetDisplayStatus("Discount"))
-                                                        {
-                                                            <td class="border-none border-right"></td>
-                                                        }
-                                                        <td class="border-none border-right text-right">
-                                                            @if (Tax?.Amount != null)
-                                                            {
-                                                                <strong>@Tax?.Amount.AmountForAccount</strong>
-                                                            }
-                                                        </td>
-                                                    </tr>
-                                                }
-                                            }
-                                            @if (Model?.RoundOff != null)
-                                            {
-                                            <tr>
-                                                 @if (GetDisplayStatus("SNo"))
-                                                {
-                                                    <td class="border-none border-right border-left"></td>
-                                                }
-                                                @if (GetDisplayStatus("Item"))
-                                                {
-                                                    <td class="border-none border-right text-right">
-                                                         <strong>
-                                                            Round Off
-                                                         </strong>
-                                                    </td>
-                                                }
-                                                @if (GetDisplayStatus("HsnSac"))
-                                                {
-                                                    <td class="border-none border-right"></td>
-                                                }
-                                                @if (GetDisplayStatus("Quantity"))
-                                                {
-                                                    <td class="border-none border-right"></td>
-                                                }
-                                                @if (GetDisplayStatus("Rate"))
-                                                {
-                                                    <td class="border-none border-right"></td>
-                                                }
-
-                                                <td class="border-none border-right"></td>
-
-                                                @if (GetDisplayStatus("Discount"))
-                                                {
-                                                    <td class="border-none border-right"></td>
-                                                }
-                                                <td class="border-none border-right border-top text-right">
-                                                    <strong>
-                                                        @GetAccountCurrencyCodeOrSymbol()
-                                                        @Model?.RoundOff
-                                                    </strong>
-                                                </td>
-                                            </tr>
-                                            }
-
-                                            <tr>
-                                                @if (GetDisplayStatus("SNo"))
-                                                {
-                                                    <td></td>
-                                                }
-                                                @if (GetDisplayStatus("Item"))
-                                                {
-                                                    <td class="text-right">Total</td>
-                                                }
-                                                @if (GetDisplayStatus("HsnSac"))
-                                                {
-                                                    <td></td>
-                                                }
-                                                @if (GetDisplayStatus("Quantity"))
-                                                {
-                                                    <td class="text-center">
-                                                        @if (GetDisplayStatus("TotalQuantity"))
-                                                        {
-                                                            <strong>@Model?.StockQuantityWithUnit</strong>
-                                                        }
-                                                    </td>
-                                                }
-                                                @if (GetDisplayStatus("Rate"))
-                                                {
-                                                    <td></td>
-                                                }
-
-                                                <td></td>
-
-                                                @if (GetDisplayStatus("Discount"))
-                                                {
-                                                    <td></td>
-                                                }
-                                                <td class="text-right">
-                                                    <strong>
-                                                        @GetAccountCurrencyCodeOrSymbol()
-                                                        @Model?.GstEntriesTotal?.AmountForAccount
-                                                    </strong>
-                                                </td>
-                                            </tr>
-                                        </tfoot>
                                     </table>
-                                </td>
-                            </tr>
-                            @if (GetDisplayStatus("TotalInWords"))
-                            {
-                            <tr>
-                                <td class="p-0 border-none @(GetDisplayStatus("TaxBifurcation") ? "" : "border-bottom")">
-                                    <table class="@(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
+                                }
+                                <table>
+                                    <tbody>
                                         <tr>
-                                            <td class="border-none border-left" width="50%">Amount Chargeable (in words)</td>
-                                            <td class="border-none border-right text-right" width="50%">E. & O.E</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border-none border-left border-right" colspan="100%">
-                                                <strong>
-                                                    @Model?.TotalInWords?.AmountForAccount
-                                                </strong>
+                                            <td class="p-0 vertical-align-top">
+                                                <table class="h-inherit">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td width="50%" class="border-none border-right p-0 vertical-align-top">
+                                                                <table>
+                                                                    @{
+                                                                        var showCompanyInfo = GetDisplayStatus("ShowLogo") ||
+                                                                        GetDisplayStatus("ShowCompanyAddress") ||
+                                                                        GetDisplayStatus("HeaderCompanyName");
+                                                                    }
+                                                                    <tbody>
+                                                                        @if (showCompanyInfo)
+                                                                        {
+                                                                            <tr>
+                                                                                <td class="border-none">
+                                                                                    <table>
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                @if (GetDisplayStatus("ShowLogo") &&
+                                                                                            !string.IsNullOrEmpty(Model?.Company?.Logo?.Url))
+                                                                                                {
+                                                                                                    <td class="p-0 border-none pd-r1 vertical-align-top"
+                                                                                                        width="@Model?.Company?.Logo?.Size">
+                                                                                                        <figure class="m-0">
+                                                                                                            <img src="@Model?.Company?.Logo?.Url"
+                                                                                                                width="@Model?.Company?.Logo?.Size"
+                                                                                                                height="auto" />
+                                                                                                        </figure>
+                                                                                                    </td>
+                                                                                                }
+
+                                                                                                <td
+                                                                                                    class="p-0 border-none vertical-align-top">
+                                                                                                    @if
+                                                                                                (GetDisplayStatus("HeaderCompanyName"))
+                                                                                                    {
+                                                                                                        <h2
+                                                                                                            class="word-break font-weight-500">
+                                                                                                            @Model?.Company?.Name
+                                                                                                        </h2>
+                                                                                                    }
+
+                                                                                                    @if
+                                                                                                (GetDisplayStatus("ShowCompanyAddress"))
+                                                                                                    {
+                                                                                                        <address>@Model?.Company?.Address
+                                                                                                        </address>
+                                                                                                    }
+
+                                                                                                    @if
+                                                                                                (GetDisplayStatus("CompanyTaxNumber"))
+                                                                                                    {
+                                                                                                        <table>
+                                                                                                            <tr>
+                                                                                                                <td class="border-none p-0">
+                                                                                                                    @GetLabel("CompanyTaxNumber")
+                                                                                                                </td>
+                                                                                                                <td class="border-none p-0">
+                                                                                                                    :
+                                                                                                                    @Model?.Company?.TaxNumber
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        </table>
+                                                                                                    }
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+
+                                                                        @if (GetDisplayStatus("CustomerName"))
+                                                                        {
+                                                                            <tr>
+                                                                                <td
+                                                                                    class="border-none @(showCompanyInfo ? "border-top" : "")">
+                                                                                    <table>
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td class="border-none p-0"
+                                                                                                    width="100px">
+                                                                                                    @GetLabel("CustomerName")
+                                                                                                </td>
+                                                                                                <td class="border-none p-0">:
+                                                                                                    <strong>@Model?.CustomerDetails?.Name</strong>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+
+                                                                        @if (GetDisplayStatus("ShippingAddress"))
+                                                                        {
+                                                                            <tr>
+                                                                                <td
+                                                                                    class="border-none @(showCompanyInfo || GetDisplayStatus("CustomerName") ? "border-top" : "")">
+                                                                                    <p>@GetLabel("ShippingAddress")</p>
+                                                                                    <p>@Model?.Shipping?.Address</p>
+                                                                                    <table>
+                                                                                        <tbody>
+                                                                                            @if (GetDisplayStatus("ShippingTaxNumber"))
+                                                                                            {
+                                                                                                <tr>
+                                                                                                    <td class="border-none p-0"
+                                                                                                        width="100px">
+                                                                                                        @GetLabel("ShippingTaxNumber")
+                                                                                                    </td>
+                                                                                                    <td class="border-none p-0">:
+                                                                                                        @Model?.Shipping?.TaxNumber</td>
+                                                                                                </tr>
+                                                                                            }
+
+                                                                                            @if
+                                                                                        (GetDisplayStatus("ShippingStateCounty"))
+                                                                                            {
+                                                                                                <tr>
+                                                                                                    <td class="border-none p-0"
+                                                                                                        width="100px">
+                                                                                                        @GetLabel("ShippingStateCounty")
+                                                                                                    </td>
+                                                                                                    <td class="border-none p-0">:
+                                                                                                        @Model?.Shipping?.StateCounty</td>
+                                                                                                </tr>
+                                                                                            }
+
+                                                                                            @if (GetDisplayStatus("AttentionTo"))
+                                                                                            {
+                                                                                                <tr>
+                                                                                                    <td class="border-none p-0"
+                                                                                                        width="100px">
+                                                                                                        @GetLabel("AttentionTo")
+                                                                                                    </td>
+                                                                                                    <td class="border-none p-0">:
+                                                                                                        @Model?.AttentionTo</td>
+                                                                                                </tr>
+                                                                                            }
+
+                                                                                            @if (GetDisplayStatus("CustomerEmail"))
+                                                                                            {
+                                                                                                <tr>
+                                                                                                    <td class="border-none p-0"
+                                                                                                        width="100px">
+                                                                                                        @GetLabel("CustomerEmail")
+                                                                                                    </td>
+                                                                                                    <td class="border-none p-0">:
+                                                                                                        @Model?.CustomerDetails?.Email</td>
+                                                                                                </tr>
+                                                                                            }
+
+                                                                                            @if
+                                                                                        (GetDisplayStatus("CustomerContactNumber"))
+                                                                                            {
+                                                                                                <tr>
+                                                                                                    <td class="border-none p-0"
+                                                                                                        width="100px">
+                                                                                                        @GetLabel("CustomerContactNumber")
+                                                                                                    </td>
+                                                                                                    <td class="border-none p-0">:
+                                                                                                        @Model?.CustomerDetails?.ContactNumber
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            }
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+
+                                                                        @if (GetDisplayStatus("BillingAddress"))
+                                                                        {
+                                                                            <tr>
+                                                                                <td
+                                                                                    class="border-none @(showCompanyInfo || GetDisplayStatus("CustomerName") || GetDisplayStatus("ShippingAddress") ? "border-top" : "")">
+                                                                                    <p>@GetLabel("BillingAddress")</p>
+                                                                                    <p>@Model?.Billing?.Address</p>
+                                                                                    <table>
+                                                                                        @if (GetDisplayStatus("BillingTaxNumber"))
+                                                                                        {
+                                                                                            <tr>
+                                                                                                <td class="border-none p-0" width="100px">
+                                                                                                    @GetLabel("BillingTaxNumber")
+                                                                                                </td>
+                                                                                                <td class="border-none p-0">:
+                                                                                                    @Model?.Billing?.TaxNumber</td>
+                                                                                            </tr>
+                                                                                        }
+
+                                                                                        @if (GetDisplayStatus("BillingStateCounty"))
+                                                                                        {
+                                                                                            <tr>
+                                                                                                <td class="border-none p-0" width="100px">
+                                                                                                    @GetLabel("BillingStateCounty")
+                                                                                                </td>
+                                                                                                <td class="border-none p-0">:
+                                                                                                    @Model?.Billing?.StateCounty</td>
+                                                                                            </tr>
+                                                                                        }
+
+                                                                                        @if (GetDisplayStatus("DisplayPlaceOfSupply"))
+                                                                                        {
+                                                                                            <tr>
+                                                                                                <td class="border-none p-0" width="100px">
+                                                                                                    @GetLabel("DisplayPlaceOfSupply")
+                                                                                                </td>
+                                                                                                <td class="border-none p-0">:
+                                                                                                    @Model?.PlaceOfSupply</td>
+                                                                                            </tr>
+                                                                                        }
+
+                                                                                        @if (GetDisplayStatus("AttentionTo"))
+                                                                                        {
+                                                                                            <tr>
+                                                                                                <td class="border-none p-0" width="100px">
+                                                                                                    @GetLabel("AttentionTo")
+                                                                                                </td>
+                                                                                                <td class="border-none p-0">:
+                                                                                                    @Model?.AttentionTo</td>
+                                                                                            </tr>
+                                                                                        }
+
+                                                                                        @if (GetDisplayStatus("CustomerEmail"))
+                                                                                        {
+                                                                                            <tr>
+                                                                                                <td class="border-none p-0" width="100px">
+                                                                                                    @GetLabel("CustomerEmail")
+                                                                                                </td>
+                                                                                                <td class="border-none p-0">:
+                                                                                                    @Model?.CustomerDetails?.Email</td>
+                                                                                            </tr>
+                                                                                        }
+
+                                                                                        @if (GetDisplayStatus("CustomerContactNumber"))
+                                                                                        {
+                                                                                            <tr>
+                                                                                                <td class="border-none p-0" width="100px">
+                                                                                                    @GetLabel("CustomerContactNumber")</td>
+                                                                                                <td class="border-none p-0">:
+                                                                                                    @Model?.CustomerDetails?.ContactNumber
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        }
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                            <td width="50%" class="border-none border-left p-0 vertical-align-top">
+                                                                <table class="table-row-height">
+                                                                    <tbody>
+                                                                        @if (GetDisplayStatus("VoucherNumber") ||
+                                                                        GetDisplayStatus("VoucherDate"))
+                                                                        {
+                                                                            <tr>
+                                                                                @if (GetDisplayStatus("VoucherNumber"))
+                                                                                {
+                                                                                    <td width="50%"
+                                                                                        class="border-none border-bottom border-right vertical-align-top">
+                                                                                        <span>@GetLabel("VoucherNumber")</span>
+                                                                                        <p class="font-weight-500">@Model?.VoucherNumber</p>
+                                                                                    </td>
+                                                                                }
+                                                                                <td width="50%"
+                                                                                    class="border-none border-bottom vertical-align-top">
+                                                                                    @if (GetDisplayStatus("VoucherDate"))
+                                                                                    {
+                                                                                        <span>@GetLabel("VoucherDate")</span>
+                                                                                        <p class="font-weight-500">@Model?.VoucherDate</p>
+                                                                                    }
+                                                                                </td>
+                                                                                @if (!GetDisplayStatus("VoucherNumber"))
+                                                                                {
+                                                                                    <td width="50%"
+                                                                                        class="border-none border-bottom border-left"></td>
+                                                                                }
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
                                             </td>
                                         </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            }
-                            @if (GetDisplayStatus("TaxBifurcation"))
-                            {
-                            <tr>
-                                <td class="p-0 border-none">
-                                    <table class="repeated-header @(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
-                                        <thead>
-                                            @{
-                                                int taxCount = 0;
-                                                bool TaxIsApplied = false;
-                                                bool CgstSgstIsApplied = false;
-                                                bool CessIsApplied = false;
-                                                bool OtherTaxIsApplied = false;
-
-                                                bool ShowHSNSAC = false;
-                                            }
-                                            <tr>
-                                                @if (GetLabel("TaxBifurcation") == "HSN/SAC")
-                                                {
-                                                ShowHSNSAC = true;
-                                                <th class="vertical-align-top text-center" rowspan="2">
-                                                    @GetLabel("TaxBifurcation")
-                                                </th>
-                                                }
-                                                <th class="vertical-align-top @(Model?.IsTaxesApplied == true ? "text-center" : "text-right")" rowspan="2">
-                                                    Taxable Value
-                                                </th>
-                                                @* IGST/ (CGST/SGST) / VAT  *@
-                                                @if (Model?.GstTaxesTotalOnly != null && Model.GstTaxesTotalOnly.Any())
-                                                {
-                                                    CgstSgstIsApplied = Model.GstTaxesTotalOnly.Count == 2;
-                                                    TaxIsApplied = true;
-                                                    @foreach (var Tax in Model.GstTaxesTotalOnly)
-                                                    {
-                                                    taxCount++;
-                                                    <th class="text-center" colspan="2">
-                                                        @if (Tax?.AccountName != null)
-                                                        {
-                                                            <span class="text-uppercase">@Tax?.AccountName</span>
-                                                        }
-                                                    </th>
-                                                    }
-                                                }
-
-                                                @* CESS (It may be more then 1) *@
-                                                @if (Model?.CessTotal != null && Model.CessTotal.Any())
-                                                {
-                                                    CessIsApplied = true;
-                                                    @foreach (var Cess in Model.CessTotal)
-                                                    {
-                                                    taxCount++;
-                                                    <th class="text-center" colspan="2">
-                                                        @if (Cess?.AccountName != null)
-                                                        {
-                                                            <span class="text-uppercase">@Cess?.AccountName</span>
-                                                        }
-                                                    </th>
-                                                    }
-                                                }
-
-                                                @* Other Tax (It may be more then 1) *@
-                                                @if (Model?.OtherTotal != null && Model.OtherTotal.Any())
-                                                {
-                                                    OtherTaxIsApplied = true;
-                                                    @foreach (var OtherTax in Model.OtherTotal)
-                                                    {
-                                                    taxCount++;
-                                                    <th class="text-center" colspan="2">
-                                                        @if (OtherTax?.AccountName != null)
-                                                        {
-                                                            <span class="text-uppercase">@OtherTax?.AccountName</span>
-                                                        }
-                                                    </th>
-                                                    }
-                                                }
-
-                                                @if (Model?.IsTaxesApplied == true)
-                                                {
-                                                    <th class="text-right vertical-align-top" rowspan="2">
-                                                        Total Tax Amount
-                                                    </th>
-                                                }
-                                            </tr>
-                                            @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
-                                            {
-                                            <tr>
-                                                @for(int i = 0; i < taxCount; i++)
-                                                {
-                                                    <th class="text-center" width="60px">Rate</th>
-                                                    <th class="text-center" width="60px">Amount</th>
-                                                }
-                                            </tr>
-                                            }
-                                        </thead>
-                                        <tbody>
-                                            @if (Model?.TaxBifurcation != null && Model.TaxBifurcation.Any())
-                                            {
-                                                @foreach (var Bifurcation in Model.TaxBifurcation)
-                                                {
-                                                <tr>
-                                                    @if (ShowHSNSAC == true)
-                                                    {
-                                                    <td>
-                                                        @if (Bifurcation?.HsnSc != null)
-                                                        {
-                                                            <span>@Bifurcation?.HsnSc</span>
-                                                        }
-                                                    </td>
-                                                    }
-                                                    <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">@Bifurcation?.TaxableValue</td>
-
-                                                    @* IGST / VAT *@
-                                                    @if (TaxIsApplied == true && CgstSgstIsApplied == false)
-                                                    {
-                                                        <td class="text-center">
-                                                            @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @if (Bifurcation?.Iamt != null) {
-                                                                @(Bifurcation?.Iamt >= 0 ? Bifurcation?.Iamt : "")
-                                                            } else if(Bifurcation?.Vatamt != null) {
-                                                                @(Bifurcation?.Vatamt >= 0 ? Bifurcation?.Vatamt : "") 
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-0 border-none vertical-align-top">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-0 border-none">
+                                                <table class="entry-table repeated-header @(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
+                                                    <thead>
+                                                        <tr class="border-top-none">
+                                                            @if (GetDisplayStatus("SNo"))
+                                                            {
+                                                                <th class="text-center">@GetLabel("SNo")</th>
                                                             }
-                                                        </td>
-                                                    }
+                                                            @if (GetDisplayStatus("Item"))
+                                                            {
+                                                                <th width="35%">@GetLabel("Item")</th>
+                                                            }
+                                                            @if (GetDisplayStatus("HsnSac"))
+                                                            {
+                                                                <th class="text-center">@GetLabel("HsnSac")</th>
+                                                            }
+                                                            @if (GetDisplayStatus("Quantity"))
+                                                            {
+                                                                <th class="text-center">@GetLabel("Quantity")</th>
+                                                            }
+                                                            @if (GetDisplayStatus("Rate"))
+                                                            {
+                                                                <th class="text-right">@GetLabel("Rate")</th>
+                                                            }
 
-                                                    @* CGST/SGST *@
-                                                    @if (CgstSgstIsApplied == true)
-                                                    {
-                                                        <td class="text-center">
-                                                            @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @(Bifurcation?.Camt >= 0 ? Bifurcation?.Camt : "")
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @(Bifurcation?.Samt != null && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @(Bifurcation?.Samt >= 0 ? Bifurcation?.Samt : "")
-                                                        </td>
-                                                    }
+                                                            <th class="text-center">per</th>
 
-                                                    @* SALES TAX  - Note - currently not support Sales Tax *@
-                                                    @* @if (Bifurcation?.SalesTaxAmount != null)
-                                                    {
-                                                        <td class="text-center">
-                                                            @(Bifurcation?.SalesTaxAmount != null && Bifurcation?.SalesTaxRate >= 0 ? $"{Bifurcation?.SalesTaxRate}%" : "") 
-                                                        </td>
-                                                        <td class="text-center">
-                                                            @(Bifurcation?.SalesTaxAmount >= 0 ? Bifurcation?.SalesTaxAmount : "") 
-                                                        </td>
-                                                    } *@
-
-                                                    @* CESS (It may be more then 1) *@
-                                                    @if (CessIsApplied == true)
-                                                    {
-                                                        @foreach (var Cess in Bifurcation?.CsAmountList ?? Enumerable.Empty<decimal>())
-                                                        { 
-                                                            <td class="text-center">
-                                                                @(Cess > 0 && Bifurcation?.CsTaxRate >= 0 ? $"{Bifurcation?.CsTaxRate}%" : "") 
-                                                            </td>
-                                                            <td class="text-center">
-                                                                @(Cess > 0 ? Cess : "") 
-                                                            </td>
+                                                            @if (GetDisplayStatus("Discount"))
+                                                            {
+                                                                <th class="text-center">@GetLabel("Discount")</th>
+                                                            }
+                                                            <th class="text-right no-wrap">
+                                                                @if (GetDisplayStatus("Total"))
+                                                                {
+                                                                    @GetLabel("Total")
+                                                                }
+                                                                else
+                                                                {
+                                                                    <span>Amount</span>
+                                                                }
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="vertical-align-top">
+                                                        @{
+                                                            var index = 0;
                                                         }
-                                                    }
+                                                        @if (Model?.Entries != null && Model.Entries.Any())
+                                                        {
+                                                        @foreach (var Entry in Model.Entries)
+                                                        {
+                                                            index++;
+                                                            <tr>
+                                                                @if (GetDisplayStatus("SNo"))
+                                                                {
+                                                                    <td class="py-0 border-none border-right border-left text-center vertical-align-top">
+                                                                        <span>@index</span>
+                                                                    </td>
+                                                                }
+                                                                @if (GetDisplayStatus("Item"))
+                                                                {
+                                                                    <td class="py-0 border-none border-right">
+                                                                        @if (Entry?.Stock != null && !string.IsNullOrEmpty(Entry.Stock.Name))
+                                                                        {
+                                                                            <p class="word-break">
+                                                                                <strong class="capitalize">
+                                                                                    @Entry?.Stock?.Name
+                                                                                </strong>
+                                                                                @if (Entry?.Stock?.ShowVariant == true)
+                                                                                {
+                                                                                    <span>-</span>
+                                                                                    <span>@Entry.Stock.Variant?.Name</span>
+                                                                                }
+                                                                            </p>
+                                                                        }
+                                                                        else if (Entry?.AccountName != null)
+                                                                        {
+                                                                            <strong class="word-break capitalize">
+                                                                                @Entry.AccountName
+                                                                            </strong>
+                                                                        }
 
-                                                    @* Other Tax (It may be more then 1) *@
-                                                    @if (OtherTaxIsApplied == true && Bifurcation?.OthAmountList != null)
-                                                    {
-                                                        @foreach (var OtherTax in Bifurcation?.OthAmountList ?? Enumerable.Empty<decimal>())
-                                                        { 
-                                                            <td class="text-center">
-                                                                @(OtherTax > 0 && Bifurcation?.OthTaxRate >= 0 ? $"{Bifurcation?.OthTaxRate}%" : "") 
-                                                            </td>
-                                                            <td class="text-center">
-                                                                @(OtherTax > 0 ? OtherTax : "") 
-                                                            </td>
+                                                                        @if (Entry?.Description != null)
+                                                                        {
+                                                                            <p class="color-light word-break">
+                                                                                @Entry.Description
+                                                                            </p>
+                                                                        }
+
+                                                                        @if (Entry?.Stock != null && !string.IsNullOrEmpty(Entry.Stock.Sku) ||
+                                                                    Entry?.Stock?.CustomField1 != null || Entry?.Stock?.CustomField2 != null)
+                                                                        {
+                                                                            @if (GetDisplayStatus("SkuCode") && !string.IsNullOrEmpty(Entry.Stock.Sku))
+                                                                            {
+                                                                                <p class="color-light word-break">
+                                                                                    SKU Code: @Entry.Stock?.Sku
+                                                                                </p>
+                                                                            }
+
+                                                                            <!-- Custom Fields -->
+                                                                            @if (Entry?.Stock?.CustomField1?.Value != null)
+                                                                            {
+                                                                                <p class="font-size-small color-light word-break">
+                                                                                    @Entry.Stock.CustomField1?.Key : @Entry.Stock.CustomField1?.Value,
+                                                                                </p>
+                                                                            }
+
+                                                                            @if (Entry?.Stock?.CustomField2?.Value != null)
+                                                                            {
+                                                                                <p class="font-size-small color-light word-break">
+                                                                                    @Entry.Stock.CustomField2?.Key : @Entry.Stock.CustomField2?.Value,
+                                                                                </p>
+                                                                            }
+                                                                        }
+
+                                                                        @if (GetDisplayStatus("Date") && Entry?.Date != null)
+                                                                        {
+                                                                            <p class="font-size-small color-light">
+                                                                                @Entry.Date
+                                                                            </p>
+                                                                        }
+                                                                    </td>
+                                                                }
+
+                                                                @if (GetDisplayStatus("HsnSac"))
+                                                                {
+                                                                    <td class="py-0 border-none border-right text-center">
+                                                                        @if (Entry?.HsnNumber != null)
+                                                                        {
+                                                                            <span>@Entry.HsnNumber</span>
+                                                                        }
+                                                                        else if (Entry?.SacNumber != null)
+                                                                        {
+                                                                            <span>@Entry.SacNumber</span>
+                                                                        }
+                                                                    </td>
+                                                                }
+
+                                                                @if (GetDisplayStatus("Quantity"))
+                                                                {
+                                                                    <td class="py-0 border-none border-right text-center">
+                                                                        @if (Entry?.Stock != null && Entry.Stock.Quantity != null)
+                                                                        {
+                                                                            <strong class="no-wrap">
+                                                                                @Entry.Stock?.Quantity
+                                                                                @if (Entry?.Stock != null && Entry.Stock.StockUnit != null)
+                                                                                {
+                                                                                    @Entry.Stock?.StockUnit?.Code
+                                                                                }
+                                                                            </strong>
+                                                                        }
+                                                                    </td>
+                                                                }
+
+                                                                @if (GetDisplayStatus("Rate"))
+                                                                {
+                                                                    <td class="py-0 border-none border-right text-right">
+                                                                        @if (Entry?.Stock?.Rate != null)
+                                                                        {
+                                                                            <p>
+                                                                                @GetAccountCurrencyCodeOrSymbol()
+                                                                                @Entry.Stock.Rate.AmountForAccount
+                                                                            </p>
+                                                                            
+                                                                            @if (IsShowAmountForCompany() && Entry.Stock.Rate?.AmountForCompany != null)
+                                                                            {
+                                                                                <p class="text-light pr-3 font-size-small">
+                                                                                    @GetCompanyCurrencyCodeOrSymbol()
+                                                                                    @Entry.Stock.Rate.AmountForCompany
+                                                                                </p>
+                                                                            }
+                                                                        }
+                                                                    </td>
+                                                                }
+
+                                                                <td class="py-0 border-none border-right text-center">
+                                                                    @if (Entry?.Stock != null && Entry.Stock.StockUnit != null &&
+                                                                !string.IsNullOrEmpty(Entry.Stock.StockUnit.Code))
+                                                                    {
+                                                                        <span>@Entry.Stock.StockUnit.Code</span>
+                                                                    }
+                                                                </td>
+
+                                                                @if (GetDisplayStatus("Discount"))
+                                                                {
+                                                                    <td class="py-0 border-none border-right text-center">
+                                                                        @if (Entry?.SumOfDiscounts != null && Entry.SumOfDiscounts.AmountForAccount >= 0)
+                                                                        {
+                                                                            <span>@GetAccountCurrencyCodeOrSymbol() - @Entry?.SumOfDiscounts?.AmountForAccount</span>
+                                                                        }
+                                                                    </td>
+                                                                }
+                                                                <td class="py-0 border-none border-right text-right">
+                                                                    @if (Entry?.TaxableValue != null)
+                                                                    {
+                                                                        <p>
+                                                                            <strong>
+                                                                                @GetAccountCurrencyCodeOrSymbol()
+                                                                                @Entry?.TaxableValue?.AmountForAccount
+                                                                            </strong>
+                                                                        </p>
+                                                                        @if (IsShowAmountForCompany())
+                                                                        {
+                                                                            <p class="text-right text-light">
+                                                                                <strong class="text-light font-size-small">
+                                                                                    @GetCompanyCurrencyCodeOrSymbol()
+                                                                                    @Entry?.TaxableValue?.AmountForCompany
+                                                                                </strong>
+                                                                            </p>
+                                                                        }
+                                                                    }
+                                                                </td>
+                                                            </tr>
                                                         }
-                                                    }
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            @if (GetDisplayStatus("SNo"))
+                                                            {
+                                                                <td class="border-none border-right border-left"></td>
+                                                            }
+                                                            @if (GetDisplayStatus("Item"))
+                                                            {
+                                                                <td class="border-none border-right"></td>
+                                                            }
+                                                            @if (GetDisplayStatus("HsnSac"))
+                                                            {
+                                                                <td class="border-none border-right"></td>
+                                                            }
+                                                            @if (GetDisplayStatus("Quantity"))
+                                                            {
+                                                                <td class="border-none border-right"></td>
+                                                            }
+                                                            @if (GetDisplayStatus("Rate"))
+                                                            {
+                                                                <td class="border-none border-right"></td>
+                                                            }
 
-                                                    @if (Model?.IsTaxesApplied == true)
-                                                    {
-                                                        <td class="text-right">@Bifurcation?.EntryTotal</td>
-                                                    }
-                                                </tr>
-                                                }
-                                            }
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                @if (ShowHSNSAC == true)
-                                                {
-                                                <td class="text-right">
-                                                    <strong>Total</strong>
-                                                </td>
-                                                }
+                                                            <td class="border-none border-right"></td>
 
-                                                <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">
-                                                    <strong>@Model?.TaxableTotal?.AmountForAccount</strong>
-                                                </td>
+                                                            @if (GetDisplayStatus("Discount"))
+                                                            {
+                                                                <td class="border-none border-right"></td>
+                                                            }
+                                                            <td class="border-none border-right border-top text-right">
+                                                                <strong> @Model?.TaxableTotal?.AmountForAccount</strong>
+                                                            </td>
+                                                        </tr>
 
-                                                @if (Model?.GstTaxesTotalOnly != null && Model.GstTaxesTotalOnly.Any())
-                                                {
-                                                    @foreach (var Tax in Model.GstTaxesTotalOnly)
-                                                    {
-                                                    <td class="text-center"></td>
-                                                     <td class="text-center">
-                                                       <strong>@Tax?.Amount?.AmountForAccount</strong>
-                                                    </td>
-                                                    }
-                                                }
+                                                        @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
+                                                        {
+                                                            @foreach (var Tax in Model.GstTaxesTotal)
+                                                            {
+                                                                <tr>
+                                                                    @if (GetDisplayStatus("SNo"))
+                                                                    {
+                                                                        <td class="border-none border-right border-left"></td>
+                                                                    }
+                                                                    @if (GetDisplayStatus("Item"))
+                                                                    {
+                                                                        <td class="border-none border-right text-right">
+                                                                            @if (Tax?.AccountName != null)
+                                                                            {
+                                                                                <strong class="text-uppercase">
+                                                                                    @Tax?.AccountName
+                                                                                </strong>
+                                                                            }
+                                                                        </td>
+                                                                    }
+                                                                    @if (GetDisplayStatus("HsnSac"))
+                                                                    {
+                                                                        <td class="border-none border-right"></td>
+                                                                    }
+                                                                    @if (GetDisplayStatus("Quantity"))
+                                                                    {
+                                                                        <td class="border-none border-right"></td>
+                                                                    }
+                                                                    @if (GetDisplayStatus("Rate"))
+                                                                    {
+                                                                        <td class="border-none border-right"></td>
+                                                                    }
 
+                                                                    <td class="border-none border-right"></td>
 
-                                                @* CESS (It may be more then 1) *@
-                                                @if (CessIsApplied == true && Model?.CessTotal != null)
-                                                {
-                                                    @foreach (var Cess in Model.CessTotal)
-                                                    { 
-                                                        <td class="text-center">
-                                                            <strong></strong>
+                                                                    @if (GetDisplayStatus("Discount"))
+                                                                    {
+                                                                        <td class="border-none border-right"></td>
+                                                                    }
+                                                                    <td class="border-none border-right text-right">
+                                                                        @if (Tax?.Amount != null)
+                                                                        {
+                                                                            <strong>@Tax?.Amount.AmountForAccount</strong>
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                        @if (Model?.RoundOff != null)
+                                                        {
+                                                        <tr>
+                                                            @if (GetDisplayStatus("SNo"))
+                                                            {
+                                                                <td class="border-none border-right border-left"></td>
+                                                            }
+                                                            @if (GetDisplayStatus("Item"))
+                                                            {
+                                                                <td class="border-none border-right text-right">
+                                                                    <strong>
+                                                                        Round Off
+                                                                    </strong>
+                                                                </td>
+                                                            }
+                                                            @if (GetDisplayStatus("HsnSac"))
+                                                            {
+                                                                <td class="border-none border-right"></td>
+                                                            }
+                                                            @if (GetDisplayStatus("Quantity"))
+                                                            {
+                                                                <td class="border-none border-right"></td>
+                                                            }
+                                                            @if (GetDisplayStatus("Rate"))
+                                                            {
+                                                                <td class="border-none border-right"></td>
+                                                            }
+
+                                                            <td class="border-none border-right"></td>
+
+                                                            @if (GetDisplayStatus("Discount"))
+                                                            {
+                                                                <td class="border-none border-right"></td>
+                                                            }
+                                                            <td class="border-none border-right border-top text-right">
+                                                                <strong>
+                                                                    @GetAccountCurrencyCodeOrSymbol()
+                                                                    @Model?.RoundOff
+                                                                </strong>
+                                                            </td>
+                                                        </tr>
+                                                        }
+
+                                                        <tr>
+                                                            @if (GetDisplayStatus("SNo"))
+                                                            {
+                                                                <td></td>
+                                                            }
+                                                            @if (GetDisplayStatus("Item"))
+                                                            {
+                                                                <td class="text-right">Total</td>
+                                                            }
+                                                            @if (GetDisplayStatus("HsnSac"))
+                                                            {
+                                                                <td></td>
+                                                            }
+                                                            @if (GetDisplayStatus("Quantity"))
+                                                            {
+                                                                <td class="text-center">
+                                                                    @if (GetDisplayStatus("TotalQuantity"))
+                                                                    {
+                                                                        <strong>@Model?.StockQuantityWithUnit</strong>
+                                                                    }
+                                                                </td>
+                                                            }
+                                                            @if (GetDisplayStatus("Rate"))
+                                                            {
+                                                                <td></td>
+                                                            }
+
+                                                            <td></td>
+
+                                                            @if (GetDisplayStatus("Discount"))
+                                                            {
+                                                                <td></td>
+                                                            }
+                                                            <td class="text-right">
+                                                                <strong>
+                                                                    @GetAccountCurrencyCodeOrSymbol()
+                                                                    @Model?.GstEntriesTotal?.AmountForAccount
+                                                                </strong>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        @if (GetDisplayStatus("TotalInWords"))
+                                        {
+                                        <tr>
+                                            <td class="p-0 border-none @(GetDisplayStatus("TaxBifurcation") ? "" : "border-bottom")">
+                                                <table class="@(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
+                                                    <tr>
+                                                        <td class="border-none border-left" width="50%">Amount Chargeable (in words)</td>
+                                                        <td class="border-none border-right text-right" width="50%">E. & O.E</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="border-none border-left border-right" colspan="100%">
+                                                            <strong>
+                                                                @Model?.TotalInWords?.AmountForAccount
+                                                            </strong>
                                                         </td>
-                                                        <td class="text-center">
-                                                            <strong>@Cess?.Amount?.AmountForAccount</strong>
-                                                        </td>
-                                                    }
-                                                }
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        }
+                                        @if (GetDisplayStatus("TaxBifurcation"))
+                                        {
+                                        <tr>
+                                            <td class="p-0 border-none">
+                                                <table class="repeated-header @(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
+                                                    <thead>
+                                                        @{
+                                                            int taxCount = 0;
+                                                            bool TaxIsApplied = false;
+                                                            bool CgstSgstIsApplied = false;
+                                                            bool CessIsApplied = false;
+                                                            bool OtherTaxIsApplied = false;
 
-                                                @* Other Tax (It may be more then 1) *@
-                                                @if (OtherTaxIsApplied == true && Model?.OtherTotal != null)
-                                                {
-                                                    @foreach (var OtherTax in Model.OtherTotal)
-                                                    { 
-                                                        <td class="text-center">
-                                                            <strong></strong>
-                                                        </td>
-                                                        <td class="text-center">
-                                                            <strong>@OtherTax?.Amount?.AmountForAccount</strong>
-                                                        </td>
-                                                    }
-                                                }
+                                                            bool ShowHSNSAC = false;
+                                                        }
+                                                        <tr>
+                                                            @if (GetLabel("TaxBifurcation") == "HSN/SAC")
+                                                            {
+                                                            ShowHSNSAC = true;
+                                                            <th class="vertical-align-top text-center" rowspan="2">
+                                                                @GetLabel("TaxBifurcation")
+                                                            </th>
+                                                            }
+                                                            <th class="vertical-align-top @(Model?.IsTaxesApplied == true ? "text-center" : "text-right")" rowspan="2">
+                                                                Taxable Value
+                                                            </th>
+                                                            @* IGST/ (CGST/SGST) / VAT  *@
+                                                            @if (Model?.GstTaxesTotalOnly != null && Model.GstTaxesTotalOnly.Any())
+                                                            {
+                                                                CgstSgstIsApplied = Model.GstTaxesTotalOnly.Count == 2;
+                                                                TaxIsApplied = true;
+                                                                @foreach (var Tax in Model.GstTaxesTotalOnly)
+                                                                {
+                                                                taxCount++;
+                                                                <th class="text-center" colspan="2">
+                                                                    @if (Tax?.AccountName != null)
+                                                                    {
+                                                                        <span class="text-uppercase">@Tax?.AccountName</span>
+                                                                    }
+                                                                </th>
+                                                                }
+                                                            }
 
-                                                @if (Model?.IsTaxesApplied == true)
-                                                {
-                                                    <td class="text-right">
-                                                        <strong>@Model?.TaxBifurcationEntryTotal?.AmountForAccount</strong>
-                                                    </td>
-                                                }
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </tbody>
+                                                            @* CESS (It may be more then 1) *@
+                                                            @if (Model?.CessTotal != null && Model.CessTotal.Any())
+                                                            {
+                                                                CessIsApplied = true;
+                                                                @foreach (var Cess in Model.CessTotal)
+                                                                {
+                                                                taxCount++;
+                                                                <th class="text-center" colspan="2">
+                                                                    @if (Cess?.AccountName != null)
+                                                                    {
+                                                                        <span class="text-uppercase">@Cess?.AccountName</span>
+                                                                    }
+                                                                </th>
+                                                                }
+                                                            }
+
+                                                            @* Other Tax (It may be more then 1) *@
+                                                            @if (Model?.OtherTotal != null && Model.OtherTotal.Any())
+                                                            {
+                                                                OtherTaxIsApplied = true;
+                                                                @foreach (var OtherTax in Model.OtherTotal)
+                                                                {
+                                                                taxCount++;
+                                                                <th class="text-center" colspan="2">
+                                                                    @if (OtherTax?.AccountName != null)
+                                                                    {
+                                                                        <span class="text-uppercase">@OtherTax?.AccountName</span>
+                                                                    }
+                                                                </th>
+                                                                }
+                                                            }
+
+                                                            @if (Model?.IsTaxesApplied == true)
+                                                            {
+                                                                <th class="text-right vertical-align-top" rowspan="2">
+                                                                    Total Tax Amount
+                                                                </th>
+                                                            }
+                                                        </tr>
+                                                        @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
+                                                        {
+                                                        <tr>
+                                                            @for(int i = 0; i < taxCount; i++)
+                                                            {
+                                                                <th class="text-center" width="60px">Rate</th>
+                                                                <th class="text-center" width="60px">Amount</th>
+                                                            }
+                                                        </tr>
+                                                        }
+                                                    </thead>
+                                                    <tbody>
+                                                        @if (Model?.TaxBifurcation != null && Model.TaxBifurcation.Any())
+                                                        {
+                                                            @foreach (var Bifurcation in Model.TaxBifurcation)
+                                                            {
+                                                            <tr>
+                                                                @if (ShowHSNSAC == true)
+                                                                {
+                                                                <td>
+                                                                    @if (Bifurcation?.HsnSc != null)
+                                                                    {
+                                                                        <span>@Bifurcation?.HsnSc</span>
+                                                                    }
+                                                                </td>
+                                                                }
+                                                                <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">@Bifurcation?.TaxableValue</td>
+
+                                                                @* IGST / VAT *@
+                                                                @if (TaxIsApplied == true && CgstSgstIsApplied == false)
+                                                                {
+                                                                    <td class="text-center">
+                                                                        @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @if (Bifurcation?.Iamt != null) {
+                                                                            @(Bifurcation?.Iamt >= 0 ? Bifurcation?.Iamt : "")
+                                                                        } else if(Bifurcation?.Vatamt != null) {
+                                                                            @(Bifurcation?.Vatamt >= 0 ? Bifurcation?.Vatamt : "") 
+                                                                        }
+                                                                    </td>
+                                                                }
+
+                                                                @* CGST/SGST *@
+                                                                @if (CgstSgstIsApplied == true)
+                                                                {
+                                                                    <td class="text-center">
+                                                                        @(Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @(Bifurcation?.Camt >= 0 ? Bifurcation?.Camt : "")
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @(Bifurcation?.Samt != null && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @(Bifurcation?.Samt >= 0 ? Bifurcation?.Samt : "")
+                                                                    </td>
+                                                                }
+
+                                                                @* SALES TAX  - Note - currently not support Sales Tax *@
+                                                                @* @if (Bifurcation?.SalesTaxAmount != null)
+                                                                {
+                                                                    <td class="text-center">
+                                                                        @(Bifurcation?.SalesTaxAmount != null && Bifurcation?.SalesTaxRate >= 0 ? $"{Bifurcation?.SalesTaxRate}%" : "") 
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @(Bifurcation?.SalesTaxAmount >= 0 ? Bifurcation?.SalesTaxAmount : "") 
+                                                                    </td>
+                                                                } *@
+
+                                                                @* CESS (It may be more then 1) *@
+                                                                @if (CessIsApplied == true)
+                                                                {
+                                                                    @foreach (var Cess in Bifurcation?.CsAmountList ?? Enumerable.Empty<decimal>())
+                                                                    { 
+                                                                        <td class="text-center">
+                                                                            @(Cess > 0 && Bifurcation?.CsTaxRate >= 0 ? $"{Bifurcation?.CsTaxRate}%" : "") 
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            @(Cess > 0 ? Cess : "") 
+                                                                        </td>
+                                                                    }
+                                                                }
+
+                                                                @* Other Tax (It may be more then 1) *@
+                                                                @if (OtherTaxIsApplied == true && Bifurcation?.OthAmountList != null)
+                                                                {
+                                                                    @foreach (var OtherTax in Bifurcation?.OthAmountList ?? Enumerable.Empty<decimal>())
+                                                                    { 
+                                                                        <td class="text-center">
+                                                                            @(OtherTax > 0 && Bifurcation?.OthTaxRate >= 0 ? $"{Bifurcation?.OthTaxRate}%" : "") 
+                                                                        </td>
+                                                                        <td class="text-center">
+                                                                            @(OtherTax > 0 ? OtherTax : "") 
+                                                                        </td>
+                                                                    }
+                                                                }
+
+                                                                @if (Model?.IsTaxesApplied == true)
+                                                                {
+                                                                    <td class="text-right">@Bifurcation?.EntryTotal</td>
+                                                                }
+                                                            </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            @if (ShowHSNSAC == true)
+                                                            {
+                                                            <td class="text-right">
+                                                                <strong>Total</strong>
+                                                            </td>
+                                                            }
+
+                                                            <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">
+                                                                <strong>@Model?.TaxableTotal?.AmountForAccount</strong>
+                                                            </td>
+
+                                                            @if (Model?.GstTaxesTotalOnly != null && Model.GstTaxesTotalOnly.Any())
+                                                            {
+                                                                @foreach (var Tax in Model.GstTaxesTotalOnly)
+                                                                {
+                                                                <td class="text-center"></td>
+                                                                <td class="text-center">
+                                                                <strong>@Tax?.Amount?.AmountForAccount</strong>
+                                                                </td>
+                                                                }
+                                                            }
+
+
+                                                            @* CESS (It may be more then 1) *@
+                                                            @if (CessIsApplied == true && Model?.CessTotal != null)
+                                                            {
+                                                                @foreach (var Cess in Model.CessTotal)
+                                                                { 
+                                                                    <td class="text-center">
+                                                                        <strong></strong>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <strong>@Cess?.Amount?.AmountForAccount</strong>
+                                                                    </td>
+                                                                }
+                                                            }
+
+                                                            @* Other Tax (It may be more then 1) *@
+                                                            @if (OtherTaxIsApplied == true && Model?.OtherTotal != null)
+                                                            {
+                                                                @foreach (var OtherTax in Model.OtherTotal)
+                                                                { 
+                                                                    <td class="text-center">
+                                                                        <strong></strong>
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        <strong>@OtherTax?.Amount?.AmountForAccount</strong>
+                                                                    </td>
+                                                                }
+                                                            }
+
+                                                            @if (Model?.IsTaxesApplied == true)
+                                                            {
+                                                                <td class="text-right">
+                                                                    <strong>@Model?.TaxBifurcationEntryTotal?.AmountForAccount</strong>
+                                                                </td>
+                                                            }
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </main>
+          </td>
+        </tr>
+      </tbody>
+      @if (Model?.ShowSectionsInline != true)
+      {
+      <tfoot>
+        <tr class="hide-background-border">
+          <td class="p-0 border-none">
+            <div style="height: var(--footer-height);"></div>
+          </td>
+        </tr>
+      </tfoot>
+      }
     </table>
-</main>

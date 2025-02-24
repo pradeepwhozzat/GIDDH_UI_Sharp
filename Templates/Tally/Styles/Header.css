@@ -2,17 +2,15 @@
 header {
   padding-left: var(--header-footer-body-padding, 15px);
   padding-right: var(--header-footer-body-padding, 15px);
-  /* position: fixed;
-  top: 0;
-  left: 0; */
-  width: 100%;
-  z-index: 9;
-  display: table-header-group;
 }
 
-
-header .qr-code-image {
-  aspect-ratio: 1/1;
+body.repeat-header-footer header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  width: 100%;
+  background-color: #ffffff;
 }
 
 header .pdf-title {
