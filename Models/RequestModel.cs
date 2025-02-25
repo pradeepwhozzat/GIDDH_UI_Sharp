@@ -209,6 +209,7 @@ namespace InvoiceData
     public class GstTaxesTotal
     {
         public string? TaxType { get; set; }
+        public string? Name { get; set; } // In Case of Estimate/Proforma
         public string? AccountName { get; set; }
         public Amount? Amount { get; set; }
         public double? TaxPercent { get; set; }

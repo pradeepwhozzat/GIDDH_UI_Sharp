@@ -67,13 +67,13 @@
                         @if (GetDisplayStatus("DisplayExportMessage"))
                         {
                         <tr>
-                            <td class="border-none border-top text-center">
+                            <td class="border-none border-top text-center @(Model?.ShowSectionsInline == true ? "border-left border-right" : "")">
                                 @GetLabel("DisplayExportMessage")
                             </td>
                         </tr>
                         }
                         <tr>
-                            <td class="p-0 border-none">
+                            <td class="p-0 border-none @(Model?.ShowSectionsInline == true ? "border-left border-right" : "")">
                                 @if (Model?.EInvoiceDetails != null)
                                 {
                                     <table>
@@ -129,7 +129,7 @@
                                 <table>
                                     <tbody>
                                         <tr>
-                                            <td class="p-0 vertical-align-top border-none border-top @(Model?.ShowSectionsInline == true ? "border-left border-right" : "")">
+                                            <td class="p-0 vertical-align-top border-none border-top">
                                                 <table class="h-inherit">
                                                     <tbody>
                                                         <tr>
@@ -424,12 +424,12 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="p-0 border-none vertical-align-top">
+                            <td class="p-0 border-none vertical-align-top @(Model?.ShowSectionsInline == true ? "border-left border-right" : "")">
                                 <table>
                                     <tbody>
                                         <tr>
                                             <td class="p-0 border-none">
-                                                <table class="entry-table repeated-header @(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
+                                                <table class="entry-table repeated-header remove-left-right-border">
                                                     <thead>
                                                         <tr>
                                                             @if (GetDisplayStatus("SNo"))
@@ -690,10 +690,10 @@
                                                                     @if (GetDisplayStatus("Item"))
                                                                     {
                                                                         <td class="border-none border-right text-right">
-                                                                            @if (Tax?.AccountName != null)
+                                                                            @if (Tax?.AccountName != null || Tax?.Name != null)
                                                                             {
                                                                                 <strong class="text-uppercase">
-                                                                                    @Tax?.AccountName
+                                                                                    @(Tax?.AccountName ?? Tax?.Name)
                                                                                 </strong>
                                                                             }
                                                                         </td>
@@ -817,7 +817,7 @@
                                         {
                                         <tr>
                                             <td class="p-0 border-none @(GetDisplayStatus("TaxBifurcation") ? "" : "border-bottom")">
-                                                <table class="@(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
+                                                <table class="remove-left-right-border">
                                                     <tr>
                                                         <td class="border-none border-left" width="50%">Amount Chargeable (in words)</td>
                                                         <td class="border-none border-right text-right" width="50%">E. & O.E</td>
@@ -837,7 +837,7 @@
                                         {
                                         <tr>
                                             <td class="p-0 border-none">
-                                                <table class="repeated-header @(Model?.ShowSectionsInline == true ? "" : "remove-left-right-border")">
+                                                <table class="repeated-header remove-left-right-border">
                                                     <thead>
                                                         @{
                                                             int taxCount = 0;
@@ -868,9 +868,9 @@
                                                                 {
                                                                 taxCount++;
                                                                 <th class="text-center" colspan="2">
-                                                                    @if (Tax?.AccountName != null)
+                                                                    @if (Tax?.AccountName != null || Tax?.Name != null)
                                                                     {
-                                                                        <span class="text-uppercase">@Tax?.AccountName</span>
+                                                                        <span class="text-uppercase">@(Tax?.AccountName ?? Tax?.Name)</span>
                                                                     }
                                                                 </th>
                                                                 }

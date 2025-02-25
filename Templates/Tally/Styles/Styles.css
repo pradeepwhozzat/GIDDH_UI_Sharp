@@ -76,6 +76,8 @@
   box-sizing: border-box !important;
   font-size: inherit;
   font-weight: inherit;
+  font-family: inherit;
+  color: inherit;
 }
 
 html,
@@ -229,7 +231,6 @@ table.table-row-height tr td {
   /* Need to optmise this code for entry table */
   padding-top: 1px !important;
   padding-bottom: 1px !important;
-
 }
 .pd-l1 {
   padding-left: 10px !important;

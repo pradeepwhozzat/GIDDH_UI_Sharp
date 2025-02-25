@@ -29,7 +29,8 @@ namespace GiddhTemplate.Services
                                 _browser = (Browser?)Puppeteer.LaunchAsync(new LaunchOptions
                                 {
                                     Headless = true,
-                                    ExecutablePath = "/usr/bin/google-chrome"
+                                    ExecutablePath = "/usr/bin/google-chrome" // Server Google Chrome url
+                                    // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" // Local System Google Chrome url
                                 }).Result;
                             }
                             catch (PuppeteerSharp.ProcessException ex)
@@ -95,29 +96,33 @@ namespace GiddhTemplate.Services
             themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
             themeCSS.Append($"--color-primary: {request?.Theme?.PrimaryColor};");
             themeCSS.Append($"--color-secondary: {request?.Theme?.SecondaryColor};");
+            // Set Default font weight 500 in case Roboto Font Family
+            if (request?.Theme?.Font?.Family == "Roboto")
+            {
+                themeCSS.Append($"font-weight: var(--font-weight-500, 500);");
+            }
             themeCSS.Append("}");
 
             var allStyles = $"{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}"; // Combine all styles
 
             if (request?.TemplateType?.ToUpper() == "TALLY")
             {
-                //  {(repeatHeaderFooter ? backgroundStyles : string.Empty)}
                 bool repeatHeaderFooter = request?.ShowSectionsInline != true;
                 return $@"<html> 
-                                <head> 
-                                    <style>
-                                        {allStyles}
-                                        {(repeatHeaderFooter ? backgroundStyles : string.Empty)}
-                                    </style>
-                                </head> 
-                                <body class={(repeatHeaderFooter ? "repeat-header-footer" : "")}>
-                                    <div style='display: flex; flex-direction: column; height: -webkit-fill-available;'>
-                                        {header}
-                                        {body}
-                                        {footer}
-                                    </div>
-                                </body> 
-                                </html>";
+                            <head> 
+                                <style>
+                                    {allStyles}
+                                    {(repeatHeaderFooter ? backgroundStyles : string.Empty)}
+                                </style>
+                            </head> 
+                            <body class={(repeatHeaderFooter ? "repeat-header-footer" : "")}>
+                                <div style='display: flex; flex-direction: column; height: -webkit-fill-available;'>
+                                    {header}
+                                    {body}
+                                    {footer}
+                                </div>
+                            </body> 
+                        </html>";
             }
             else
             {
@@ -212,9 +217,9 @@ namespace GiddhTemplate.Services
 
             Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
+            // Final HTML store in "template"
             string template = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, request, BackgroundStyles);
             Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
-            // Console.WriteLine(template);
             await page.SetContentAsync(template);
 
             // Define the PDF options with header and footer
@@ -224,10 +229,10 @@ namespace GiddhTemplate.Services
                 Landscape = false,
                 MarginOptions = new MarginOptions
                 {
-                    Top = "5mm", // String values are also accepted: "1in", "2cm", etc.
-                    Bottom = "5mm",
-                    Left = "0mm",
-                    Right = "0mm"
+                    Top = "15px", // String values are also accepted: "1in", "2cm", etc.
+                    Bottom = "30px", // Here 15px + 15px due extra 15px for page number
+                    Left = "0px",
+                    Right = "0px"
                 },
                 PrintBackground = true, // Include background colors and images in the PDF
                 DisplayHeaderFooter = false
