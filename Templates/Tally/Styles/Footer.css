@@ -12,18 +12,3 @@ body.repeat-header-footer footer {
   z-index: 9;
   width: 100%;
 }
-
-@page { 
-  @bottom-center {
-     content: "(" counter(page) ")"; /* counter(page) for current page  | counter(pages) for Total Page */
-     font-style: bold;
-     margin-bottom: 6px;
-  }
-}
-
-@page:first {
-  @bottom-center {
-     content: ""; /* Empty content to hide footer */
-     margin-bottom: 0;
-  }
-}
