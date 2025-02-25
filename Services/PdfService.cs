@@ -143,6 +143,8 @@ namespace GiddhTemplate.Services
 
         private string LoadOpenSansFontCSS()
         {
+            Console.WriteLine("fontPath outside if LoadOpenSansFontCSS : " + Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "OpenSans"));
+            
             if (_openSansFontCSS != null) // Load only once
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "OpenSans");
@@ -162,6 +164,9 @@ namespace GiddhTemplate.Services
         }
         private string LoadRobotoFontCSS()
         {
+
+            Console.WriteLine("fontPath outside if LoadRobotoFontCSS : " + Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "Roboto"));
+            
             if (_openRobotoFontCSS != null) // Load only once
             {
                 string fontName = "Roboto";
