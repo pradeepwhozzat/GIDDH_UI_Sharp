@@ -220,7 +220,7 @@ namespace InvoiceData
 
     public class TaxBifurcation 
     {
-        public int? Qty { get; set; }
+        public decimal? Qty { get; set; }
         public decimal? EntryTotal { get; set; }
         public string? Desc { get; set; }
         public decimal? Iamt { get; set; }

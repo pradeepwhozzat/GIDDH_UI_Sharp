@@ -143,12 +143,10 @@ namespace GiddhTemplate.Services
 
         private string LoadOpenSansFontCSS()
         {
-            Console.WriteLine("fontPath outside if LoadOpenSansFontCSS : " + Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "OpenSans"));
             
             if (_openSansFontCSS != null) // Load only once
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "OpenSans");
-                Console.WriteLine("fontPath: "+ fontPath);
                 _openSansFontCSS = $@"
                         @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Light.ttf') format('truetype'); font-weight: 200; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
                         @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-LightItalic.ttf') format('truetype'); font-weight: 200; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
@@ -165,13 +163,11 @@ namespace GiddhTemplate.Services
         private string LoadRobotoFontCSS()
         {
 
-            Console.WriteLine("fontPath outside if LoadRobotoFontCSS : " + Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "Roboto"));
             
             if (_openRobotoFontCSS != null) // Load only once
             {
                 string fontName = "Roboto";
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "Roboto");
-                Console.WriteLine("fontPath: "+ fontPath);
                 _openRobotoFontCSS = $@"
                         @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Light.ttf') format('truetype'); font-weight: 200; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
                         @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-LightItalic.ttf') format('truetype'); font-weight: 200; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
