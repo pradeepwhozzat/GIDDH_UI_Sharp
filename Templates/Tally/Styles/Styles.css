@@ -271,7 +271,7 @@ table.table-row-height tr td {
   }
 
   tfoot {
-    display: table-row-group; /* Ensure it's treated as a group of rows */
+    display: table-row-group; /* Ensure it's treated as a group of rows *
     visibility: hidden; /* Hide it by default */
   }
 
@@ -279,11 +279,11 @@ table.table-row-height tr td {
     visibility: visible; /* Only show the footer on the last table */
   }
 
-  table.repeated-header thead {
+  table.repeated-header > thead {
     display: table-header-group !important; /* Ensure headers repeat on each page */
   }
 
-  table.repeated-footer tfoot {
+  table.repeated-footer > tfoot {
     display: table-footer-group !important; /* Ensure footers repeat on each page */
   }
 
