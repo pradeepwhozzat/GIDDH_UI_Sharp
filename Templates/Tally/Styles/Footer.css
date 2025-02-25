@@ -20,3 +20,10 @@ body.repeat-header-footer footer {
      margin-bottom: 6px;
   }
 }
+
+@page:first {
+  @bottom-center {
+     content: ""; /* Empty content to hide footer */
+     margin-bottom: 0;
+  }
+}
