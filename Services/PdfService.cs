@@ -2,6 +2,7 @@ using PuppeteerSharp;
 using System.Text;
 using InvoiceData;
 using PuppeteerSharp.Media;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace GiddhTemplate.Services
@@ -10,15 +11,30 @@ namespace GiddhTemplate.Services
     {
         private readonly RazorTemplateService _razorTemplateService;
         private readonly Lazy<(string Common, string Header, string Footer, string Body, string BackgroundStyles)> _styles;
-        private string _openSansFontCSS = ""; // Cache the Open Sans CSS
-        private string _openRobotoFontCSS = ""; // Cache the Roboto CSS
         private static Browser? _browser;
-        private static readonly object _lock = new object(); // Add a lock for thread safety
+        private static readonly object _lock = new object();
+        private static readonly ConcurrentDictionary<string, string> _renderedTemplates = new ConcurrentDictionary<string, string>();
+        private static readonly PdfOptions _cachedPdfOptions = new PdfOptions
+        {
+            Format = PaperFormat.A4,
+            Landscape = false,
+            MarginOptions = new MarginOptions
+            {
+                Top = "15px",
+                Bottom = "30px",
+                Left = "0px",
+                Right = "0px"
+            },
+            PrintBackground = true,
+            PreferCSSPageSize = true,
+            DisplayHeaderFooter = false,
+        };
+
         public static async Task<Browser> GetBrowserAsync()
         {
             if (_browser == null || !_browser.IsConnected)
             {
-                await Task.Run(() => // Run browser creation on a background thread
+                await Task.Run(() =>
                 {
                     lock (_lock)
                     {
@@ -47,6 +63,7 @@ namespace GiddhTemplate.Services
             return _browser;
             #pragma warning restore CS8603 // Possible null reference return.
         }
+
         public PdfService()
         {
             _razorTemplateService = new RazorTemplateService();
@@ -72,22 +89,24 @@ namespace GiddhTemplate.Services
 
         private async Task<string> RenderTemplate(string templatePath, Root request)
         {
-            return await _razorTemplateService.RenderTemplateAsync(templatePath, request);
+            string cacheKey = $"{templatePath}-{request.GetHashCode()}";
+            #pragma warning disable CS8600 // Disable null conversion warning
+            if (_renderedTemplates.TryGetValue(cacheKey, out string cachedResult))
+            {
+                #pragma warning restore CS8600 // Restore null conversion warning
+                return cachedResult;
+            }
+            #pragma warning restore CS8600 // Restore null conversion warning
+
+            string renderedTemplate = await _razorTemplateService.RenderTemplateAsync(templatePath, request);
+            _renderedTemplates.TryAdd(cacheKey, renderedTemplate);
+            return renderedTemplate;
         }
+
 
         private string CreatePdfDocument(string header, string body, string footer, string commonStyles, string headerStyles, string footerStyles, string bodyStyles, Root request, string backgroundStyles)
         {
-            // Dynamic Theme
             var themeCSS = new StringBuilder();
-            if (request?.Theme?.Font?.Family == "Open Sans")
-            {
-                themeCSS.Append(LoadOpenSansFontCSS());
-            }
-            else if (request?.Theme?.Font?.Family == "Roboto")
-            {
-                themeCSS.Append(LoadRobotoFontCSS());
-            }
-
             themeCSS.Append("html, body {");
             themeCSS.Append($"--font-family: \"{request?.Theme?.Font?.Family}\";");
             themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;");
@@ -96,14 +115,13 @@ namespace GiddhTemplate.Services
             themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
             themeCSS.Append($"--color-primary: {request?.Theme?.PrimaryColor};");
             themeCSS.Append($"--color-secondary: {request?.Theme?.SecondaryColor};");
-            // Set Default font weight 500 in case Roboto Font Family
             if (request?.Theme?.Font?.Family == "Roboto")
             {
                 themeCSS.Append($"font-weight: var(--font-weight-500, 500);");
             }
             themeCSS.Append("}");
 
-            var allStyles = $"{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}"; // Combine all styles
+            var allStyles = $"{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}";
 
             if (request?.TemplateType?.ToUpper() == "TALLY")
             {
@@ -127,66 +145,24 @@ namespace GiddhTemplate.Services
             else
             {
                 return $@"<html> 
-                                <head> 
-                                    <style>
-                                        {allStyles}
-                                    </style>
-                                </head> 
-                                <body>
-                                    {header}
-                                    {body}
-                                    {footer}
-                                </body> 
-                                </html>";
+                            <head> 
+                                <style>
+                                    {allStyles}
+                                </style>
+                            </head> 
+                            <body>
+                                {header}
+                                {body}
+                                {footer}
+                            </body> 
+                        </html>";
             }
-        }
-
-        private string LoadOpenSansFontCSS()
-        {
-            
-            if (_openSansFontCSS != null) // Load only once
-            {
-                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "OpenSans");
-                _openSansFontCSS = $@"
-                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Light.ttf') format('truetype'); font-weight: 200; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-LightItalic.ttf') format('truetype'); font-weight: 200; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-MediumItalic.ttf') format('truetype'); font-weight: 500; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: 'Open Sans'; src: url('{fontPath}/OpenSans-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                    ";
-            }
-            return _openSansFontCSS ?? string.Empty;
-        }
-        private string LoadRobotoFontCSS()
-        {
-
-            
-            if (_openRobotoFontCSS != null) // Load only once
-            {
-                string fontName = "Roboto";
-                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally", "Styles", "Fonts", "Roboto");
-                _openRobotoFontCSS = $@"
-                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Light.ttf') format('truetype'); font-weight: 200; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-LightItalic.ttf') format('truetype'); font-weight: 200; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Medium.ttf') format('truetype'); font-weight: 500; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-MediumItalic.ttf') format('truetype'); font-weight: 500; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                        @font-face {{ font-family: {fontName}; src: url('{fontPath}/{fontName}-BoldItalic.ttf') format('truetype'); font-weight: 700; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
-                    ";
-            }
-            return _openRobotoFontCSS ?? string.Empty;
         }
 
         private string GetFileNameWithPath(Root request)
         {
             string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
             Directory.CreateDirectory(rootPath);
-
             string pdfName = $"{(string.IsNullOrWhiteSpace(request?.PdfRename) ? "PDF" : request.PdfRename)} {DateTimeOffset.Now:HHmmssfff}.pdf";
             return Path.Combine(rootPath, pdfName);
         }
@@ -225,31 +201,14 @@ namespace GiddhTemplate.Services
             Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
             await page.SetContentAsync(template);
 
-            // Define the PDF options with header and footer
-            var pdfOptions = new PdfOptions
-            {
-                Format = PaperFormat.A4,
-                Landscape = false,
-                MarginOptions = new MarginOptions
-                {
-                    Top = "15px", // String values are also accepted: "1in", "2cm", etc.
-                    Bottom = "30px", // Here 15px + 15px due extra 15px for page number
-                    Left = "0px",
-                    Right = "0px"
-                },
-                PrintBackground = true, // Include background colors and images in the PDF
-                DisplayHeaderFooter = false
-            };
-
-            // Set EmulateMediaType (important for CSS)
             await page.EmulateMediaTypeAsync(MediaType.Print);
 
             // Uncomment below line to save PDF file in local 
             // string pdfName = GetFileNameWithPath(request);
             // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
-            // await page.PdfAsync(pdfName, pdfOptions);
+            // await page.PdfAsync(pdfName, _cachedPdfOptions);
 
-            var pdfBytes = await page.PdfDataAsync(pdfOptions);
+            var pdfBytes = await page.PdfDataAsync(_cachedPdfOptions);
             Console.WriteLine("pdfBytes " + DateTime.Now.ToString("HH:mm:ss.fff"));
             return Convert.ToBase64String(pdfBytes);
         }
