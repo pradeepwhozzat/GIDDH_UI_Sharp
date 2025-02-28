@@ -260,7 +260,7 @@ namespace InvoiceData
         public StockUnit? StockUnit { get; set; }
         public Variant? Variant { get; set; }
         public Dictionary<string, string>? CustomFields { get; set; }
-        public int? Quantity { get; set; }
+        public decimal? Quantity { get; set; }
         public Amount? Rate { get; set; }
         public string? Type { get; set; }
         public string? Sku { get; set; }
