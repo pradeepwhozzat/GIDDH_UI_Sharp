@@ -833,7 +833,7 @@
                                             </td>
                                         </tr>
                                         }
-                                        @if (GetDisplayStatus("TaxBifurcation"))
+                                        @if (GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true)
                                         {
                                         <tr>
                                             <td class="p-0 border-none">
