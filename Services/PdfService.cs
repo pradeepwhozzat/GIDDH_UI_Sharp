@@ -3,7 +3,6 @@ using System.Text;
 using InvoiceData;
 using PuppeteerSharp.Media;
 using System.Collections.Concurrent;
-using System.Threading.Tasks;
 
 namespace GiddhTemplate.Services
 {
@@ -11,6 +10,8 @@ namespace GiddhTemplate.Services
     {
         private readonly RazorTemplateService _razorTemplateService;
         private readonly Lazy<(string Common, string Header, string Footer, string Body, string BackgroundStyles)> _styles;
+        private string _openSansFontCSS = ""; // Cache the Open Sans CSS
+        private string _openRobotoFontCSS = ""; // Cache the Roboto CSS
         private static Browser? _browser;
         private static readonly object _lock = new object();
         private static readonly ConcurrentDictionary<string, string> _renderedTemplates = new ConcurrentDictionary<string, string>();
@@ -59,9 +60,9 @@ namespace GiddhTemplate.Services
                     }
                 });
             }
-            #pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8603 // Possible null reference return.
             return _browser;
-            #pragma warning restore CS8603 // Possible null reference return.
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public PdfService()
@@ -87,26 +88,78 @@ namespace GiddhTemplate.Services
             );
         }
 
+        private string LoadOpenSansFontCSS()
+        {
+            if (_openSansFontCSS != null) // Load only once
+            {
+                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "OpenSans");
+                _openSansFontCSS = $@"
+                        @font-face {{ font-family: 'Open Sans'; src: url('{ConvertToBase64(fontPath + "/OpenSans-Light.ttf")}') format('truetype'); font-weight: 200; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{ConvertToBase64(fontPath + "/OpenSans-LightItalic.ttf")}') format('truetype'); font-weight: 200; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{ConvertToBase64(fontPath + "/OpenSans-Regular.ttf")}') format('truetype'); font-weight: 400; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{ConvertToBase64(fontPath + "/OpenSans-Italic.ttf")}') format('truetype'); font-weight: 400; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{ConvertToBase64(fontPath + "/OpenSans-Medium.ttf")}') format('truetype'); font-weight: 500; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{ConvertToBase64(fontPath + "/OpenSans-MediumItalic.ttf")}') format('truetype'); font-weight: 500; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{ConvertToBase64(fontPath + "/OpenSans-Bold.ttf")}') format('truetype'); font-weight: 700; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: 'Open Sans'; src: url('{ConvertToBase64(fontPath + "/OpenSans-BoldItalic.ttf")}') format('truetype'); font-weight: 700; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                    ";
+            }
+            return _openSansFontCSS ?? string.Empty;
+        }
+        private string LoadRobotoFontCSS()
+        {
+            if (_openRobotoFontCSS != null) // Load only once
+            {
+                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Roboto");
+                _openRobotoFontCSS = $@"
+                        @font-face {{ font-family: Roboto; src: url('{ConvertToBase64(fontPath + "/Roboto-Light.ttf")}') format('truetype'); font-weight: 200; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: Roboto; src: url('{ConvertToBase64(fontPath + "/Roboto-LightItalic.ttf")}') format('truetype'); font-weight: 200; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: Roboto; src: url('{ConvertToBase64(fontPath + "/Roboto-Regular.ttf")}') format('truetype'); font-weight: 400; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: Roboto; src: url('{ConvertToBase64(fontPath + "/Roboto-Italic.ttf")}') format('truetype'); font-weight: 400; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: Roboto; src: url('{ConvertToBase64(fontPath + "/Roboto-Medium.ttf")}') format('truetype'); font-weight: 500; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: Roboto; src: url('{ConvertToBase64(fontPath + "/Roboto-MediumItalic.ttf")}') format('truetype'); font-weight: 500; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: Roboto; src: url('{ConvertToBase64(fontPath + "/Roboto-Bold.ttf")}') format('truetype'); font-weight: 700; font-style: normal; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                        @font-face {{ font-family: Roboto; src: url('{ConvertToBase64(fontPath + "/Roboto-BoldItalic.ttf")}') format('truetype'); font-weight: 700; font-style: italic; unicode-range: U+0020-007E, U+00A0-00FF; }}
+                    ";
+            }
+            return _openRobotoFontCSS ?? string.Empty;
+        }
+
         private async Task<string> RenderTemplate(string templatePath, Root request)
         {
             string cacheKey = $"{templatePath}-{request.GetHashCode()}";
-            #pragma warning disable CS8600 // Disable null conversion warning
+#pragma warning disable CS8600 // Disable null conversion warning
             if (_renderedTemplates.TryGetValue(cacheKey, out string cachedResult))
             {
-                #pragma warning restore CS8600 // Restore null conversion warning
+#pragma warning restore CS8600 // Restore null conversion warning
                 return cachedResult;
             }
-            #pragma warning restore CS8600 // Restore null conversion warning
+#pragma warning restore CS8600 // Restore null conversion warning
 
             string renderedTemplate = await _razorTemplateService.RenderTemplateAsync(templatePath, request);
             _renderedTemplates.TryAdd(cacheKey, renderedTemplate);
             return renderedTemplate;
         }
 
+        string ConvertToBase64(string filePath)
+        {
+            byte[] fontBytes = File.ReadAllBytes(filePath);
+            return "data:font/truetype;charset=utf-8;base64," + Convert.ToBase64String(fontBytes);
+        }
 
         private string CreatePdfDocument(string header, string body, string footer, string commonStyles, string headerStyles, string footerStyles, string bodyStyles, Root request, string backgroundStyles)
         {
             var themeCSS = new StringBuilder();
+            Console.WriteLine("Load Font Start: " + DateTime.Now.ToString("HH:mm:ss.fff"));
+            if (request?.Theme?.Font?.Family == "Open Sans")
+            {
+                themeCSS.Append(LoadOpenSansFontCSS());
+            }
+            else if (request?.Theme?.Font?.Family == "Roboto")
+            {
+                themeCSS.Append(LoadRobotoFontCSS());
+            }
+            Console.WriteLine("Load Font End: " + DateTime.Now.ToString("HH:mm:ss.fff"));
             themeCSS.Append("html, body {");
             themeCSS.Append($"--font-family: \"{request?.Theme?.Font?.Family}\";");
             themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;");
