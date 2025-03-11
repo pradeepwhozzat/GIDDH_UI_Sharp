@@ -12,8 +12,8 @@ namespace GiddhTemplate.Services
         private readonly Lazy<(string Common, string Header, string Footer, string Body, string BackgroundStyles)> _styles;
         private string _openSansFontCSS = ""; // Cache the Open Sans CSS
         private string _openRobotoFontCSS = ""; // Cache the Roboto CSS
-        private static Browser? _browser;
-        private static readonly object _lock = new object();
+        private static readonly SemaphoreSlim _semaphore = new(1, 1);
+        private static IBrowser? _browser;
         private static readonly ConcurrentDictionary<string, string> _renderedTemplates = new ConcurrentDictionary<string, string>();
         private static readonly PdfOptions _cachedPdfOptions = new PdfOptions
         {
@@ -31,38 +31,36 @@ namespace GiddhTemplate.Services
             DisplayHeaderFooter = false,
         };
 
-        public static async Task<Browser> GetBrowserAsync()
+        public static async Task<IBrowser> GetBrowserAsync()
         {
             if (_browser == null || !_browser.IsConnected)
             {
-                await Task.Run(() =>
+                await _semaphore.WaitAsync();
+                try
                 {
-                    lock (_lock)
+                    if (_browser == null || !_browser.IsConnected)
                     {
-                        if (_browser == null || !_browser.IsConnected)
+                        _browser = await Puppeteer.LaunchAsync(new LaunchOptions
                         {
-                            try
-                            {
-                                _browser = (Browser?)Puppeteer.LaunchAsync(new LaunchOptions
-                                {
-                                    Headless = true,
-                                    ExecutablePath = "/usr/bin/google-chrome" // Server Google Chrome url
-                                    // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" // Local System Google Chrome url
-                                }).Result;
-                            }
-                            catch (PuppeteerSharp.ProcessException ex)
-                            {
-                                Console.WriteLine($"Error launching browser: {ex.Message}");
-                                _browser = null;
-                                throw;
-                            }
-                        }
+                            Headless = true,
+                            ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
+                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" // Local path
+                            Args = new[] { "--no-sandbox", "--disable-setuid-sandbox" }
+                        });
                     }
-                });
+                }
+                catch (PuppeteerSharp.ProcessException ex)
+                {
+                    Console.WriteLine($"Error launching browser: {ex.Message}");
+                    _browser = null;
+                    throw;
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
             }
-#pragma warning disable CS8603 // Possible null reference return.
-            return _browser;
-#pragma warning restore CS8603 // Possible null reference return.
+            return _browser!;
         }
 
         public PdfService()
