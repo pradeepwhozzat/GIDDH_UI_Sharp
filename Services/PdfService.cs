@@ -271,6 +271,8 @@ namespace GiddhTemplate.Services
                 Console.WriteLine($"Error generating PDF: {ex.Message}");
             } finally {
                 await page.CloseAsync();
+                await page.DisposeAsync();
+                page = null;
             }
             return null;
         }
