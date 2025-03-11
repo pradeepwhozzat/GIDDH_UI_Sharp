@@ -856,7 +856,7 @@
                                                                 @GetLabel("TaxBifurcation")
                                                             </th>
                                                             }
-                                                            <th class="vertical-align-top @(Model?.IsTaxesApplied == true ? "text-center" : "text-right")" rowspan="2">
+                                                            <th class="vertical-align-top text-center" rowspan="2">
                                                                 Taxable Value
                                                             </th>
                                                             @* IGST/ (CGST/SGST) / VAT  *@
@@ -908,12 +908,9 @@
                                                                 }
                                                             }
 
-                                                            @if (Model?.IsTaxesApplied == true)
-                                                            {
-                                                                <th class="text-right vertical-align-top" rowspan="2">
-                                                                    Total Tax Amount
-                                                                </th>
-                                                            }
+                                                            <th class="text-right vertical-align-top" rowspan="2">
+                                                                Total Tax Amount
+                                                            </th>
                                                         </tr>
                                                         @if (Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                                                         {
@@ -941,7 +938,7 @@
                                                                     }
                                                                 </td>
                                                                 }
-                                                                <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">@Bifurcation?.TaxableValue</td>
+                                                                <td class="text-center">@Bifurcation?.TaxableValue</td>
 
                                                                 @* IGST / VAT *@
                                                                 @if (TaxIsApplied == true && CgstSgstIsApplied == false)
@@ -1013,11 +1010,8 @@
                                                                         </td>
                                                                     }
                                                                 }
-
-                                                                @if (Model?.IsTaxesApplied == true)
-                                                                {
-                                                                    <td class="text-right">@Bifurcation?.EntryTotal</td>
-                                                                }
+                                                                
+                                                                <td class="text-right">@Bifurcation?.EntryTaxTotal</td>
                                                             </tr>
                                                             }
                                                         }
@@ -1078,7 +1072,7 @@
                                                             @if (Model?.IsTaxesApplied == true)
                                                             {
                                                                 <td class="text-right">
-                                                                    <strong>@Model?.TaxBifurcationEntryTotal?.AmountForAccount</strong>
+                                                                    <strong>@Model?.TotalTax?.AmountForAccount</strong>
                                                                 </td>
                                                             }
                                                         </tr>

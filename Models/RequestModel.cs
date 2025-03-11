@@ -222,6 +222,7 @@ namespace InvoiceData
     {
         public decimal? Qty { get; set; }
         public decimal? EntryTotal { get; set; }
+        public decimal? EntryTaxTotal { get; set; }
         public string? Desc { get; set; }
         public decimal? Iamt { get; set; }
         public decimal? Camt { get; set; }
