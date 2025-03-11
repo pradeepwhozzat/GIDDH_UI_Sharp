@@ -12,8 +12,8 @@ namespace GiddhTemplate.Services
         private readonly Lazy<(string Common, string Header, string Footer, string Body, string BackgroundStyles)> _styles;
         private string _openSansFontCSS = ""; // Cache the Open Sans CSS
         private string _openRobotoFontCSS = ""; // Cache the Roboto CSS
-        private static Browser? _browser;
-        private static readonly object _lock = new object();
+        private static readonly SemaphoreSlim _semaphore = new(1, 1);
+        private static IBrowser? _browser;
         private static readonly ConcurrentDictionary<string, string> _renderedTemplates = new ConcurrentDictionary<string, string>();
         private static readonly PdfOptions _cachedPdfOptions = new PdfOptions
         {
@@ -31,38 +31,36 @@ namespace GiddhTemplate.Services
             DisplayHeaderFooter = false,
         };
 
-        public static async Task<Browser> GetBrowserAsync()
+        public static async Task<IBrowser> GetBrowserAsync()
         {
             if (_browser == null || !_browser.IsConnected)
             {
-                await Task.Run(() =>
+                await _semaphore.WaitAsync();
+                try
                 {
-                    lock (_lock)
+                    if (_browser == null || !_browser.IsConnected)
                     {
-                        if (_browser == null || !_browser.IsConnected)
+                        _browser = await Puppeteer.LaunchAsync(new LaunchOptions
                         {
-                            try
-                            {
-                                _browser = (Browser?)Puppeteer.LaunchAsync(new LaunchOptions
-                                {
-                                    Headless = true,
-                                    ExecutablePath = "/usr/bin/google-chrome" // Server Google Chrome url
-                                    // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" // Local System Google Chrome url
-                                }).Result;
-                            }
-                            catch (PuppeteerSharp.ProcessException ex)
-                            {
-                                Console.WriteLine($"Error launching browser: {ex.Message}");
-                                _browser = null;
-                                throw;
-                            }
-                        }
+                            Headless = true,
+                            ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
+                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" // Local path
+                            Args = new[] { "--no-sandbox", "--disable-setuid-sandbox" }
+                        });
                     }
-                });
+                }
+                catch (PuppeteerSharp.ProcessException ex)
+                {
+                    Console.WriteLine($"Error launching browser: {ex.Message}");
+                    _browser = null;
+                    throw;
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
             }
-#pragma warning disable CS8603 // Possible null reference return.
-            return _browser;
-#pragma warning restore CS8603 // Possible null reference return.
+            return _browser!;
         }
 
         public PdfService()
@@ -222,48 +220,59 @@ namespace GiddhTemplate.Services
 
         public async Task<string> GeneratePdfAsync(Root request)
         {
-            Console.WriteLine("PDF Generation Started ...");
-            Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
+            var browser = await GetBrowserAsync();
+            var page = await browser.NewPageAsync();
 
-            using var page = await (await GetBrowserAsync()).NewPageAsync();
+            try {
+                Console.WriteLine("PDF Generation Started ...");
+                Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
-            Console.WriteLine("Get RendererConfig " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                Console.WriteLine("Get RendererConfig " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
-            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
-            var (commonStyles, headerStyles, footerStyles, bodyStyles, BackgroundStyles) = _styles.Value;
-            Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
+                string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Tally");
+                var (commonStyles, headerStyles, footerStyles, bodyStyles, BackgroundStyles) = _styles.Value;
+                Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
 
-            // Run template rendering in parallel
-            var renderTasks = new[]
-            {
-                RenderTemplate(Path.Combine(templatePath, "Header.cshtml"), request),
-                RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request),
-                RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request)
-            };
+                // Run template rendering in parallel
+                var renderTasks = new[]
+                {
+                    RenderTemplate(Path.Combine(templatePath, "Header.cshtml"), request),
+                    RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request),
+                    RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request)
+                };
 
-            await Task.WhenAll(renderTasks);
+                await Task.WhenAll(renderTasks);
 
-            string header = renderTasks[0].Result;
-            string footer = renderTasks[1].Result;
-            string body = renderTasks[2].Result;
+                string header = renderTasks[0].Result;
+                string footer = renderTasks[1].Result;
+                string body = renderTasks[2].Result;
 
-            Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
-            // Final HTML store in "template"
-            string template = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, request, BackgroundStyles);
-            Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
-            await page.SetContentAsync(template);
+                // Final HTML store in "template"
+                string template = CreatePdfDocument(header, body, footer, commonStyles, headerStyles, footerStyles, bodyStyles, request, BackgroundStyles);
+                Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                await page.SetContentAsync(template);
 
-            await page.EmulateMediaTypeAsync(MediaType.Print);
+                await page.EmulateMediaTypeAsync(MediaType.Print);
 
-            // Uncomment below line to save PDF file in local 
-            // string pdfName = GetFileNameWithPath(request);
-            // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
-            // await page.PdfAsync(pdfName, _cachedPdfOptions);
+                // Uncomment below line to save PDF file in local
+                // string pdfName = GetFileNameWithPath(request);
+                // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
+                // await page.PdfAsync(pdfName, _cachedPdfOptions);
 
-            var pdfBytes = await page.PdfDataAsync(_cachedPdfOptions);
-            Console.WriteLine("pdfBytes " + DateTime.Now.ToString("HH:mm:ss.fff"));
-            return Convert.ToBase64String(pdfBytes);
+                var pdfBytes = await page.PdfDataAsync(_cachedPdfOptions);
+                Console.WriteLine("pdfBytes " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                return Convert.ToBase64String(pdfBytes);
+
+            } catch (Exception ex) {
+                Console.WriteLine($"Error generating PDF: {ex.Message}");
+            } finally {
+                await page.CloseAsync();
+                await page.DisposeAsync();
+                page = null;
+            }
+            return null;
         }
     }
 }
