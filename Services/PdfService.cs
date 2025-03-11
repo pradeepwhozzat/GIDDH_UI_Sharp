@@ -35,20 +35,34 @@ namespace GiddhTemplate.Services
         {
             if (_browser == null || !_browser.IsConnected)
             {
-                lock (_lock)
+                await Task.Run(() =>
                 {
-                    if (_browser == null || !_browser.IsConnected)
+                    lock (_lock)
                     {
-                        return _browser = Puppeteer.LaunchAsync(new LaunchOptions
+                        if (_browser == null || !_browser.IsConnected)
                         {
-                            Headless = true,
-                            ExecutablePath = "/usr/bin/google-chrome" // Adjust path for your system
-                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" // Local System Google Chrome url
-                        });
+                            try
+                            {
+                                _browser = (Browser?)Puppeteer.LaunchAsync(new LaunchOptions
+                                {
+                                    Headless = true,
+                                    ExecutablePath = "/usr/bin/google-chrome" // Server Google Chrome url
+                                    // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" // Local System Google Chrome url
+                                }).Result;
+                            }
+                            catch (PuppeteerSharp.ProcessException ex)
+                            {
+                                Console.WriteLine($"Error launching browser: {ex.Message}");
+                                _browser = null;
+                                throw;
+                            }
+                        }
                     }
-                }
+                });
             }
+#pragma warning disable CS8603 // Possible null reference return.
             return _browser;
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public PdfService()
