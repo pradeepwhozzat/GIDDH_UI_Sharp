@@ -209,6 +209,7 @@ namespace InvoiceData
     public class GstTaxesTotal
     {
         public string? TaxType { get; set; }
+        public string? Name { get; set; } // In Case of Estimate/Proforma
         public string? AccountName { get; set; }
         public Amount? Amount { get; set; }
         public double? TaxPercent { get; set; }
@@ -219,7 +220,7 @@ namespace InvoiceData
 
     public class TaxBifurcation 
     {
-        public int? Qty { get; set; }
+        public decimal? Qty { get; set; }
         public decimal? EntryTotal { get; set; }
         public string? Desc { get; set; }
         public decimal? Iamt { get; set; }
@@ -259,7 +260,7 @@ namespace InvoiceData
         public StockUnit? StockUnit { get; set; }
         public Variant? Variant { get; set; }
         public Dictionary<string, string>? CustomFields { get; set; }
-        public int? Quantity { get; set; }
+        public decimal? Quantity { get; set; }
         public Amount? Rate { get; set; }
         public string? Type { get; set; }
         public string? Sku { get; set; }
