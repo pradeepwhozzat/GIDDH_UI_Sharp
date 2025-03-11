@@ -44,7 +44,7 @@ namespace GiddhTemplate.Services
                         {
                             Headless = true,
                             ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
-                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" // Local path
+                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path
                             Args = new[] { "--no-sandbox", "--disable-setuid-sandbox" }
                         });
                     }
@@ -223,7 +223,8 @@ namespace GiddhTemplate.Services
             var browser = await GetBrowserAsync();
             var page = await browser.NewPageAsync();
 
-            try {
+            try
+            {
                 Console.WriteLine("PDF Generation Started ...");
                 Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
@@ -265,14 +266,18 @@ namespace GiddhTemplate.Services
                 Console.WriteLine("pdfBytes " + DateTime.Now.ToString("HH:mm:ss.fff"));
                 return Convert.ToBase64String(pdfBytes);
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine($"Error generating PDF: {ex.Message}");
-            } finally {
+            }
+            finally
+            {
                 await page.CloseAsync();
                 await page.DisposeAsync();
                 page = null;
             }
-            return null;
+            return "Failed to generate PDF !";
         }
     }
 }
