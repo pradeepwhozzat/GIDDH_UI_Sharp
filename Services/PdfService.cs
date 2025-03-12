@@ -45,7 +45,7 @@ namespace GiddhTemplate.Services
                             Headless = true,
                             ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
                             // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path
-                            Args = new[] { "--no-sandbox", "--disable-setuid-sandbox" }
+                            Args = new[] { "--no-sandbox", "--disable-setuid-sandbox", "--lang=en-US,ar-SA" }
                         });
                     }
                 }
