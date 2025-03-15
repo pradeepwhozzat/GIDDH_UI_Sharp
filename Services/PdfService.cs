@@ -189,7 +189,7 @@ namespace GiddhTemplate.Services
         {
             string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
             Directory.CreateDirectory(rootPath);
-            string pdfName = $"{(string.IsNullOrWhiteSpace(request?.PdfRename) ? "PDF" : request.PdfRename)} {DateTimeOffset.Now:HHmmssfff}.pdf";
+            string pdfName = $"{(string.IsNullOrWhiteSpace(request?.PdfRename) ? "PDF" : request.PdfRename)}_{DateTimeOffset.Now:HHmmssfff}.pdf";
             return Path.Combine(rootPath, pdfName);
         }
 

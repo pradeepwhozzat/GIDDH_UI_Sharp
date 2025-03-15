@@ -68,6 +68,33 @@
                                 <td class="p-0" colspan="100%">
                                     <table>
                                         <tbody>
+                                            @if(GetDisplayStatus("ShowEInvoiceDetails"))
+                                            {
+                                            <tr>
+                                                <td class="p-0">
+                                                    <table>
+                                                        <tbody>
+                                                            @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.IrnNumber))
+                                                            {
+                                                            <tr>
+                                                                <td>IRN: @Model?.EInvoiceDetails?.IrnNumber</td>
+                                                            </tr>
+                                                            }
+                                                            <tr>
+                                                                <td>
+                                                                    Ack No: 152410022936999
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    Ack Date: 2024-01-01 10:08:00
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            }
                                             <tr>
                                                 <td class="p-0">
                                                     <table>
