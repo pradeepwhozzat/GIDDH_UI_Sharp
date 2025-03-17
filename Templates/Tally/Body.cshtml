@@ -45,6 +45,12 @@
     {
         return Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true;
     }
+
+    public bool IsRtlCurrency(string code)
+    {
+        HashSet<string> rtlCurrencies = new HashSet<string> { "AED" }; //Add any other needed RTL currencies.
+        return rtlCurrencies.Contains(code);
+    }
 }
 
     <table class="repeated-header repeated-footer">
@@ -616,7 +622,12 @@
                                                                     <td class="py-0 border-none border-right text-center">
                                                                         @if (Entry?.SumOfDiscounts != null && Entry.SumOfDiscounts.AmountForAccount >= 0)
                                                                         {
-                                                                            <span>@GetAccountCurrencyCodeOrSymbol() - @Entry?.SumOfDiscounts?.AmountForAccount</span>
+                                                                            @if (IsRtlCurrency(Model?.AccountCurrency?.Code))
+                                                                            {
+                                                                                <span>- @Entry?.SumOfDiscounts?.AmountForAccount @GetAccountCurrencyCodeOrSymbol()</span>
+                                                                            } else {
+                                                                                <span>@GetAccountCurrencyCodeOrSymbol() - @Entry?.SumOfDiscounts?.AmountForAccount</span>
+                                                                            }
                                                                         }
                                                                     </td>
                                                                 }
@@ -845,7 +856,6 @@
                                                             bool CgstSgstIsApplied = false;
                                                             bool CessIsApplied = false;
                                                             bool OtherTaxIsApplied = false;
-
                                                             bool ShowHSNSAC = false;
                                                         }
                                                         <tr>
@@ -917,8 +927,8 @@
                                                         <tr>
                                                             @for(int i = 0; i < taxCount; i++)
                                                             {
-                                                                <th class="text-center" width="60px">Rate</th>
-                                                                <th class="text-center" width="60px">Amount</th>
+                                                                <th class="text-center" style="width: clamp(60px, 20%, 80px);">Rate</th>
+                                                                <th class="text-center" style="width: clamp(60px, 20%, 80px);">Amount</th>
                                                             }
                                                         </tr>
                                                         }
