@@ -1035,8 +1035,8 @@
                                                             </td>
                                                             }
 
-                                                            <td class="@(Model?.IsTaxesApplied == true ? "text-center" : "text-right")">
-                                                                <strong>@Model?.TaxableTotal?.AmountForAccount</strong>
+                                                            <td class="text-center">
+                                                                <strong>@Model?.TaxableTotal?.AmountForCompany</strong>
                                                             </td>
 
                                                             @if (Model?.GstTaxesTotalOnly != null && Model.GstTaxesTotalOnly.Any())
@@ -1045,7 +1045,7 @@
                                                                 {
                                                                 <td class="text-center"></td>
                                                                 <td class="text-center">
-                                                                <strong>@Tax?.Amount?.AmountForAccount</strong>
+                                                                <strong>@Tax?.Amount?.AmountForCompany</strong>
                                                                 </td>
                                                                 }
                                                             }
@@ -1060,7 +1060,7 @@
                                                                         <strong></strong>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                        <strong>@Cess?.Amount?.AmountForAccount</strong>
+                                                                        <strong>@Cess?.Amount?.AmountForCompany</strong>
                                                                     </td>
                                                                 }
                                                             }
@@ -1074,17 +1074,14 @@
                                                                         <strong></strong>
                                                                     </td>
                                                                     <td class="text-center">
-                                                                        <strong>@OtherTax?.Amount?.AmountForAccount</strong>
+                                                                        <strong>@OtherTax?.Amount?.AmountForCompany</strong>
                                                                     </td>
                                                                 }
                                                             }
 
-                                                            @if (Model?.IsTaxesApplied == true)
-                                                            {
-                                                                <td class="text-right">
-                                                                    <strong>@Model?.TotalTax?.AmountForAccount</strong>
-                                                                </td>
-                                                            }
+                                                            <td class="text-right">
+                                                                <strong>@Model?.TotalTax?.AmountForCompany</strong>
+                                                            </td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
