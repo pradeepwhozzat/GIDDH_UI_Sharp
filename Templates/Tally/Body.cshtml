@@ -957,7 +957,7 @@
                                                                 @if (TaxIsApplied == true && CgstSgstIsApplied == false)
                                                                 {
                                                                     <td class="text-center">
-                                                                        @(((Bifurcation?.Iamt > 0) || (Bifurcation?.Vatamt > 0)) && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
+                                                                        @((Bifurcation?.Iamt > 0 || Bifurcation?.Vatamt > 0) && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
                                                                     </td>
                                                                     <td class="text-center">
                                                                         @if (Bifurcation?.Iamt != null) {
@@ -972,13 +972,13 @@
                                                                 @if (CgstSgstIsApplied == true)
                                                                 {
                                                                     <td class="text-center">
-                                                                        @((Bifurcation?.Camt > 0) && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
+                                                                        @(Bifurcation?.Camt > 0 && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
                                                                     </td>
                                                                     <td class="text-center">
                                                                         @(Bifurcation?.Camt > 0 ? Bifurcation?.Camt : "")
                                                                     </td>
                                                                     <td class="text-center">
-                                                                        @((Bifurcation?.Samt > 0) && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
+                                                                        @(Bifurcation?.Samt > 0 && Bifurcation?.GstOrVatTaxRate >= 0 ? $"{Bifurcation?.GstOrVatTaxRate}%" : "") 
                                                                     </td>
                                                                     <td class="text-center">
                                                                         @(Bifurcation?.Samt > 0 ? Bifurcation?.Samt : "")
