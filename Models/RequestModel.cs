@@ -216,6 +216,8 @@ namespace InvoiceData
         public bool? ConsiderInItemTotal { get; set; }
         public bool? ConsiderInVoucherTotal { get; set; }
         public bool? ShowOnVoucher { get; set; }
+        public string? AmountForAccount { get; set; }
+        public string? AccountUniqueName { get; set; }
     }
 
     public class TaxBifurcation 
@@ -285,6 +287,7 @@ namespace InvoiceData
         public string? AccountName { get; set; }
         public Amount? Amount { get; set; }
         public double? TaxPercent { get; set; }
+        public string? AccountUniqueName { get; set; }
     }
 
     public class Entry
@@ -303,6 +306,7 @@ namespace InvoiceData
         public Amount? SumOfDiscounts { get; set; }
         public string? Description { get; set; }
         public string? HsnNumber { get; set; }
+        public double? UsedQuantity { get; set; }
         public string? SacNumber { get; set; }
     }
     
@@ -324,6 +328,11 @@ namespace InvoiceData
         public WarehouseDetails? WarehouseDetails { get; set; }
         public Amount? Balance { get; set; }
         public string? PlaceOfSupply { get; set; }
+        public string? ExchangeRate { get; set; }
+        public string? PlaceOfCountry { get; set; }
+        public string? LutNumber { get; set; }
+        public string? CustomerName { get; set; }
+        public Amount? TaxableAmount { get; set; }
         public Amount? GrandTotal { get; set; }
         public string? QRCodeBase64String { get; set; }
         public List<SumOfTax>? SumOfTaxes { get; set; }
