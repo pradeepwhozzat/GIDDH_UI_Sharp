@@ -7,7 +7,6 @@
 
 @functions {
     private readonly Dictionary<string, Setting> _settingCache = new Dictionary<string, Setting>();
-    private Dictionary<string, string> storeTAXS = new();
     public string GetLabel(string settingName)
     {
         if (!_settingCache.TryGetValue(settingName, out var setting))
