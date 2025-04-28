@@ -31,41 +31,22 @@
     <table>
         <tbody>
             <tr>
-                <td class="p-0" colspan="100%">
-                    @if (GetDisplayStatus("DisplayExportMessage"))
-                    {
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <p>@GetLabel("DisplayExportMessage")</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    }
-                </td>
-            </tr>
-            <tr>
                 <td class="p-0" width="33%">
                     <table>
                         <tbody>
-                            @if (GetDisplayStatus("Message1"))
+                            @if (GetDisplayStatus("Message1") && !string.IsNullOrEmpty(Model?.Message1))
                             {
                                 <tr>
                                     <td>
-                                        <p class="font-size-small">@GetLabel("Message1")</p>
+                                        <p>@Model.Message1</p>
                                     </td>
                                 </tr>
                             }
-                            @if (GetDisplayStatus("InvoiceNotes"))
+                            @if (GetDisplayStatus("ShowMessage2") && !string.IsNullOrEmpty(Model?.Message2))
                             {
                                 <tr>
                                     <td>
-                                        @if (!string.IsNullOrEmpty(Model?.Message2))
-                                        {
-                                            <p class="font-size-small">@Model.Message2</p>
-                                        }
+                                        <p>@Model.Message2</p>
                                     </td>
                                 </tr>
                             }
@@ -85,10 +66,6 @@
                     @if (GetDisplayStatus("TextUnderSlogan") || GetDisplayStatus("ImageSignature"))
                     {
                         <div class="border-bottom" style="padding-bottom: 5px;"> @* Added class and inline style *@
-                            @if (GetDisplayStatus("TextUnderSlogan"))
-                            {
-                                <p>@GetLabel("TextUnderSlogan")</p>
-                            }
                             @if (GetDisplayStatus("ImageSignature") && !string.IsNullOrEmpty(Model?.ImageSignature))
                             {
                                 <figure class="m-0">
@@ -115,9 +92,9 @@
                     {
                         <p class="font-weight-500">@Model?.Company?.Name</p>
                     }
-                    @if (GetDisplayStatus("FooterCompanyAddress"))
+                    @if (GetDisplayStatus("CompanyAddress"))
                     {
-                        <address>@Model?.Company?.Address</address>
+                        <address>@GetLabel("CompanyAddress")</address>
                     }
                 </td>
             </tr>
