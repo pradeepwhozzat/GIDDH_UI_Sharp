@@ -27,6 +27,11 @@
 }
 
 <header id="header">
+    @* This is for copy type image work at time of Invoice Copy - (Transport, Customer etc) *@
+    @if(Model?.TypeOfCopy != null)
+    {
+        <img class="type-of-copy" src="@Model.TypeOfCopy" height="40"/>
+    }
     <table>
         <tbody>
             <tr>
@@ -45,7 +50,7 @@
                                     }
                                     @if (GetDisplayStatus("HeaderCompanyName"))
                                     {
-                                        <p>@Model?.Company?.Name</p>
+                                        <p class="mr-t1 color-light"><strong>@Model?.Company?.Name</strong></p>
                                     }
                                     @if (GetDisplayStatus("CompanyTaxNumber"))
                                     {
@@ -79,7 +84,7 @@
                                     </table>
                                 </td>
 
-                                <td class="qr-code vertical-align-bottom text-right" width="25%">
+                                <td class="vertical-align-bottom text-right" width="25%">
                                     @if (GetDisplayStatus("ShowQrCode") &&
                                     !string.IsNullOrEmpty(Model?.QRCodeBase64String))
                                     {

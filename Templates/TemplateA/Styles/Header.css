@@ -14,7 +14,7 @@ body.repeat-header-footer header {
   background-color: #ffffff;
 }
 
-header .qr-code-image {
+.qr-code-image {
   aspect-ratio: 1/1;
 }
 
@@ -35,8 +35,14 @@ header .qr-code-image {
 .invoice-title strong {
   position: relative;
   z-index: 1;
-  background-color: var(--color-secondary);
+  background-color: #ffffff;
   padding-left: 15px;
   padding-right: 15px;
+}
+.type-of-copy {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
 /* ---------------- Invoice-title end-------------------- */

@@ -17,4 +17,25 @@ table.entry-summary tr td {
 
 .entry-table tbody tr td > * {
   line-height: calc(var(--font-size-default, 14px) * 1.25);
-} 
+}
+
+.entry-table thead tr th, .entry-table tfoot tr td, .tax-bifurcation-table thead tr th {
+  background-color: var(--color-secondary) !important;
+}
+
+.line-height-10 {
+  line-height: 10px;
+}
+
+.tax-bifurcation-table tbody tr td, .tax-bifurcation-table tfoot tr td {
+  padding-top: 5px;
+}
+
+.grid-view {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  align-items: start;
+}
+.grid-view > .grid-item {
+  margin-bottom: 10px;
+}
