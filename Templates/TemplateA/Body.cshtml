@@ -5,61 +5,6 @@
 @using System.Linq;
 @using System.Reflection;
 
-@functions {
-    private readonly Dictionary<string, Setting> _settingCache = new Dictionary<string, Setting>();
-    public string GetLabel(string settingName)
-    {
-        if (!_settingCache.TryGetValue(settingName, out var setting))
-        {
-            var property = Model.Settings?.GetType()
-                .GetProperty(settingName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-
-            setting = property?.GetValue(Model.Settings) as Setting;
-            _settingCache[settingName] = setting ?? new Setting(); // avoid setting = new Setting();
-        }
-
-        return setting?.Display == true ? setting.Label ?? string.Empty : string.Empty;
-    }
-
-   public bool GetDisplayStatus(string settingName)
-    {
-        if (!_settingCache.TryGetValue(settingName, out var setting))
-        {
-            var property = Model.Settings?.GetType()
-                .GetProperty(settingName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
-
-            setting = property?.GetValue(Model.Settings) as Setting;
-            _settingCache[settingName] = setting ?? new Setting();
-        }
-        return setting?.Display == true;
-    }
-
-    public string GetAccountCurrencyCodeOrSymbol()
-    {
-        return Model?.CurrencyFormat == "CODE"
-        ? Model?.AccountCurrency?.Code ?? string.Empty
-        : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol) ?? string.Empty;
-    }
-
-    public string GetCompanyCurrencyCodeOrSymbol()
-    {
-        return Model?.CurrencyFormat == "CODE"
-        ? Model?.Company?.Currency?.Code ?? string.Empty
-        : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol) ?? string.Empty;
-    }
-
-    public bool IsShowAmountForCompany()
-    {
-        return Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true;
-    }
-
-    public bool IsRtlCurrency(string code)
-    {
-        HashSet<string> rtlCurrencies = new HashSet<string> { "AED" }; //Add any other needed RTL currencies.
-        return rtlCurrencies.Contains(code);
-    }
-}
-
 <table class="repeated-header repeated-footer pd-l1">
     @if (Model?.ShowSectionsInline != true)
     {
@@ -81,7 +26,7 @@
                                 <td class="p-0" colspan="100%">
                                     <table>
                                         <tbody>
-                                            @if(GetDisplayStatus("ShowEInvoiceDetails"))
+                                            @if(@Model?.Settings?.ShowEInvoiceDetails?.Display == true)
                                             {
                                             <tr>
                                                 <td class="p-0">
@@ -122,7 +67,7 @@
                                                             <tr>
                                                                 <td>Company Details:</td>
                                                             </tr>
-                                                                @if (GetDisplayStatus("HeaderCompanyName"))
+                                                                @if (Model?.Settings?.HeaderCompanyName?.Display == true)
                                                                 {
                                                                     <tr>
                                                                         <td>
@@ -130,7 +75,7 @@
                                                                         </td>
                                                                     </tr>
                                                                 }
-                                                                @if (GetDisplayStatus("CompanyAddress"))
+                                                                @if (Model?.Settings?.CompanyAddress?.Display == true)
                                                                 {
                                                                     <tr>
                                                                         <td>
@@ -138,18 +83,18 @@
                                                                         </td>
                                                                     </tr>
                                                                 }
-                                                                @if (GetDisplayStatus("CompanyTaxNumber"))
+                                                                @if (Model?.Settings?.CompanyTaxNumber?.Display == true)
                                                                 {
                                                                     <tr>
                                                                         <td>
-                                                                            @GetLabel("CompanyTaxNumber"): @Model?.Company?.TaxNumber
+                                                                            @Model?.Settings?.CompanyTaxNumber?.Label: @Model?.Company?.TaxNumber
                                                                         </td>
                                                                     </tr>
                                                                 }
                                                         </tbody>
                                                     </table>
                                                 </td>
-                                                @if (GetDisplayStatus("WarehouseAddress"))
+                                                @if (Model?.Settings?.WarehouseAddress?.Display == true)
                                                 {
                                                     <td class="p-0 vertical-align-top">
                                                         <table>
@@ -183,133 +128,133 @@
                                             <tr>
                                                 <td colspan="100%" class="p-0 pd-t1">
                                                     <div class="grid-view">
-                                                        @if (GetDisplayStatus("CustomerName"))
+                                                        @if (Model?.Settings?.CustomerName?.Display == true)
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("CustomerName")</p>
+                                                                <p>@Model?.Settings?.CustomerName?.Label</p>
                                                                 <p>@Model?.CustomerName</p>
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("BillingAddress"))
+                                                        @if (Model?.Settings?.BillingAddress?.Display == true)
                                                         {
                                                             <div class="grid-item">
-                                                                <strong>@GetLabel("BillingAddress")</strong>
+                                                                <strong>@Model?.Settings?.BillingAddress?.Label</strong>
                                                                 <address>@Model?.Company?.Billing?.Address</address>
-                                                                @if (GetDisplayStatus("BillingTaxNumber"))
+                                                                @if (Model?.Settings?.BillingTaxNumber?.Display == true)
                                                                 {
-                                                                    <p class="mr-t1">@GetLabel("BillingTaxNumber")</p>
+                                                                    <p class="mr-t1">@Model?.Settings?.BillingTaxNumber?.Label</p>
                                                                     <p>@Model?.Company?.Billing?.TaxNumber</p>
                                                                 }
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("ShippingAddress"))
+                                                        @if (Model?.Settings?.ShippingAddress?.Display == true)
                                                         {
                                                             <div class="grid-item">
-                                                                <strong>@GetLabel("ShippingAddress")</strong>
+                                                                <strong>@Model?.Settings?.ShippingAddress?.Label</strong>
                                                                 <address>@Model?.Company?.Shipping?.Address</address>
-                                                                @if (GetDisplayStatus("ShippingTaxNumber"))
+                                                                @if (Model?.Settings?.ShippingTaxNumber?.Display == true)
                                                                 {
-                                                                    <p class="mr-t1">@GetLabel("ShippingTaxNumber")</p>
+                                                                    <p class="mr-t1">@Model?.Settings?.ShippingTaxNumber?.Label</p>
                                                                     <p>@Model?.Company?.Shipping?.TaxNumber</p>
                                                                 }
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("AttentionTo") || GetDisplayStatus("CustomerEmail") || GetDisplayStatus("CustomerContactNumber"))
+                                                        @if (Model?.Settings?.AttentionTo?.Display == true || Model?.Settings?.CustomerEmail?.Display == true || Model?.Settings?.CustomerContactNumber?.Display == true)
                                                         {
                                                             <div class="grid-item">
-                                                                @if (GetDisplayStatus("AttentionTo"))
+                                                                @if (Model?.Settings?.AttentionTo?.Display == true)
                                                                 {
                                                                     <p>@Model?.CustomerDetails?.Name</p>
                                                                 }
 
-                                                                @if (GetDisplayStatus("CustomerEmail"))
+                                                                @if (Model?.Settings?.CustomerEmail?.Display == true)
                                                                 {
                                                                     <p>@Model?.CustomerDetails?.Email</p>
                                                                 }
 
-                                                                @if (GetDisplayStatus("CustomerContactNumber"))
+                                                                @if (Model?.Settings?.CustomerContactNumber?.Display == true)
                                                                 {
                                                                     <p>@Model?.CustomerDetails?.ContactNumber</p>
                                                                 }
                                                             </div>
                                                         }
 
-                                                        @if (GetDisplayStatus("DueDate") && !string.IsNullOrEmpty(Model?.DueDate))
+                                                        @if (Model?.Settings?.DueDate?.Display == true && !string.IsNullOrEmpty(Model?.DueDate))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("DueDate")</p>
+                                                                <p>@Model?.Settings?.DueDate?.Label</p>
                                                                 <p>@Model?.DueDate</p>
                                                             </div>
                                                         }
 
-                                                        @if (GetDisplayStatus("ShippingDate") && !string.IsNullOrEmpty(Model?.ShippingDate))
+                                                        @if (Model?.Settings?.ShippingDate?.Display == true && !string.IsNullOrEmpty(Model?.ShippingDate))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("shippingDate")</p>
+                                                                <p>@Model?.Settings?.ShippingDate?.Label</p>
                                                                 <p>@Model.ShippingDate</p>
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("ShippedVia") && !string.IsNullOrEmpty(Model?.ShippedVia))
+                                                        @if (Model?.Settings?.ShippedVia?.Display == true && !string.IsNullOrEmpty(Model?.ShippedVia))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("ShippedVia")</p>
+                                                                <p>@Model?.Settings?.ShippedVia?.Label</p>
                                                                 <p>@Model.ShippedVia</p>
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("TrackingNumber") && !string.IsNullOrEmpty(Model?.TrackingNumber))
+                                                        @if (Model?.Settings?.TrackingNumber?.Display == true && !string.IsNullOrEmpty(Model?.TrackingNumber))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("TrackingNumber")</p>
+                                                                <p>@Model?.Settings?.TrackingNumber?.Label</p>
                                                                 <p>@Model.TrackingNumber</p>
                                                             </div>
                                                         }
 
-                                                        @if (GetDisplayStatus("DisplayExchangeRate") && Model?.ExchangeRate != null)
+                                                        @if (Model?.Settings?.DisplayExchangeRate?.Display == true && Model?.ExchangeRate != null)
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("DisplayExchangeRate")</p>
+                                                                <p>@Model?.Settings?.DisplayExchangeRate?.Label</p>
                                                                 <p>@Model.ExchangeRate</p>
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("DisplayPlaceOfSupply") && !string.IsNullOrEmpty(Model?.PlaceOfSupply))
+                                                        @if (Model?.Settings?.DisplayPlaceOfSupply?.Display == true && !string.IsNullOrEmpty(Model?.PlaceOfSupply))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("DisplayPlaceOfSupply")</p>
+                                                                <p>@Model?.Settings?.DisplayPlaceOfSupply?.Label</p>
                                                                 <p>@Model.PlaceOfSupply</p>
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("DisplayPlaceOfCountry") && !string.IsNullOrEmpty(Model?.PlaceOfCountry))
+                                                        @if (Model?.Settings?.DisplayPlaceOfCountry?.Display == true && !string.IsNullOrEmpty(Model?.PlaceOfCountry))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("DisplayPlaceOfCountry")</p>
+                                                                <p>@Model?.Settings?.DisplayPlaceOfCountry?.Label</p>
                                                                 <p>@Model.PlaceOfCountry</p>
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("DisplayLutNumber") && !string.IsNullOrEmpty(Model?.LutNumber))
+                                                        @if (Model?.Settings?.DisplayLutNumber?.Display == true && !string.IsNullOrEmpty(Model?.LutNumber))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("DisplayLutNumber")</p>
+                                                                <p>@Model?.Settings?.DisplayLutNumber?.Label</p>
                                                                 <p>@Model.LutNumber</p>
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("CustomField1") && !string.IsNullOrEmpty(Model?.CustomField1))
+                                                        @if (Model?.Settings?.CustomField1?.Display == true && !string.IsNullOrEmpty(Model?.CustomField1))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("CustomField1")</p>
+                                                                <p>@Model?.Settings?.CustomField1?.Label</p>
                                                                 <p>@Model.CustomField1</p>
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("CustomField2") && !string.IsNullOrEmpty(Model?.CustomField2))
+                                                        @if (Model?.Settings?.CustomField2?.Display == true && !string.IsNullOrEmpty(Model?.CustomField2))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("CustomField2")</p>
+                                                                <p>@Model?.Settings?.CustomField2?.Label</p>
                                                                 <p>@Model.CustomField2</p>
                                                             </div>
                                                         }
-                                                        @if (GetDisplayStatus("CustomField3") && !string.IsNullOrEmpty(Model?.CustomField3))
+                                                        @if (Model?.Settings?.CustomField3?.Display == true && !string.IsNullOrEmpty(Model?.CustomField3))
                                                         {
                                                             <div class="grid-item">
-                                                                <p>@GetLabel("CustomField3")</p>
+                                                                <p>@Model?.Settings?.CustomField3?.Label</p>
                                                                 <p>@Model.CustomField3</p>
                                                             </div>
                                                         }
@@ -322,50 +267,50 @@
                                                         <thead>
                                                             <tr>
                                                                 
-                                                                @if (GetDisplayStatus("SNo"))
+                                                                @if (Model?.Settings?.SNo?.Display == true)
                                                                 {
-                                                                    <th width="30px" class="text-center pd-t05 pd-b05">@GetLabel("SNo")</th>
+                                                                    <th width="30px" class="text-center pd-t05 pd-b05">@Model?.Settings?.SNo?.Label</th>
                                                                 }
                                                                 
-                                                                @if (GetDisplayStatus("ShowVariantImage"))
+                                                                @if (Model?.Settings?.ShowVariantImage?.Display == true)
                                                                 {
-                                                                    <th width="15%" class="text-center">@GetLabel("ShowVariantImage")</th>
+                                                                    <th width="15%" class="text-center">@Model?.Settings?.ShowVariantImage?.Label</th>
                                                                 }
                                                                 
-                                                                @if (GetDisplayStatus("Item"))
+                                                                @if (Model?.Settings?.Item?.Display == true)
                                                                 {
-                                                                    <th width="15%" class="text-left">@GetLabel("Item")</th>
+                                                                    <th width="15%" class="text-left">@Model?.Settings?.Item?.Label</th>
                                                                 }
 
-                                                                @if (GetDisplayStatus("HsnSac"))
+                                                                @if (Model?.Settings?.HsnSac?.Display == true)
                                                                 {
-                                                                    <th class="text-right">@GetLabel("HsnSac")</th>
+                                                                    <th class="text-right">@Model?.Settings?.HsnSac?.Label</th>
                                                                 }
-                                                                @if (GetDisplayStatus("Quantity"))
+                                                                @if (Model?.Settings?.Quantity?.Display == true)
                                                                 {
-                                                                    <th class="text-right">@GetLabel("Quantity")</th>
+                                                                    <th class="text-right">@Model?.Settings?.Quantity?.Label</th>
                                                                 }
-                                                                @if (GetDisplayStatus("Rate"))
+                                                                @if (Model?.Settings?.Rate?.Display == true)
                                                                 {
-                                                                    <th class="text-right">@GetLabel("Rate")</th>
-                                                                }
-
-                                                                @if (GetDisplayStatus("AmountBeforeDiscount"))
-                                                                {
-                                                                    <th class="text-right">@GetLabel("AmountBeforeDiscount")</th>
+                                                                    <th class="text-right">@Model?.Settings?.Rate?.Label</th>
                                                                 }
 
-                                                                @if (GetDisplayStatus("Discount"))
+                                                                @if (Model?.Settings?.AmountBeforeDiscount?.Display == true)
                                                                 {
-                                                                    <th class="text-right">@GetLabel("Discount")</th>
+                                                                    <th class="text-right">@Model?.Settings?.AmountBeforeDiscount?.Label</th>
                                                                 }
 
-                                                                @if (GetDisplayStatus("TaxableValue"))
+                                                                @if (Model?.Settings?.Discount?.Display == true)
                                                                 {
-                                                                    <th class="text-right">@GetLabel("TaxableValue")</th>
+                                                                    <th class="text-right">@Model?.Settings?.Discount?.Label</th>
                                                                 }
 
-                                                                @if (GetDisplayStatus("Taxes") && !GetDisplayStatus("TaxBifurcation") && Model?.GstTaxesTotal?.Any() == true)
+                                                                @if (Model?.Settings?.TaxableValue?.Display == true)
+                                                                {
+                                                                    <th class="text-right">@Model?.Settings?.TaxableValue?.Label</th>
+                                                                }
+
+                                                                @if (Model?.Settings?.Taxes?.Display == true && !Model?.Settings?.TaxBifurcation?.Display == true && Model?.GstTaxesTotal?.Any() == true)
                                                                 {
                                                                     @foreach (var tax in Model.GstTaxesTotal)
                                                                     {
@@ -373,9 +318,9 @@
                                                                     }
                                                                 }
                                                                 <th class="text-right">
-                                                                    @if (GetDisplayStatus("Total"))
+                                                                    @if (Model?.Settings?.Total?.Display == true)
                                                                     {
-                                                                        @GetLabel("Total")
+                                                                        @Model?.Settings?.Total?.Label
                                                                     }
                                                                     else
                                                                     {
@@ -383,11 +328,12 @@
                                                                     }
                                                                 </th>
                                                             </tr>
-                                                            @if (GetDisplayStatus("PreviousDue") && Model?.PreviousDueAmount != null)
+                                                            @if (Model?.Settings?.PreviousDue?.Display == true && Model?.PreviousDueAmount != null)
                                                             {
                                                                 <tr class="border-top">
                                                                     <td colspan="100%" class="text-right">
-                                                                        @GetLabel("PreviousDue") : @GetAccountCurrencyCodeOrSymbol() @Model?.PreviousDueAmount?.AmountForAccount
+                                                                        @Model?.Settings?.PreviousDue?.Label : @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code ?? string.Empty
+                                                                            : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol) ?? string.Empty) @Model?.PreviousDueAmount?.AmountForAccount
                                                                     </td>
                                                                 </tr>
                                                             }
@@ -404,14 +350,14 @@
 
                                                                     <tr class="vertical-align-top border-top">
                                                                         <!-- # -->
-                                                                        @if (GetDisplayStatus("SNo"))
+                                                                        @if (Model?.Settings?.SNo?.Display == true)
                                                                         {
                                                                             <td class="text-center">
                                                                                 <span>@index</span>
                                                                             </td>
                                                                         }
 
-                                                                        @if (GetDisplayStatus("ShowVariantImage"))
+                                                                        @if (Model?.Settings?.ShowVariantImage?.Display == true)
                                                                         {
                                                                             <td class="text-center">
                                                                                 @if (!string.IsNullOrEmpty(Entry?.Stock?.Variant?.Value))
@@ -423,7 +369,7 @@
                                                                         }
 
                                                                         <!-- Description -->
-                                                                        @if (GetDisplayStatus("Item"))
+                                                                        @if (Model?.Settings?.Item?.Display == true)
                                                                         {
                                                                             <td class="text-left">
                                                                                 <div style="display: flex; align-items: start; flex-direction: column;">
@@ -435,12 +381,12 @@
                                                                                             <p>@Entry?.AccountName</p>
                                                                                         }
 
-                                                                                        @if (!GetDisplayStatus("ShowDescriptionInRows") && !string.IsNullOrEmpty(Entry?.Description))
+                                                                                        @if (!Model?.Settings?.ShowDescriptionInRows?.Display == true && !string.IsNullOrEmpty(Entry?.Description))
                                                                                         {
                                                                                             <p class="font-size-small">@Entry.Description </p>
                                                                                         }
 
-                                                                                        @if (GetDisplayStatus("SkuCode") && !string.IsNullOrEmpty(Entry?.Stock?.SkuCodeHeading) && !string.IsNullOrEmpty(Entry?.Stock?.Sku))
+                                                                                        @if (Model?.Settings?.SkuCode?.Display == true && !string.IsNullOrEmpty(Entry?.Stock?.SkuCodeHeading) && !string.IsNullOrEmpty(Entry?.Stock?.Sku))
                                                                                         {
                                                                                             <p class="font-size-small">@Entry.Stock.SkuCodeHeading: @Entry.Stock.Sku</p>
                                                                                         }
@@ -455,7 +401,7 @@
                                                                                             <p class="font-size-small">@Entry.Stock.CustomField2.Key:@Entry.Stock.CustomField2.Value</p>
                                                                                         }
 
-                                                                                        @if (GetDisplayStatus("Date"))
+                                                                                        @if (Model?.Settings?.Date?.Display == true)
                                                                                         {
                                                                                             <p class="font-size-small">@Entry?.Date</p>
                                                                                         }
@@ -464,7 +410,7 @@
                                                                             </td>
                                                                         }
                                                                         <!-- HSN/SAC -->
-                                                                        @if (GetDisplayStatus("HsnSac"))
+                                                                        @if (Model?.Settings?.HsnSac?.Display == true)
                                                                         {
                                                                             <td class="text-right">
                                                                                 <p>@Entry?.HsnNumber</p>
@@ -472,7 +418,7 @@
                                                                             </td>
                                                                         }
                                                                         <!-- Qty. -->
-                                                                        @if (GetDisplayStatus("Quantity"))
+                                                                        @if (Model?.Settings?.Quantity?.Display == true)
                                                                         {
                                                                             <td class="text-right">
                                                                                 <p>@Entry?.Stock?.Quantity</p>
@@ -481,20 +427,20 @@
                                                                         }
 
                                                                         <!-- Rate/Item -->
-                                                                        @if (GetDisplayStatus("Rate"))
+                                                                        @if (Model?.Settings?.Rate?.Display == true)
                                                                         {
                                                                             <td class="text-right">
                                                                                 @if (Entry?.Stock?.Rate != null)
                                                                                 {
                                                                                     <p>
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         @Entry.Stock.Rate.AmountForAccount
                                                                                     </p>
                                                                                     
-                                                                                    @if (IsShowAmountForCompany() && Entry.Stock.Rate?.AmountForCompany != null)
+                                                                                    @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && Entry.Stock.Rate?.AmountForCompany != null)
                                                                                     {
                                                                                         <p class="text-light pr-3 font-size-small">
-                                                                                            @GetCompanyCurrencyCodeOrSymbol()
+                                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))
                                                                                             @Entry.Stock.Rate.AmountForCompany
                                                                                         </p>
                                                                                     }
@@ -503,54 +449,54 @@
                                                                         }
 
                                                                         <!-- Total Before Dis. -->
-                                                                        @if (GetDisplayStatus("AmountBeforeDiscount"))
+                                                                        @if (Model?.Settings?.AmountBeforeDiscount?.Display == true)
                                                                         {
                                                                             <td class="text-right">
-                                                                                @GetAccountCurrencyCodeOrSymbol()
+                                                                                @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                 @Entry?.Amount?.AmountForAccount
                                                                             </td>
                                                                         }
 
                                                                         <!-- Dis./ Item -->
-                                                                        @if (GetDisplayStatus("Discount"))
+                                                                        @if (Model?.Settings?.Discount?.Display == true)
                                                                         {
                                                                             <td class="text-right">
                                                                                 @if (Entry?.SumOfDiscounts != null && Entry.SumOfDiscounts.AmountForAccount >= 0)
                                                                                 {
                                                                                     if (Model?.AccountCurrency?.Code != null)
                                                                                     {
-                                                                                        @if (IsRtlCurrency(Model.AccountCurrency.Code))
+                                                                                        @if (Model?.AccountCurrency?.Code == "AED")
                                                                                         {
-                                                                                            <span>- @Entry?.SumOfDiscounts?.AmountForAccount @GetAccountCurrencyCodeOrSymbol()</span>
+                                                                                            <span>- @Entry?.SumOfDiscounts?.AmountForAccount @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))</span>
                                                                                         } else {
-                                                                                            <span>@GetAccountCurrencyCodeOrSymbol() - @Entry?.SumOfDiscounts?.AmountForAccount</span>
+                                                                                            <span>@(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) - @Entry?.SumOfDiscounts?.AmountForAccount</span>
                                                                                         }
                                                                                     }
                                                                                 }
                                                                             </td>
                                                                         }
 
-                                                                        @if (GetDisplayStatus("TaxableValue"))
+                                                                        @if (Model?.Settings?.TaxableValue?.Display == true)
                                                                         {
                                                                             <td class="text-right">
                                                                                 @if (Entry?.TaxableValue != null)
                                                                                 {
                                                                                     <p>
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         @Entry?.TaxableValue.AmountForAccount
                                                                                     </p>
                                                                                     
-                                                                                    @if (IsShowAmountForCompany() && Entry?.TaxableValue?.AmountForCompany != null)
+                                                                                    @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && Entry?.TaxableValue?.AmountForCompany != null)
                                                                                     {
                                                                                         <p class="text-light pr-3 font-size-small">
-                                                                                            @GetCompanyCurrencyCodeOrSymbol()
+                                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))
                                                                                             @Entry?.TaxableValue?.AmountForCompany
                                                                                         </p>
                                                                                     }
                                                                                 }
                                                                             </td>
                                                                         }
-                                                                        @if (GetDisplayStatus("Taxes") && !GetDisplayStatus("TaxBifurcation"))
+                                                                        @if (Model?.Settings?.Taxes?.Display == true && !Model?.Settings?.TaxBifurcation?.Display == true)
                                                                         {
                                                                             @foreach (var tax in Model.GstTaxesTotal)
                                                                             {
@@ -559,7 +505,7 @@
                                                                                     @if(entryTax?.AccountUniqueName == tax.AccountUniqueName)
                                                                                     {
                                                                                         <td class="text-right">
-                                                                                            <p>@GetAccountCurrencyCodeOrSymbol() @entryTax?.Amount?.AmountForAccount</p>
+                                                                                            <p>@(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) @entryTax?.Amount?.AmountForAccount</p>
                                                                                             <p class="font-size-small">@entryTax?.TaxPercent%</p>
                                                                                         </td>
                                                                                     } else {
@@ -571,21 +517,21 @@
                                                                         <!-- Total -->
                                                                         <td class="text-right">
                                                                             <p>
-                                                                                @GetAccountCurrencyCodeOrSymbol() 
+                                                                                @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) 
                                                                                 @Entry?.EntryTotal?.AmountForAccount
                                                                             </p>
 
-                                                                            @if (IsShowAmountForCompany() && Entry?.EntryTotal?.AmountForCompany != null)
+                                                                            @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && Entry?.EntryTotal?.AmountForCompany != null)
                                                                             {
                                                                                 <p class="text-light pr-3 font-size-small">
-                                                                                    @GetCompanyCurrencyCodeOrSymbol()
+                                                                                    @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))
                                                                                     @Entry?.TaxableValue?.AmountForCompany
                                                                                 </p>
                                                                             }
                                                                         </td>
                                                                     </tr>
 
-                                                                    @if (GetDisplayStatus("ShowDescriptionInRows"))
+                                                                    @if (Model?.Settings?.ShowDescriptionInRows?.Display == true)
                                                                     {
                                                                         <tr>
                                                                             <td width="25px"></td>
@@ -600,67 +546,67 @@
                                                         <tfoot>
                                                             <tr class="border-top border-bottom">
 
-                                                                @if (GetDisplayStatus("SNo"))
+                                                                @if (Model?.Settings?.SNo?.Display == true)
                                                                 {
                                                                     <td class="pd-t05 pd-b05"></td>
                                                                 }
                                                                 
-                                                                @if (GetDisplayStatus("Item"))
+                                                                @if (Model?.Settings?.Item?.Display == true)
                                                                 {
                                                                     <td class="pd-t05 pd-b05"></td>
                                                                 }
 
-                                                                @if (GetDisplayStatus("ShowVariantImage"))
+                                                                @if (Model?.Settings?.ShowVariantImage?.Display == true)
                                                                 {
                                                                     <td class="pd-t05 pd-b05"></td>
                                                                 }
 
-                                                                @if (GetDisplayStatus("HsnSac"))
+                                                                @if (Model?.Settings?.HsnSac?.Display == true)
                                                                 {
                                                                     <td class="pd-t05 pd-b05"></td>
                                                                 }
 
-                                                                @if (GetDisplayStatus("Quantity"))
+                                                                @if (Model?.Settings?.Quantity?.Display == true)
                                                                 {
                                                                     <td class="text-right pd-t05 pd-b05">@Model?.StockQuantityWithUnit</td>
                                                                 }
 
-                                                                @if (GetDisplayStatus("Rate"))
+                                                                @if (Model?.Settings?.Rate?.Display == true)
                                                                 {
                                                                     <td class="pd-t05 pd-b05"></td>
                                                                 }
 
-                                                                @if (GetDisplayStatus("AmountBeforeDiscount"))
+                                                                @if (Model?.Settings?.AmountBeforeDiscount?.Display == true)
                                                                 {
                                                                     <td class="pd-t05 pd-b05"></td>
                                                                 }
 
-                                                                @if (GetDisplayStatus("Discount"))
+                                                                @if (Model?.Settings?.Discount?.Display == true)
                                                                 {
                                                                     <td class="text-right pd-t05 pd-b05"></td>
                                                                 }
 
-                                                                @if (GetDisplayStatus("TaxableValue"))
+                                                                @if (Model?.Settings?.TaxableValue?.Display == true)
                                                                 {
                                                                     <td class="text-right pd-t05 pd-b05">
-                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                         @Model?.TaxableTotal?.AmountForAccount
                                                                     </td>
                                                                 }
                                                                 
-                                                                @if (GetDisplayStatus("Taxes") && !GetDisplayStatus("TaxBifurcation") && Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
+                                                                @if (Model?.Settings?.Taxes?.Display == true && !Model?.Settings?.TaxBifurcation?.Display == true && Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
                                                                 {
                                                                     @foreach (var tax in Model.GstTaxesTotal)
                                                                     {
                                                                         <td class="text-right pd-t05 pd-b05">
-                                                                            @GetAccountCurrencyCodeOrSymbol() 
+                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) 
                                                                             @tax?.Amount?.AmountForAccount
                                                                         </td>
                                                                     }
                                                                 }
 
                                                                 <td class="text-right pd-t05 pd-b05">
-                                                                    @GetAccountCurrencyCodeOrSymbol()
+                                                                    @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                     @Model?.GstEntriesTotal?.AmountForAccount
                                                                 </td>
                                                             </tr>
@@ -674,7 +620,7 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td width="30%">
-                                                                    @if (GetDisplayStatus("ShowQrCode") && !string.IsNullOrEmpty(Model?.QRCodeBase64String))
+                                                                    @if (Model?.Settings?.ShowQrCode?.Display == true && !string.IsNullOrEmpty(Model?.QRCodeBase64String))
                                                                     {
                                                                         <figure class="m-0">
                                                                             <img src="data:image/png;base64,@Model?.QRCodeBase64String" class="qr-code-image"
@@ -685,22 +631,22 @@
                                                                 <td width="70%">
                                                                     <table class="entry-summary">
                                                                         <tbody>
-                                                                            @if (GetDisplayStatus("TaxableAmount") && Model?.TaxableTotal != null)
+                                                                            @if (Model?.Settings?.TaxableAmount?.Display == true && Model?.TaxableTotal != null)
                                                                             {
                                                                                 <tr class="line-height-10">
-                                                                                    <td class="p-0 text-right" width="50%">@GetLabel("TaxableAmount")</td>
+                                                                                    <td class="p-0 text-right" width="50%">@Model?.Settings?.TaxableAmount?.Label</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         @Model?.TaxableTotal?.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
-                                                                            @if (GetDisplayStatus("TotalTax") && Model?.TotalTax != null)
+                                                                            @if (Model?.Settings?.TotalTax?.Display == true && Model?.TotalTax != null)
                                                                             {
                                                                                 <tr class="p-0 m-0 line-height-10">
-                                                                                    <td class="p-0 text-right" width="50%">@GetLabel("TotalTax")</td>
+                                                                                    <td class="p-0 text-right" width="50%">@Model?.Settings?.TotalTax?.Label</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         @Model?.TotalTax?.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
@@ -710,16 +656,16 @@
                                                                                 <tr class="p-0 m-0 line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">RoundOff</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         @Model?.RoundOff
                                                                                     </td>
                                                                                 </tr>
                                                                             }
-                                                                            @if (GetDisplayStatus("GrandTotal") && Model?.GstEntriesTotal != null)
+                                                                            @if (Model?.Settings?.GrandTotal?.Display == true && Model?.GstEntriesTotal != null)
                                                                             {
                                                                                 <tr class="p-0 m-0 line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">
-                                                                                        <strong>@GetLabel("GrandTotal")
+                                                                                        <strong>@Model?.Settings?.GrandTotal?.Label
                                                                                             @(!string.IsNullOrEmpty(Model?.AccountCurrency?.Code) ? $"(IN {Model.AccountCurrency.Code})" : "")
                                                                                         </strong>
                                                                                     </td>
@@ -729,11 +675,11 @@
                                                                                     </td>
                                                                                 </tr>
                                                                             }
-                                                                            @if (GetDisplayStatus("TotalInWords") && Model?.TotalInWords != null)
+                                                                            @if (Model?.Settings?.TotalInWords?.Display == true && Model?.TotalInWords != null)
                                                                             {
                                                                                 <tr class="p-0 m-0">
                                                                                     <td class="p-0 text-right" width="50%" style="vertical-align: top;">
-                                                                                        @GetLabel("TotalInWords")
+                                                                                        @Model?.Settings?.TotalInWords?.Label
                                                                                     </td>
                                                                                     <td class="text-right p-0" style="padding-bottom: 5px;">
                                                                                         <span style="border-bottom: 1px solid black;">
@@ -743,27 +689,27 @@
                                                                                 </tr>
                                                                             }
 
-                                                                            @if (IsShowAmountForCompany())
+                                                                            @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true)
                                                                             {
-                                                                                @if (GetDisplayStatus("GrandTotal") && Model?.GstEntriesTotal != null)
+                                                                                @if (Model?.Settings?.GrandTotal?.Display == true && Model?.GstEntriesTotal != null)
                                                                                 {
                                                                                     <tr class="line-height-10">
                                                                                         <td class="p-0 text-right" width="50%">
-                                                                                            <strong>@GetLabel("GrandTotal")
+                                                                                            <strong>@Model?.Settings?.GrandTotal?.Label
                                                                                                     @(!string.IsNullOrEmpty(Model?.Company?.Currency?.Code) ? $"(IN {Model.Company.Currency.Code})" : "")
                                                                                             </strong>
                                                                                         </td>
                                                                                         <td class="text-right p-0">
-                                                                                            @GetAccountCurrencyCodeOrSymbol()
+                                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                             <strong>@Model?.GstEntriesTotal.AmountForCompany</strong>
                                                                                         </td>
                                                                                     </tr>
                                                                                 }
-                                                                                @if (GetDisplayStatus("TotalInWords") && Model?.TotalInWords != null)
+                                                                                @if (Model?.Settings?.TotalInWords?.Display == true && Model?.TotalInWords != null)
                                                                                 {
                                                                                     <tr>
                                                                                         <td class="p-0 text-right" width="50%" style="vertical-align: top;">
-                                                                                            @GetLabel("TotalInWords")
+                                                                                            @Model?.Settings?.TotalInWords?.Label
                                                                                         </td>
                                                                                         <td class="text-right p-0" style="padding-bottom: 5px;">
                                                                                             <span style="border-bottom: 1px solid black;">
@@ -779,80 +725,80 @@
                                                                                 <tr class="line-height-10">
                                                                                     <td class="p-0 text-right" width="50%" >Paid</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol() 
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) 
                                                                                         @Model.PaidAmount
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr class="line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">Due Amount</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol() 
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) 
                                                                                         @Model.Balance.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
 
-                                                                            @if (GetDisplayStatus("GrandTotalInAccountsCurrency") && Model?.GrandTotalInAccountsCurrency != null)
+                                                                            @if (Model?.Settings?.GrandTotalInAccountsCurrency?.Display == true && Model?.GrandTotalInAccountsCurrency != null)
                                                                             {
                                                                                 <tr class="line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">
-                                                                                        @GetLabel("GrandTotalInAccountsCurrency")
+                                                                                        @Model?.Settings?.GrandTotalInAccountsCurrency?.Label
                                                                                         @(!string.IsNullOrEmpty(Model?.Company?.Currency?.Code) ? $"(IN {Model.Company.Currency.Code})" : "")
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         @Model?.GrandTotalInAccountsCurrency
                                                                                     </td>
                                                                                 </tr>
                                                                             }
-                                                                            @if (GetDisplayStatus("TotalInWordsInAccountsCurrency") && Model?.TotalInWordsInAccountsCurrency != null)
+                                                                            @if (Model?.Settings?.TotalInWordsInAccountsCurrency?.Display == true && Model?.TotalInWordsInAccountsCurrency != null)
                                                                             {
                                                                                 <tr>
                                                                                     <td class="p-0 text-right" width="50%">
-                                                                                        <strong>@GetLabel("TotalInWordsInAccountsCurrency")
+                                                                                        <strong>@Model?.Settings?.TotalInWordsInAccountsCurrency?.Label
                                                                                         </strong>
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         <strong>@Model.TotalInWordsInAccountsCurrency</strong>
                                                                                     </td>
                                                                                 </tr>
                                                                             }
 
-                                                                            @if (GetDisplayStatus("Tcs") && Model?.TcsTotalTax != null)
+                                                                            @if (Model?.Settings?.Tcs?.Display == true && Model?.TcsTotalTax != null)
                                                                             {
                                                                                 <tr class="line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">
-                                                                                        @GetLabel("Tcs")
+                                                                                        @Model?.Settings?.Tcs?.Label
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         @Model.TcsTotalTax.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
 
-                                                                            @if (GetDisplayStatus("Tds") && Model?.TdsTotalTax != null)
+                                                                            @if (Model?.Settings?.Tds?.Display == true && Model?.TdsTotalTax != null)
                                                                             {
                                                                                 <tr class="line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">
-                                                                                        @GetLabel("Tds")
+                                                                                        @Model?.Settings?.Tds?.Label
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         @Model.TdsTotalTax.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
 
-                                                                            @if (GetDisplayStatus("TotalDue") && Model?.TotalDue != null)
+                                                                            @if (Model?.Settings?.TotalDue?.Display == true && Model?.TotalDue != null)
                                                                             {
                                                                                 <tr class="line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">
-                                                                                        @GetLabel("TotalDue")
+                                                                                        @Model?.Settings?.TotalDue?.Label
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @GetAccountCurrencyCodeOrSymbol()
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                                         @Model?.TotalDue.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
@@ -865,7 +811,7 @@
                                                     </table>
                                                 </td>
                                             </tr>
-                                            @if (GetDisplayStatus("TaxableAmount") && @Model?.TaxBifurcation?.Any() == true)
+                                            @if (Model?.Settings?.TaxableAmount?.Display == true && @Model?.TaxBifurcation?.Any() == true)
                                             {
                                                 <tr>
                                                     <td colspan="100%" class="p-0">
@@ -879,7 +825,7 @@
                                                                 <!-- Description (HSN/Tax Rate) -->
                                                                 <tr class="border-bottom">
                                                                     
-                                                                    @if (GetLabel("TaxBifurcation") == "HSN/SAC")
+                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "HSN/SAC")
                                                                     {
                                                                         <th class="text-left pd-b05 pd-t05"><strong>HSN/SAC</strong></th>
                                                                     }
@@ -932,7 +878,7 @@
                                                                         };
                                                                         
                                                                     <tr>
-                                                                        @if (GetLabel("TaxBifurcation") == "HSN/SAC")
+                                                                        @if (Model?.Settings?.TaxBifurcation?.Label == "HSN/SAC")
                                                                         {
                                                                             <td class="text-left border-right">@bifurcation?.HsnSc
                                                                                 <small>
@@ -985,7 +931,7 @@
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr class="border-bottom border-top">
-                                                                    @if (GetLabel("TaxBifurcation") == "HSN/SAC")
+                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "HSN/SAC")
                                                                     {
                                                                         <td class="text-right border-right"><strong>Total</strong></td>
                                                                     }
@@ -1037,11 +983,11 @@
                                                 <td colspan="100%">
                                                     <table style="margin-top: 20px;">
                                                         <tbody>
-                                                            @if (GetDisplayStatus("DisplayExportMessage"))
+                                                            @if (Model?.Settings?.DisplayExportMessage?.Display == true)
                                                             {
                                                                 <tr>
                                                                     <td>
-                                                                        <p>@GetLabel("DisplayExportMessage")</p>
+                                                                        <p>@Model?.Settings?.DisplayExportMessage?.Label</p>
                                                                     </td>
                                                                 </tr>
                                                             }

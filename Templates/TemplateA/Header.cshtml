@@ -2,30 +2,6 @@
 @using InvoiceData;
 @using System.Collections.Generic;
 
-@functions {
-    private readonly Dictionary<string, Setting> _settingCache = new Dictionary<string, Setting>();
-
-    public string GetLabel(string settingName)
-    {
-        if (!_settingCache.TryGetValue(settingName, out var setting))
-        {
-            setting = Model.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
-            _settingCache[settingName] = setting ??= new Setting();
-        }
-        return setting?.Display == true ? setting?.Label ?? string.Empty : string.Empty;
-    }
-
-    public bool GetDisplayStatus(string settingName)
-    {
-        if (!_settingCache.TryGetValue(settingName, out var setting))
-        {
-            setting = Model.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
-            _settingCache[settingName] = setting ??= new Setting();
-        }
-        return setting?.Display == true;
-    }
-}
-
 <header id="header">
     @* This is for copy type image work at time of Invoice Copy - (Transport, Customer etc) *@
     @if(Model?.TypeOfCopy != null)
@@ -40,7 +16,7 @@
                         <tbody>
                             <tr>
                                 <td class="p-0" width="50%">
-                                    @if (GetDisplayStatus("ShowLogo") &&
+                                    @if (Model?.Settings?.ShowLogo?.Display == true &&
                                     !string.IsNullOrEmpty(Model?.Company?.Logo?.Url))
                                     {
                                         <figure class="m-0">
@@ -48,35 +24,35 @@
                                                 height="auto" />
                                         </figure>
                                     }
-                                    @if (GetDisplayStatus("HeaderCompanyName"))
+                                    @if (Model?.Settings?.HeaderCompanyName?.Display == true)
                                     {
                                         <p class="mr-t1 color-light"><strong>@Model?.Company?.Name</strong></p>
                                     }
-                                    @if (GetDisplayStatus("CompanyTaxNumber"))
+                                    @if (Model?.Settings?.CompanyTaxNumber?.Display == true)
                                     {
-                                        <p><strong>@GetLabel("CompanyTaxNumber")</strong> @Model?.Company?.TaxNumber</p>
+                                        <p><strong>@Model?.Settings?.CompanyTaxNumber?.Label</strong> @Model?.Company?.TaxNumber</p>
                                     }
-                                    @* @if (GetDisplayStatus("GstSchemeData")) @* Example - adapt to your needs
+                                    @if (Model?.Settings?.GstSchemeData?.Display == true)
                                     {
-                                    <p>@Model?.Company?.GstSchemeData</p> @* Assuming this property exists
-                                    } *@
+                                        <p>@Model?.Company?.GstSchemeData</p>
+                                    } 
                                 </td>
 
                                 <td class="p-0 invoice-info vertical-align-bottom" width="25%"> @* Added classes and
                                     width *@
                                     <table>
                                         <tbody>
-                                            @if (GetDisplayStatus("VoucherDate"))
+                                            @if (Model?.Settings?.VoucherDate?.Display == true)
                                             {
                                                 <tr>
-                                                    <td><strong>@GetLabel("VoucherDate")</strong></td>
-                                                    <td class="text-right">@Model?.VoucherDate </td>
+                                                    <td><strong>@Model?.Settings?.VoucherDate?.Label</strong></td>
+                                                    <td class="text-right">@Model?.VoucherDate</td>
                                                 </tr>
                                             }
-                                            @if (GetDisplayStatus("VoucherNumber"))
+                                            @if (Model?.Settings?.VoucherNumber?.Display == true)
                                             {
                                                 <tr>
-                                                    <td><strong>@GetLabel("VoucherNumber")</strong></td>
+                                                    <td><strong>@Model?.Settings?.VoucherNumber?.Label</strong></td>
                                                     <td class="text-right">@Model?.VoucherNumber</td>
                                                 </tr>
                                             }
@@ -85,7 +61,7 @@
                                 </td>
 
                                 <td class="vertical-align-bottom text-right" width="25%">
-                                    @if (GetDisplayStatus("ShowQrCode") &&
+                                    @if (Model?.Settings?.ShowQrCode?.Display == true &&
                                     !string.IsNullOrEmpty(Model?.QRCodeBase64String))
                                     {
                                         <img src="data:image/png;base64,@Model?.QRCodeBase64String" class="qr-code-image"
@@ -96,11 +72,11 @@
 
                             <tr>
                                 <td colspan="100%" class="text-center pb-1">
-                                    @if (GetDisplayStatus("FormNameInvoice") || GetDisplayStatus("FormNameTaxInvoice"))
+                                    @if (Model?.Settings?.FormNameInvoice?.Display == true || Model?.Settings?.FormNameTaxInvoice?.Display == true)
                                     {
                                         <p class="invoice-title color-primary">
-                                            <strong>@GetLabel(GetDisplayStatus("FormNameInvoice") ? "FormNameInvoice" :
-                                                     "FormNameTaxInvoice")</strong>
+                                            <strong>@(Model?.Settings?.FormNameInvoice?.Display == true ? Model?.Settings?.FormNameInvoice?.Label :
+                                                        Model?.Settings?.FormNameTaxInvoice?.Label)</strong>
                                         </p>
                                     }
                                 </td>

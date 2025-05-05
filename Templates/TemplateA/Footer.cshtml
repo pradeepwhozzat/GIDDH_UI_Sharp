@@ -2,30 +2,6 @@
 @using InvoiceData;
 @using System.Collections.Generic;
 
-@functions {
-    private readonly Dictionary<string, Setting> _settingCache = new Dictionary<string, Setting>();
-
-    public string GetLabel(string settingName)
-    {
-        if (!_settingCache.TryGetValue(settingName, out var setting))
-        {
-            setting = Model.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
-            _settingCache[settingName] = setting ??= new Setting();
-        }
-        return setting?.Display == true ? setting?.Label ?? string.Empty : string.Empty;
-    }
-
-    public bool GetDisplayStatus(string settingName)
-    {
-        if (!_settingCache.TryGetValue(settingName, out var setting))
-        {
-            setting = Model.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
-            _settingCache[settingName] = setting ??= new Setting();
-        }
-        return setting?.Display == true;
-    }
-}
-
 <footer id="footer" style="@(Model?.ShowSectionsInline == true ? "flex-grow: 1" : "")">
     @* class="page-break-inside-avoid h-100" *@
     <table>
@@ -34,7 +10,7 @@
                 <td class="p-0" width="33%">
                     <table>
                         <tbody>
-                            @if (GetDisplayStatus("Message1") && !string.IsNullOrEmpty(Model?.Message1))
+                            @if (Model?.Settings?.Message1?.Display == true && !string.IsNullOrEmpty(Model?.Message1))
                             {
                                 <tr>
                                     <td>
@@ -42,7 +18,7 @@
                                     </td>
                                 </tr>
                             }
-                            @if (GetDisplayStatus("ShowMessage2") && !string.IsNullOrEmpty(Model?.Message2))
+                            @if (Model?.Settings?.ShowMessage2?.Display == true && !string.IsNullOrEmpty(Model?.Message2))
                             {
                                 <tr>
                                     <td>
@@ -50,11 +26,11 @@
                                     </td>
                                 </tr>
                             }
-                            @if (GetDisplayStatus("Thanks"))
+                            @if (Model?.Settings?.Thanks?.Display == true)
                             {
                                 <tr>
                                     <td>
-                                        <strong class="color-primary">@GetLabel("Thanks")</strong>
+                                        <strong class="color-primary">@Model?.Settings?.Thanks?.Label</strong>
                                     </td>
                                 </tr>
                             }
@@ -63,10 +39,10 @@
                 </td>
                 <td class="p-0 vertical-align-bottom" width="33%"></td>
                 <td class="vertical-align-bottom text-center" width="33%">
-                    @if (GetDisplayStatus("TextUnderSlogan") || GetDisplayStatus("ImageSignature"))
+                    @if (Model?.Settings?.TextUnderSlogan?.Display == true || Model?.Settings?.ImageSignature?.Display == true)
                     {
                         <div class="border-bottom" style="padding-bottom: 5px;"> @* Added class and inline style *@
-                            @if (GetDisplayStatus("ImageSignature") && !string.IsNullOrEmpty(Model?.ImageSignature))
+                            @if (Model?.Settings?.ImageSignature?.Display == true && !string.IsNullOrEmpty(Model?.ImageSignature))
                             {
                                 <figure class="m-0">
                                     <img src="@Model.ImageSignature" height="60px" width="auto" />
@@ -74,9 +50,9 @@
                             }
                         </div>
                     }
-                    @if (GetDisplayStatus("TextUnderSlogan"))
+                    @if (Model?.Settings?.TextUnderSlogan?.Display == true)
                     {
-                        <p class="text-under-signature mr-t1">@GetLabel("TextUnderSlogan")</p> @* Added class and spacing
+                        <p class="text-under-signature mr-t1">@Model?.Settings?.TextUnderSlogan?.Label</p> @* Added class and spacing
                     class *@
                     }
                 </td>
@@ -88,13 +64,13 @@
             </tr>
             <tr>
                 <td colspan="100%" class="text-center">
-                    @if (GetDisplayStatus("FooterCompanyName"))
+                    @if (Model?.Settings?.FooterCompanyName?.Display == true)
                     {
                         <p class="font-weight-500">@Model?.Company?.Name</p>
                     }
-                    @if (GetDisplayStatus("CompanyAddress"))
+                    @if (Model?.Settings?.CompanyAddress?.Display == true)
                     {
-                        <address>@GetLabel("CompanyAddress")</address>
+                        <address>@Model?.Settings?.CompanyAddress?.Label</address>
                     }
                 </td>
             </tr>

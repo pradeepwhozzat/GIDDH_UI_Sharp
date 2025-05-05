@@ -79,6 +79,7 @@ namespace InvoiceData
         public Setting? PreviousDue { get; set; }
         public Setting? AmountBeforeDiscount { get; set; }
         public Setting? SkuCode { get; set; }
+        public Setting? GstSchemeData { get; set; }
 
         // Initialize all static keys dynamically
         public void InitializeStaticKeys()
@@ -150,6 +151,7 @@ namespace InvoiceData
         public Logo? Logo { get; set; }
         public string? TaxNumber { get; set; }
         public string? HeaderCompanyName { get; set; }
+        public string? GstSchemeData { get; set; }
     }
 
     public class Theme
