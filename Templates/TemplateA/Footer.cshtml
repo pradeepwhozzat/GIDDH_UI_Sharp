@@ -1,0 +1,79 @@
+@model InvoiceData.Root;
+@using InvoiceData;
+@using System.Collections.Generic;
+
+<footer id="footer" style="@(Model?.ShowSectionsInline == true ? "flex-grow: 1" : "")">
+    @* class="page-break-inside-avoid h-100" *@
+    <table>
+        <tbody>
+            <tr>
+                <td class="p-0" width="33%">
+                    <table>
+                        <tbody>
+                            @if (Model?.Settings?.Message1?.Display == true && !string.IsNullOrEmpty(Model?.Message1))
+                            {
+                                <tr>
+                                    <td>
+                                        <p>@Model.Message1</p>
+                                    </td>
+                                </tr>
+                            }
+                            @if (Model?.Settings?.ShowMessage2?.Display == true && !string.IsNullOrEmpty(Model?.Message2))
+                            {
+                                <tr>
+                                    <td>
+                                        <p>@Model.Message2</p>
+                                    </td>
+                                </tr>
+                            }
+                            @if (Model?.Settings?.Thanks?.Display == true)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong class="color-primary">@Model?.Settings?.Thanks?.Label</strong>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </td>
+                <td class="p-0 vertical-align-bottom" width="33%"></td>
+                <td class="vertical-align-bottom text-center" width="33%">
+                    @if (Model?.Settings?.TextUnderSlogan?.Display == true || Model?.Settings?.ImageSignature?.Display == true)
+                    {
+                        <div class="border-bottom" style="padding-bottom: 5px;"> @* Added class and inline style *@
+                            @if (Model?.Settings?.ImageSignature?.Display == true && !string.IsNullOrEmpty(Model?.ImageSignature))
+                            {
+                                <figure class="m-0">
+                                    <img src="@Model.ImageSignature" height="60px" width="auto" />
+                                </figure>
+                            }
+                        </div>
+                    }
+                    @if (Model?.Settings?.TextUnderSlogan?.Display == true)
+                    {
+                        <p class="text-under-signature mr-t1">@Model?.Settings?.TextUnderSlogan?.Label</p> @* Added class and spacing
+                    class *@
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%">
+                    <hr class="color-primary" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="100%" class="text-center">
+                    @if (Model?.Settings?.FooterCompanyName?.Display == true)
+                    {
+                        <p class="font-weight-500">@Model?.Company?.Name</p>
+                    }
+                    @if (Model?.Settings?.CompanyAddress?.Display == true)
+                    {
+                        <address>@Model?.Settings?.CompanyAddress?.Label</address>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</footer>
