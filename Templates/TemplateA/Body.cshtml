@@ -506,13 +506,13 @@
                                                                         {
                                                                             @foreach (var tax in Model.GstTaxesTotal)
                                                                             {
-                                                                                bool isTaxFind = false;
+                                                                                bool isTaxApplied = false;
 
                                                                                 foreach (var entryTax in Entry?.Taxes ?? Enumerable.Empty<Tax>())
                                                                                 {
                                                                                     @if (entryTax?.AccountUniqueName == tax.AccountUniqueName)
                                                                                     {
-                                                                                        isTaxFind = true;
+                                                                                        isTaxApplied = true;
                                                                                         <td class="text-right">
                                                                                             <p>@(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) @entryTax?.Amount?.AmountForAccount</p>
                                                                                             <p class="font-size-small">@entryTax?.TaxPercent%</p>
@@ -521,7 +521,7 @@
                                                                                     }
                                                                                 }
 
-                                                                                if (!isTaxFind)
+                                                                                if (!isTaxApplied)
                                                                                 {
                                                                                     <td class="text-right"></td>
                                                                                 }
