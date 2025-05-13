@@ -841,18 +841,18 @@
                                                                     
                                                                     @if (Model?.Settings?.TaxBifurcation?.Label == "HSN/SAC")
                                                                     {
-                                                                        <th class="text-left pd-b05 pd-t05 pd-l05"><strong>HSN/SAC</strong></th>
+                                                                        <th class="text-left pd-b05 pd-t05"><strong>HSN/SAC</strong></th>
                                                                     }
 
-                                                                    <th class="text-right pd-b05 pd-t05 pd-r05"><strong>Taxable Amt.</strong></th>
+                                                                    <th class="text-right pd-b05 pd-t05"><strong>Taxable Amt.</strong></th>
 
                                                                     @if (Model?.GstTaxesTotalOnly?.Any() == true)
                                                                     {
                                                                         @foreach (var tax in Model.GstTaxesTotalOnly)
                                                                         {
                                                                             taxKeys.Add(tax?.Key);
-                                                                            <th class="text-right pd-b05 pd-t05 pd-r05"><strong>@tax?.AccountName%</strong></th>
-                                                                            <th class="text-right pd-b05 pd-t05 pd-r05"><strong>@tax?.AccountName Amt.</strong></th>
+                                                                            <th class="text-right pd-b05 pd-t05"><strong>@tax?.AccountName%</strong></th>
+                                                                            <th class="text-right pd-b05 pd-t05"><strong>@tax?.AccountName Amt.</strong></th>
                                                                         }
                                                                     }
 
@@ -861,7 +861,7 @@
                                                                         @foreach (var tax in Model.CessTotal)
                                                                         {
                                                                             taxKeys.Add(tax.Key);
-                                                                            <th class="text-right pd-b05 pd-t05 pd-r05"><strong>@tax?.AccountName%</strong></th>
+                                                                            <th class="text-right pd-b05 pd-t05"><strong>@tax?.AccountName%</strong></th>
                                                                         }
                                                                     }
 
@@ -870,11 +870,11 @@
                                                                         @foreach (var tax in Model.OtherTotal)
                                                                         {
                                                                             taxKeys.Add(tax.Key);
-                                                                            <th class="text-right pd-b05 pd-t05 pd-r05"><strong>@tax?.AccountName%</strong></th>
+                                                                            <th class="text-right pd-b05 pd-t05"><strong>@tax?.AccountName%</strong></th>
                                                                         }
                                                                     }
                                                                     <!-- Total -->
-                                                                    <th class="text-right pd-b05 pd-t05 pd-r05"><strong>Total Amt.</strong></th>
+                                                                    <th class="text-right pd-b05 pd-t05"><strong>Total Amt.</strong></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -894,21 +894,21 @@
                                                                     <tr>
                                                                         @if (Model?.Settings?.TaxBifurcation?.Label == "HSN/SAC")
                                                                         {
-                                                                            <td class="text-left border-right pd-l05">@bifurcation?.HsnSc
+                                                                            <td class="text-left border-right">@bifurcation?.HsnSc
                                                                                 <small>
                                                                                     @(!string.IsNullOrEmpty(bifurcation?.HsnSc) ? bifurcation?.HsnStatus == true ? "(H)" : "(S)" : "")
                                                                                 </small>
                                                                             </td>
                                                                         }
 
-                                                                        <td class="text-right border-right pd-r05">@bifurcation?.TaxableValue</td>
+                                                                        <td class="text-right border-right">@bifurcation?.TaxableValue</td>
 
                                                                         @foreach (var (key, value) in taxFields)
                                                                         {
                                                                             if (value.HasValue)
                                                                             {
-                                                                                <td class="text-right border-right pd-r05">@bifurcation?.GstOrVatTaxRate %</td>
-                                                                                <td class="text-right border-right pd-r05">@value</td>
+                                                                                <td class="text-right border-right">@bifurcation?.GstOrVatTaxRate %</td>
+                                                                                <td class="text-right border-right">@value</td>
                                                                             }
                                                                             else if (taxKeys.Contains(key))
                                                                             {
@@ -921,7 +921,7 @@
                                                                         {
                                                                             @foreach (var cessAmount in bifurcation?.CsAmountList)
                                                                             {
-                                                                                <td class="text-right border-right pd-r05">@(cessAmount != 0 ? cessAmount.ToString() : "")</td>
+                                                                                <td class="text-right border-right">@(cessAmount != 0 ? cessAmount.ToString() : "")</td>
                                                                             }
                                                                         }
 
@@ -929,7 +929,7 @@
                                                                         {
                                                                             @foreach (var otherAmount in bifurcation?.OthAmountList)
                                                                             {
-                                                                                <td class="text-right border-right pd-r05">@(otherAmount != 0 ? otherAmount.ToString() : "")</td>
+                                                                                <td class="text-right border-right">@(otherAmount != 0 ? otherAmount.ToString() : "")</td>
                                                                             }
                                                                         }
 
@@ -938,7 +938,7 @@
                                                                             <td></td>
                                                                         }
                                                                         
-                                                                        <td class="text-right pd-r05">@bifurcation.EntryTotal</td>
+                                                                        <td class="text-right">@bifurcation.EntryTotal</td>
                                                                     </tr>
                                                                 }
                                                             </tbody>
@@ -946,10 +946,10 @@
                                                                 <tr class="border-bottom border-top">
                                                                     @if (Model?.Settings?.TaxBifurcation?.Label == "HSN/SAC")
                                                                     {
-                                                                        <td class="text-right border-right pd-r05"><strong>Total</strong></td>
+                                                                        <td class="text-right border-right"><strong>Total</strong></td>
                                                                     }
 
-                                                                    <td class="text-right border-right pd-r05"><strong>@taxableTotalForTax</strong></td>
+                                                                    <td class="text-right border-right"><strong>@taxableTotalForTax</strong></td>
 
                                                                     @if (Model?.GstTaxesTotalOnly?.Any() == true)
                                                                     {
@@ -957,8 +957,8 @@
                                                                         {
                                                                             @if (sum.Amount != null)
                                                                             {
-                                                                                <td class="text-right border-right pd-r05"></td>
-                                                                                <td class="text-right border-right pd-r05"><strong>@sum.Amount.AmountForCompany</strong></td>
+                                                                                <td class="text-right border-right"></td>
+                                                                                <td class="text-right border-right"><strong>@sum.Amount.AmountForCompany</strong></td>
                                                                             }
                                                                         }
                                                                     }
@@ -969,7 +969,7 @@
                                                                         {
                                                                             @if (sum.Amount != null)
                                                                             {
-                                                                                <td class="text-right border-right pd-r05"><strong>@sum.Amount.AmountForCompany</strong></td>
+                                                                                <td class="text-right border-right"><strong>@sum.Amount.AmountForCompany</strong></td>
                                                                             }
                                                                         }
                                                                     }
@@ -980,12 +980,12 @@
                                                                         {
                                                                             @if (sum.Amount != null)
                                                                             {
-                                                                                <td class="text-right border-right pd-r05"><strong>@sum.Amount.AmountForCompany</strong></td>
+                                                                                <td class="text-right border-right"><strong>@sum.Amount.AmountForCompany</strong></td>
                                                                             }
                                                                         }
                                                                     }
 
-                                                                    <td class="text-right pd-r05"><strong>@grandEntryTotal</strong></td>
+                                                                    <td class="text-right"><strong>@grandEntryTotal</strong></td>
                                                                 </tr>
                                                             </tfoot>
                                                         </table>
