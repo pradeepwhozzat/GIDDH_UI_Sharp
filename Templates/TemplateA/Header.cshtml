@@ -15,7 +15,7 @@
                     <table>
                         <tbody>
                             <tr>
-                                <td class="p-0" width="50%">
+                                <td class="p-0 vertical-align-bottom" width="50%">
                                     @if (Model?.Settings?.ShowLogo?.Display == true &&
                                     !string.IsNullOrEmpty(Model?.Company?.Logo?.Url))
                                     {
@@ -32,10 +32,10 @@
                                     {
                                         <p><strong>@Model?.Settings?.CompanyTaxNumber?.Label</strong> @Model?.Company?.TaxNumber</p>
                                     }
-                                    @if (Model?.Settings?.GstSchemeData?.Display == true)
+                                    @if (Model?.Settings?.GstComposition?.Display == true)
                                     {
-                                        <p>@Model?.Company?.GstSchemeData</p>
-                                    } 
+                                        <p>@Model?.Settings?.GstComposition?.Label</p>
+                                    }
                                 </td>
 
                                 <td class="p-0 invoice-info vertical-align-bottom" width="25%"> @* Added classes and

@@ -1,7 +1,8 @@
 /* Footer CSS */
 footer {
-  padding-left: var(--header-footer-body-padding, 15px);
-  padding-right: var(--header-footer-body-padding, 15px);
+  padding-left: var(--padding-left, 15px);
+  padding-right: var(--padding-right, 15px);
+  padding-bottom:  var(--padding-bottom, 15px);
   margin-bottom: 1px; /* This is to fix footer bottom border visibility */
 }
 

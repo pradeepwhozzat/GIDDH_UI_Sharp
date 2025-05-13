@@ -389,5 +389,6 @@ namespace InvoiceData
         public string? Currency { get; set; }
         public Amount? TdsTotalTax { get; set; }
         public string? TypeOfCopy { get; set; }
+        public string? SealPath { get; set;}
     }
 }
