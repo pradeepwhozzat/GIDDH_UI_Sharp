@@ -1,5 +1,20 @@
 /* Global CSS Variables */
-@property --header-footer-body-padding {
+@property --padding-top {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 15px;
+}
+@property --padding-bottom {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 15px;
+}
+@property --padding-left {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 15px;
+}
+@property --padding-right {
   syntax: "<length>";
   inherits: true;
   initial-value: 15px;
@@ -255,6 +270,15 @@ table tr td {
 .pd-b05 {
   padding-bottom: 5px !important;
 }
+
+.pd-l05 {
+  padding-left: 5px !important;
+}
+
+.pd-r05 {
+  padding-right: 5px !important;
+}
+
 .h-inherit {
   height: inherit !important;
 }

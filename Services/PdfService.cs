@@ -20,8 +20,8 @@ namespace GiddhTemplate.Services
             Landscape = false,
             MarginOptions = new MarginOptions
             {
-                Top = "15px",
-                Bottom = "30px",
+                Top = "0px",
+                Bottom = "15px",
                 Left = "0px",
                 Right = "0px"
             },
@@ -161,6 +161,10 @@ namespace GiddhTemplate.Services
             themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
             themeCSS.Append($"--color-primary: {request?.Theme?.PrimaryColor};");
             themeCSS.Append($"--color-secondary: {request?.Theme?.SecondaryColor};");
+            themeCSS.Append($"--padding-top: {request?.Theme?.Margin?.Top}px;");
+            themeCSS.Append($"--padding-bottom: {request?.Theme?.Margin?.Bottom}px;");
+            themeCSS.Append($"--padding-left: {request?.Theme?.Margin?.Left}px;");
+            themeCSS.Append($"--padding-right: {request?.Theme?.Margin?.Right}px;");
             if (request?.Theme?.Font?.Family == "Roboto")
             {
                 themeCSS.Append($"font-weight: var(--font-weight-500, 500);");
