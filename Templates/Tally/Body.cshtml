@@ -858,16 +858,11 @@
                                                             bool CgstSgstIsApplied = false;
                                                             bool CessIsApplied = false;
                                                             bool OtherTaxIsApplied = false;
-                                                            bool ShowHSNSAC = false;
                                                         }
                                                         <tr>
-                                                            @if (GetLabel("TaxBifurcation") == "HSN/SAC")
-                                                            {
-                                                            ShowHSNSAC = true;
                                                             <th class="vertical-align-top text-center" rowspan="2">
-                                                                @GetLabel("TaxBifurcation")
+                                                                HSN/SAC
                                                             </th>
-                                                            }
                                                             <th class="vertical-align-top text-center" rowspan="2">
                                                                 Taxable Value
                                                             </th>
@@ -941,15 +936,12 @@
                                                             @foreach (var Bifurcation in Model.TaxBifurcation)
                                                             {
                                                             <tr>
-                                                                @if (ShowHSNSAC == true)
-                                                                {
                                                                 <td>
                                                                     @if (Bifurcation?.HsnSc != null)
                                                                     {
                                                                         <span>@Bifurcation?.HsnSc</span>
                                                                     }
                                                                 </td>
-                                                                }
                                                                 <td class="text-center">@Bifurcation?.TaxableValue</td>
 
                                                                 @* IGST / VAT *@
@@ -1030,12 +1022,9 @@
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            @if (ShowHSNSAC == true)
-                                                            {
                                                             <td class="text-right">
                                                                 <strong>Total</strong>
                                                             </td>
-                                                            }
 
                                                             <td class="text-center">
                                                                 <strong>@Model?.TaxableTotal?.AmountForCompany</strong>
