@@ -41,10 +41,4 @@ body.repeat-header-footer header {
   padding-left: 15px;
   padding-right: 15px;
 }
-.type-of-copy {
-  position: absolute;
-  top: var(--padding-top, 15px);
-  left: 50%;
-  transform: translateX(-50%);
-}
 /* ---------------- Invoice-title end-------------------- */

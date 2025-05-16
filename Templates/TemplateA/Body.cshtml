@@ -94,7 +94,7 @@
                                                         </tbody>
                                                     </table>
                                                 </td>
-                                                @if (Model?.Settings?.WarehouseAddress?.Display == true && Model?.WarehouseDetails != null)
+                                                @if (Model?.Settings?.WarehouseAddress?.Display == true)
                                                 {
                                                     <td class="p-0 vertical-align-top">
                                                         <table>
@@ -107,11 +107,11 @@
                                                                         <strong>@Model?.WarehouseDetails?.Name</strong>
                                                                     </td>
                                                                 </tr>
-                                                                @if (Model?.WarehouseDetails?.Address != null)
+                                                                @if (!string.IsNullOrEmpty(Model?.Company?.Shipping?.Address))
                                                                 {
                                                                     <tr>
                                                                         <td>
-                                                                            <address>@Model?.WarehouseDetails?.Address</address>
+                                                                            <address>@Model.Company.Shipping.Address</address>
                                                                         </td>
                                                                     </tr>
                                                                 }
@@ -195,7 +195,7 @@
                                                         {
                                                             <div class="grid-item">
                                                                 <p>@Model?.Settings?.ShippingDate?.Label</p>
-                                                                <p>@Model.ShippingDate</p>
+                                                                <p>@Model?.ShippingDate</p>
                                                             </div>
                                                         }
                                                         @if (Model?.Settings?.ShippedVia?.Display == true && !string.IsNullOrEmpty(Model?.ShippedVia))
