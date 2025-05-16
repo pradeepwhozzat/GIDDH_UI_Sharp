@@ -140,8 +140,8 @@
                                                             <div class="grid-item">
                                                                 <strong>@Model?.Settings?.BillingAddress?.Label</strong>
                                                                 <address>@Model?.Billing?.Address</address>
-                                                                <address>@Model?.Billing?.StateCounty</address>
-                                                                <address>@Model?.Billing?.Country</address>
+                                                                <p>@Model?.Billing?.StateCounty</p>
+                                                                <p>@Model?.Billing?.Country</p>
                                                                 @if (Model?.Settings?.BillingTaxNumber?.Display == true)
                                                                 {
                                                                     <p class="mr-t1">@Model?.Settings?.BillingTaxNumber?.Label</p>
@@ -154,8 +154,8 @@
                                                             <div class="grid-item">
                                                                 <strong>@Model?.Settings?.ShippingAddress?.Label</strong>
                                                                 <address>@Model?.Shipping?.Address</address>
-                                                                <address>@Model?.Shipping?.StateCounty</address>
-                                                                <address>@Model?.Shipping?.Country</address>
+                                                                <p>@Model?.Shipping?.StateCounty</p>
+                                                                <p>@Model?.Shipping?.Country</p>
                                                                 @if (Model?.Settings?.ShippingTaxNumber?.Display == true)
                                                                 {
                                                                     <p class="mr-t1">@Model?.Settings?.ShippingTaxNumber?.Label</p>
