@@ -2,7 +2,6 @@ using PuppeteerSharp;
 using System.Text;
 using InvoiceData;
 using PuppeteerSharp.Media;
-using System.Collections.Concurrent;
 
 namespace GiddhTemplate.Services
 {
@@ -13,7 +12,6 @@ namespace GiddhTemplate.Services
         private string _openRobotoFontCSS = string.Empty; // Cache the Roboto CSS
         private static readonly SemaphoreSlim _semaphore = new(1, 1);
         private static IBrowser? _browser;
-        private static readonly ConcurrentDictionary<string, string> _renderedTemplates = new();
         private static readonly PdfOptions _cachedPdfOptions = new()
         {
             Format = PaperFormat.A4,
@@ -125,11 +123,7 @@ namespace GiddhTemplate.Services
 
         private async Task<string> RenderTemplate(string templatePath, Root request)
         {
-            // string cacheKey = $"{templatePath}-{request.GetHashCode()}";
-            // if (_renderedTemplates.TryGetValue(cacheKey, out string cached)) return cached;
-
             string rendered = await _razorTemplateService.RenderTemplateAsync(templatePath, request);
-            // _renderedTemplates.TryAdd(cacheKey, rendered);
             return rendered;
         }
 
