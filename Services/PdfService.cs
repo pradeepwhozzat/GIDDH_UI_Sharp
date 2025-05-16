@@ -125,11 +125,11 @@ namespace GiddhTemplate.Services
 
         private async Task<string> RenderTemplate(string templatePath, Root request)
         {
-            string cacheKey = $"{templatePath}-{request.GetHashCode()}";
-            if (_renderedTemplates.TryGetValue(cacheKey, out string cached)) return cached;
+            // string cacheKey = $"{templatePath}-{request.GetHashCode()}";
+            // if (_renderedTemplates.TryGetValue(cacheKey, out string cached)) return cached;
 
             string rendered = await _razorTemplateService.RenderTemplateAsync(templatePath, request);
-            _renderedTemplates.TryAdd(cacheKey, rendered);
+            // _renderedTemplates.TryAdd(cacheKey, rendered);
             return rendered;
         }
 
