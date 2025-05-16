@@ -139,7 +139,9 @@
                                                         {
                                                             <div class="grid-item">
                                                                 <strong>@Model?.Settings?.BillingAddress?.Label</strong>
-                                                                <address>@Model?.Company?.Billing?.Address</address>
+                                                                <address>@Model?.Billing?.Address</address>
+                                                                <p>@Model?.Billing?.StateCounty</p>
+                                                                <p>@Model?.Billing?.Country</p>
                                                                 @if (Model?.Settings?.BillingTaxNumber?.Display == true)
                                                                 {
                                                                     <p class="mr-t1">@Model?.Settings?.BillingTaxNumber?.Label</p>
@@ -151,7 +153,9 @@
                                                         {
                                                             <div class="grid-item">
                                                                 <strong>@Model?.Settings?.ShippingAddress?.Label</strong>
-                                                                <address>@Model?.Company?.Shipping?.Address</address>
+                                                                <address>@Model?.Shipping?.Address</address>
+                                                                <p>@Model?.Shipping?.StateCounty</p>
+                                                                <p>@Model?.Shipping?.Country</p>
                                                                 @if (Model?.Settings?.ShippingTaxNumber?.Display == true)
                                                                 {
                                                                     <p class="mr-t1">@Model?.Settings?.ShippingTaxNumber?.Label</p>
@@ -362,7 +366,7 @@
                                                                             <td class="text-center">
                                                                                 @if (!string.IsNullOrEmpty(Entry?.Stock?.Variant?.Value))
                                                                                 {
-                                                                                    <img src="@Entry.Stock.Variant.Value"
+                                                                                    <img src="data:image/png;base64,@Entry.Stock.Variant.Value"
                                                                                         width="40px" />
                                                                                 }
                                                                             </td>

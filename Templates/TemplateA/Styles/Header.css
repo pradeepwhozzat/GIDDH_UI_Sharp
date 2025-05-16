@@ -1,5 +1,6 @@
 /* Header CSS */
 header {
+  position: relative;
   padding-left: var(--padding-left, 15px);
   padding-right: var(--padding-right, 15px);
   padding-top:  var(--padding-top, 15px);
@@ -42,7 +43,7 @@ body.repeat-header-footer header {
 }
 .type-of-copy {
   position: absolute;
-  top: 0;
+  top: var(--padding-top, 15px);
   left: 50%;
   transform: translateX(-50%);
 }
