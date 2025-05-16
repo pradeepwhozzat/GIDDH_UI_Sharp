@@ -3,15 +3,17 @@
 @using System.Collections.Generic;
 
 <header id="header">
-    @* This is for copy type image work at time of Invoice Copy - (Transport, Customer etc) *@
-    @if(Model?.TypeOfCopy != null)
-    {
-        <div class="vertical-align-center">
-            <img src="@Model.TypeOfCopy" height="40"/>
-        </div>
-    }
     <table>
         <tbody>
+            @* This is for copy type image work at time of Invoice Copy - (Transport, Customer etc) *@
+            @if(Model?.TypeOfCopy != null)
+            {
+            <tr>
+                <td class="p-0 text-center">
+                    <img src="@Model.TypeOfCopy" height="40px" width="auto" />
+                </td>
+            </tr>
+            }
             <tr>
                 <td class="p-0">
                     <table>

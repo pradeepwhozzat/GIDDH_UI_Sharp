@@ -94,7 +94,7 @@
                                                         </tbody>
                                                     </table>
                                                 </td>
-                                                @if (Model?.Settings?.WarehouseAddress?.Display == true && Model?.WarehouseDetails != null)
+                                                @if (Model?.Settings?.WarehouseAddress?.Display == true)
                                                 {
                                                     <td class="p-0 vertical-align-top">
                                                         <table>
@@ -107,11 +107,11 @@
                                                                         <strong>@Model?.WarehouseDetails?.Name</strong>
                                                                     </td>
                                                                 </tr>
-                                                                @if (Model?.WarehouseDetails?.Address != null)
+                                                                @if (Model?.Company?.Shipping?.Address != null)
                                                                 {
                                                                     <tr>
                                                                         <td>
-                                                                            <address>@Model?.Company?.Shipping?.Address</address>
+                                                                            <address>@Model.Company.Shipping.Address</address>
                                                                         </td>
                                                                     </tr>
                                                                 }

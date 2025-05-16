@@ -188,11 +188,6 @@ table tr td {
   vertical-align: bottom;
 }
 
-.vertical-align-center {
-  vertical-align: center;
-  text-align: center;
-}
-
 .border-none {
   border: none;
 }
