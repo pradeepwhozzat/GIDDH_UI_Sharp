@@ -6,7 +6,9 @@
     @* This is for copy type image work at time of Invoice Copy - (Transport, Customer etc) *@
     @if(Model?.TypeOfCopy != null)
     {
-        <img class="type-of-copy" src="@Model.TypeOfCopy" height="40"/>
+        <div class="vertical-align-center">
+            <img src="@Model.TypeOfCopy" height="40"/>
+        </div>
     }
     <table>
         <tbody>
@@ -34,7 +36,7 @@
                                     }
                                     @if (Model?.Settings?.GstComposition?.Display == true)
                                     {
-                                        <p>@Model?.Settings?.GstComposition?.Label</p>
+                                        <p>@(Model?.Settings?.GstComposition?.Label ?? "Registered under Composition Scheme")</p>
                                     }
                                 </td>
 
