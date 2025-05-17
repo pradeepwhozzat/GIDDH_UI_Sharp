@@ -33,16 +33,15 @@ namespace GiddhTemplate.Controllers
             {
                 return BadRequest("Invalid request data. Ensure the payload matches the expected format.");
             }
-
             try
             {
-                var base64Pdf = await _pdfService.GeneratePdfAsync(request);
-                if (string.IsNullOrEmpty(base64Pdf))
+                var pdfBytes = await _pdfService.GeneratePdfAsync(request);
+                if (pdfBytes == null || pdfBytes.Length == 0)
                 {
-                   return  StatusCode(500, new { error = "Failed to generate PDF !" });
-                } else {
-                    return Ok(base64Pdf);
+                    return StatusCode(500, new { error = "Failed to generate PDF!" });
                 }
+                // Return the PDF as a file download
+                return File(pdfBytes, "application/pdf", "invoice.pdf");
             }
             catch (Exception ex)
             {
