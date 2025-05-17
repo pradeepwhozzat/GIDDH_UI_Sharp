@@ -215,6 +215,12 @@ namespace GiddhTemplate.Services
 
                 await page.SetContentAsync(template);
                 await page.EmulateMediaTypeAsync(MediaType.Print);
+
+                // ###### Uncomment below line to save PDF file in local ######
+                // string pdfName = GetFileNameWithPath(request);
+                // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
+                // await page.PdfAsync(pdfName, _cachedPdfOptions);
+
                 return await page.PdfDataAsync(_cachedPdfOptions);
             }
             catch (Exception ex)

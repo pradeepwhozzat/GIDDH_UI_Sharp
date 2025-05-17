@@ -35,7 +35,7 @@ namespace GiddhTemplate.Controllers
             }
             try
             {
-                var pdfBytes = await _pdfService.GeneratePdfAsync(request);
+                byte[] pdfBytes = await _pdfService.GeneratePdfAsync(request);
                 if (pdfBytes == null || pdfBytes.Length == 0)
                 {
                     return StatusCode(500, new { error = "Failed to generate PDF!" });
