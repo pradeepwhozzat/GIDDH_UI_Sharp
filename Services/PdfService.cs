@@ -181,7 +181,7 @@ namespace GiddhTemplate.Services
             return Path.Combine(rootPath, pdfName);
         }
 
-        public async Task<string?> GeneratePdfAsync(Root request)
+        public async Task<byte[]?> GeneratePdfAsync(Root request)
         {
             var browser = await GetBrowserAsync();
             var page = await browser.NewPageAsync();
@@ -215,11 +215,7 @@ namespace GiddhTemplate.Services
 
                 await page.SetContentAsync(template);
                 await page.EmulateMediaTypeAsync(MediaType.Print);
-
-                var pdfBytes = await page.PdfDataAsync(_cachedPdfOptions);
-                // Console.WriteLine("pdfBytes " + DateTime.Now.ToString("HH:mm:ss.fff"));
-
-                return Convert.ToBase64String(pdfBytes);
+                return await page.PdfDataAsync(_cachedPdfOptions);
             }
             catch (Exception ex)
             {
