@@ -1,52 +1,238 @@
-using Microsoft.AspNetCore.Mvc;
-using GiddhTemplate.Services;
+using PuppeteerSharp;
+using System.Text;
 using InvoiceData;
+using PuppeteerSharp.Media;
 
-namespace GiddhTemplate.Controllers
+namespace GiddhTemplate.Services
 {
-
-    [ApiController]
-    public class MainController : ControllerBase
+    public class PdfService
     {
-        [HttpGet("/")]
-        public IActionResult Get()
+        private readonly RazorTemplateService _razorTemplateService;
+        private string _openSansFontCSS = string.Empty; // Cache the Open Sans CSS
+        private string _openRobotoFontCSS = string.Empty; // Cache the Roboto CSS
+        private static readonly SemaphoreSlim _semaphore = new(1, 1);
+        private static IBrowser? _browser;
+        private static readonly PdfOptions _cachedPdfOptions = new()
         {
-            return Ok("Hello from Giddh template!");
-        }
-    }
-
-    [ApiController]
-    [Route("api/v1/[controller]")]
-    public class PdfController : ControllerBase
-    {
-        private readonly PdfService _pdfService;
-
-        public PdfController()
-        {
-            _pdfService = new PdfService();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GeneratePdfAsync([FromBody] Root request)
-        {
-            if (request == null || string.IsNullOrEmpty(request.Company?.Name))
+            Format = PaperFormat.A4,
+            Landscape = false,
+            MarginOptions = new MarginOptions
             {
-                return BadRequest("Invalid request data. Ensure the payload matches the expected format.");
+                Top = "0px",
+                Bottom = "15px",
+                Left = "0px",
+                Right = "0px"
+            },
+            PrintBackground = true,
+            PreferCSSPageSize = true,
+            DisplayHeaderFooter = false,
+        };
+
+        public static async Task<IBrowser> GetBrowserAsync()
+        {
+            if (_browser == null || !_browser.IsConnected)
+            {
+                await _semaphore.WaitAsync();
+                try
+                {
+                    if (_browser == null || !_browser.IsConnected)
+                    {
+                        _browser = await Puppeteer.LaunchAsync(new LaunchOptions
+                        {
+                            Headless = true,
+                            ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
+                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
+                            // ExecutablePath ="C:/Program Files/Google/Chrome/Application/chrome.exe", // Local path Windows
+                            Args = new[] { "--no-sandbox", "--disable-setuid-sandbox", "--lang=en-US,ar-SA" }
+                        });
+                    }
+                }
+                catch (PuppeteerSharp.ProcessException ex)
+                {
+                    Console.WriteLine($"Error launching browser: {ex.Message}");
+                    _browser = null;
+                    throw;
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
             }
+            return _browser!;
+        }
+
+        public PdfService()
+        {
+            _razorTemplateService = new RazorTemplateService();
+        }
+
+        private string LoadFileContent(string filePath) => File.Exists(filePath) ? File.ReadAllText(filePath) : string.Empty;
+
+        private (string Common, string Header, string Footer, string Body, string Background) LoadStyles(string basePath)
+        {
+            return (
+                LoadFileContent(Path.Combine(basePath, "Styles", "Styles.css")),
+                LoadFileContent(Path.Combine(basePath, "Styles", "Header.css")),
+                LoadFileContent(Path.Combine(basePath, "Styles", "Footer.css")),
+                LoadFileContent(Path.Combine(basePath, "Styles", "Body.css")),
+                LoadFileContent(Path.Combine(basePath, "Styles", "Background.css"))
+            );
+        }
+
+        private string LoadFontCSS(string fontFamily)
+        {
+            if (fontFamily == "Open Sans" && string.IsNullOrEmpty(_openSansFontCSS))
+            {
+                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "OpenSans");
+                _openSansFontCSS = BuildFontCSS("Open Sans", fontPath);
+            }
+            else if (fontFamily == "Roboto" && string.IsNullOrEmpty(_openRobotoFontCSS))
+            {
+                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Roboto");
+                _openRobotoFontCSS = BuildFontCSS("Roboto", fontPath);
+            }
+
+            return fontFamily switch
+            {
+                "Open Sans" => _openSansFontCSS,
+                "Roboto" => _openRobotoFontCSS,
+                _ => string.Empty
+            };
+        }
+
+        private string BuildFontCSS(string family, string path)
+        {
+            var styles = new[]
+            {
+                ("Light", 200, "normal"),
+                ("LightItalic", 200, "italic"),
+                ("Regular", 400, "normal"),
+                ("Italic", 400, "italic"),
+                ("Medium", 500, "normal"),
+                ("MediumItalic", 500, "italic"),
+                ("Bold", 700, "normal"),
+                ("BoldItalic", 700, "italic")
+            };
+            var sb = new StringBuilder();
+            foreach (var (style, weight, fontStyle) in styles)
+            {
+                sb.Append($"@font-face {{ font-family: '{family}'; src: url('{ConvertToBase64(Path.Combine(path, $"{family.Replace(" ", "")}-{style}.ttf"))}') format('truetype'); font-weight: {weight}; font-style: {fontStyle}; unicode-range: U+0020-007E, U+00A0-00FF; }}\n");
+            }
+            return sb.ToString();
+        }
+
+        private async Task<string> RenderTemplate(string templatePath, Root request)
+        {
+            string rendered = await _razorTemplateService.RenderTemplateAsync(templatePath, request);
+            return rendered;
+        }
+
+        string ConvertToBase64(string filePath) => "data:font/truetype;charset=utf-8;base64," + Convert.ToBase64String(File.ReadAllBytes(filePath));
+
+        private string CreatePdfDocument(string header, string body, string footer, string commonStyles, string headerStyles, string footerStyles, string bodyStyles, Root request, string backgroundStyles)
+        {
+            var themeCSS = new StringBuilder();
+            // Console.WriteLine("Load Font Start: " + DateTime.Now.ToString("HH:mm:ss.fff"));
+            themeCSS.Append(LoadFontCSS(request?.Theme?.Font?.Family ?? string.Empty));
+            // Console.WriteLine("Load Font End: " + DateTime.Now.ToString("HH:mm:ss.fff"));
+
+            themeCSS.Append("html, body {");
+            themeCSS.Append($"--font-family: \"{request?.Theme?.Font?.Family}\";");
+            themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;");
+            themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault + 4}px;");
+            themeCSS.Append($"--font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;");
+            themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
+            themeCSS.Append($"--color-primary: {request?.Theme?.PrimaryColor};");
+            themeCSS.Append($"--color-secondary: {request?.Theme?.SecondaryColor};");
+            themeCSS.Append($"--padding-top: {request?.Theme?.Margin?.Top}px;");
+            themeCSS.Append($"--padding-bottom: {request?.Theme?.Margin?.Bottom}px;");
+            themeCSS.Append($"--padding-left: {request?.Theme?.Margin?.Left}px;");
+            themeCSS.Append($"--padding-right: {request?.Theme?.Margin?.Right}px;");
+            if (request?.Theme?.Font?.Family == "Roboto")
+            {
+                themeCSS.Append($"font-weight: var(--font-weight-500, 500);");
+            }
+            themeCSS.Append("}");
+
+            var allStyles = $"{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}";
+            bool repeatHeaderFooter = request?.ShowSectionsInline != true;
+            return $@"<html> 
+                <head> 
+                    <style>
+                        {allStyles}
+                        {(repeatHeaderFooter ? backgroundStyles : string.Empty)}
+                    </style>
+                </head> 
+                <body class={(repeatHeaderFooter ? "repeat-header-footer" : "")}>
+                    <div style='display: flex; flex-direction: column; height: -webkit-fill-available;'>
+                        {header}
+                        {body}
+                        {footer}
+                    </div>
+                </body> 
+            </html>";
+        }
+
+        private string GetFileNameWithPath(Root request)
+        {
+            string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "Downloads");
+            Directory.CreateDirectory(rootPath);
+            string pdfName = $"{(string.IsNullOrWhiteSpace(request?.PdfRename) ? "PDF" : request.PdfRename)}_{DateTimeOffset.Now:HHmmssfff}.pdf";
+            return Path.Combine(rootPath, pdfName);
+        }
+
+        public async Task<byte[]?> GeneratePdfAsync(Root request)
+        {
+            var browser = await GetBrowserAsync();
+            var page = await browser.NewPageAsync();
+
             try
             {
-                byte[] pdfBytes = await _pdfService.GeneratePdfAsync(request);
-                if (pdfBytes == null || pdfBytes.Length == 0)
+                // Console.WriteLine("PDF Generation Started ...");
+                // Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
+
+                string templateFolderName = request?.TemplateType?.ToUpper() == "TALLY" ? "Tally" : "TemplateA";
+                string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", templateFolderName);
+                var styles = LoadStyles(templatePath);
+                // Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
+
+                // Run template rendering in parallel
+                var renderTasks = new[]
                 {
-                    return StatusCode(500, new { error = "Failed to generate PDF!" });
-                }
-                // Return the PDF as a file download
-                return File(pdfBytes, "application/pdf", "invoice.pdf");
+                    RenderTemplate(Path.Combine(templatePath, "Header.cshtml"), request),
+                    RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request),
+                    RenderTemplate(Path.Combine(templatePath, "Body.cshtml"), request)
+                };
+                await Task.WhenAll(renderTasks);
+
+                string header = renderTasks[0].Result;
+                string footer = renderTasks[1].Result;
+                string body = renderTasks[2].Result;
+
+                // Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                string template = CreatePdfDocument(header, body, footer, styles.Common, styles.Header, styles.Footer, styles.Body, request, styles.Background);
+                // Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
+
+                await page.SetContentAsync(template);
+                await page.EmulateMediaTypeAsync(MediaType.Print);
+
+                // ###### Uncomment below line to save PDF file in local ######
+                // string pdfName = GetFileNameWithPath(request);
+                // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
+                // await page.PdfAsync(pdfName, _cachedPdfOptions);
+
+                return await page.PdfDataAsync(_cachedPdfOptions);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { error = ex.Message });
+                Console.WriteLine($"Error generating PDF: {ex.Message}");
             }
+            finally
+            {
+                await page.CloseAsync();
+                await page.DisposeAsync();
+            }
+            return null;
         }
     }
 }
