@@ -38,7 +38,7 @@
                                     }
                                     @if (Model?.Settings?.GstComposition?.Display == true)
                                     {
-                                        <p>@(Model?.Settings?.GstComposition?.Label ?? "Registered under Composition Scheme")</p>
+                                        <p>@(!string.IsNullOrEmpty(Model?.Settings?.GstComposition?.Label) ? Model.Settings.GstComposition.Label : "Registered under Composition Scheme")</p>
                                     }
                                 </td>
 
