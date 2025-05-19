@@ -94,7 +94,7 @@
                                                         </tbody>
                                                     </table>
                                                 </td>
-                                                @if (Model?.Settings?.WarehouseAddress?.Display == true)
+                                                @if (Model?.Settings?.WarehouseAddress?.Display == true && Model?.WarehouseDetails != null)
                                                 {
                                                     <td class="p-0 vertical-align-top">
                                                         <table>
@@ -102,16 +102,19 @@
                                                                 <tr>
                                                                     <td>Shipped From:</td>
                                                                 </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <strong>@Model?.WarehouseDetails?.Name</strong>
-                                                                    </td>
-                                                                </tr>
-                                                                @if (!string.IsNullOrEmpty(Model?.Company?.Shipping?.Address))
+                                                                @if (!string.IsNullOrEmpty(Model?.WarehouseDetails?.Name))
                                                                 {
                                                                     <tr>
                                                                         <td>
-                                                                            <address>@Model.Company.Shipping.Address</address>
+                                                                            <strong>@Model?.WarehouseDetails?.Name</strong>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                @if (!string.IsNullOrEmpty(Model?.WarehouseDetails?.Address))
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            <address>@Model?.WarehouseDetails?.Address</address>
                                                                         </td>
                                                                     </tr>
                                                                 }
