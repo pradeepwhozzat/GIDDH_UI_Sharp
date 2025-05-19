@@ -843,7 +843,7 @@
                                                                 <!-- Description (HSN/Tax Rate) -->
                                                                 <tr class="border-bottom">
                                                                     
-                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "HSN/SAC")
+                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
                                                                     {
                                                                         <th class="text-left pd-b05 pd-t05"><strong>HSN/SAC</strong></th>
                                                                     }
@@ -896,7 +896,7 @@
                                                                         };
                                                                         
                                                                     <tr>
-                                                                        @if (Model?.Settings?.TaxBifurcation?.Label == "HSN/SAC")
+                                                                        @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
                                                                         {
                                                                             <td class="text-left border-right">@bifurcation?.HsnSc
                                                                                 <small>
@@ -948,7 +948,7 @@
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr class="border-bottom border-top">
-                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "HSN/SAC")
+                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
                                                                     {
                                                                         <td class="text-right border-right"><strong>Total</strong></td>
                                                                     }
