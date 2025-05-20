@@ -145,10 +145,10 @@
                                                                 <address>@Model?.Billing?.Address</address>
                                                                 <p>@Model?.Billing?.StateCounty</p>
                                                                 <p>@Model?.Billing?.Country</p>
-                                                                @if (Model?.Settings?.BillingTaxNumber?.Display == true)
+                                                                @if (Model?.Settings?.BillingTaxNumber?.Display == true && !string.IsNullOrEmpty(Model?.Billing?.TaxNumber))
                                                                 {
                                                                     <p class="mr-t1">@Model?.Settings?.BillingTaxNumber?.Label</p>
-                                                                    <p>@Model?.Company?.Billing?.TaxNumber</p>
+                                                                    <p>@Model?.Billing?.TaxNumber</p>
                                                                 }
                                                             </div>
                                                         }
@@ -159,10 +159,10 @@
                                                                 <address>@Model?.Shipping?.Address</address>
                                                                 <p>@Model?.Shipping?.StateCounty</p>
                                                                 <p>@Model?.Shipping?.Country</p>
-                                                                @if (Model?.Settings?.ShippingTaxNumber?.Display == true)
+                                                                @if (Model?.Settings?.ShippingTaxNumber?.Display == true && !string.IsNullOrEmpty(Model?.Shipping?.TaxNumber))
                                                                 {
                                                                     <p class="mr-t1">@Model?.Settings?.ShippingTaxNumber?.Label</p>
-                                                                    <p>@Model?.Company?.Shipping?.TaxNumber</p>
+                                                                    <p>@Model?.Shipping?.TaxNumber</p>
                                                                 }
                                                             </div>
                                                         }
