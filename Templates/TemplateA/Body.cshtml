@@ -60,74 +60,80 @@
                                                 </td>
                                             </tr>
                                             }
-                                            <tr>
-                                                <td class="p-0" width="50%">
-                                                    <table>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>Company Details:</td>
-                                                            </tr>
-                                                                @if (Model?.Settings?.HeaderCompanyName?.Display == true)
-                                                                {
+                                            @if (Model?.Settings?.ShowCompanyAddress?.Display == true || Model?.Settings?.WarehouseAddress?.Display == true)
+                                            {
+                                                <tr>
+                                                    @if (Model?.Settings?.ShowCompanyAddress?.Display == true)
+                                                    {
+                                                        <td class="p-0" width="50%">
+                                                            <table>
+                                                                <tbody>
                                                                     <tr>
-                                                                        <td>
-                                                                            <strong>@Model?.Company?.HeaderCompanyName</strong>
-                                                                        </td>
+                                                                        <td>Company Details:</td>
                                                                     </tr>
-                                                                }
-                                                                @if (Model?.Settings?.CompanyAddress?.Display == true)
-                                                                {
+                                                                        @if (Model?.Settings?.HeaderCompanyName?.Display == true)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <strong>@Model?.Company?.HeaderCompanyName</strong>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                        @if (Model?.Settings?.CompanyAddress?.Display == true)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <address>@Model?.Company?.Address</address>
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                        @if (Model?.Settings?.CompanyTaxNumber?.Display == true)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>
+                                                                                    @Model?.Settings?.CompanyTaxNumber?.Label: @Model?.Company?.TaxNumber
+                                                                                </td>
+                                                                            </tr>
+                                                                        }
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    }
+                                                    @if (Model?.Settings?.WarehouseAddress?.Display == true && (!string.IsNullOrEmpty(Model?.WarehouseDetails?.Name) || !string.IsNullOrEmpty(Model?.WarehouseDetails?.Address)))
+                                                    {
+                                                        <td class="p-0 vertical-align-top">
+                                                            <table>
+                                                                <tbody>
                                                                     <tr>
-                                                                        <td>
-                                                                            <address>@Model?.Company?.Address</address>
-                                                                        </td>
+                                                                        <td>Shipped From:</td>
                                                                     </tr>
-                                                                }
-                                                                @if (Model?.Settings?.CompanyTaxNumber?.Display == true)
-                                                                {
-                                                                    <tr>
-                                                                        <td>
-                                                                            @Model?.Settings?.CompanyTaxNumber?.Label: @Model?.Company?.TaxNumber
-                                                                        </td>
-                                                                    </tr>
-                                                                }
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                                @if (Model?.Settings?.WarehouseAddress?.Display == true && (!string.IsNullOrEmpty(Model?.WarehouseDetails?.Name) || !string.IsNullOrEmpty(Model?.WarehouseDetails?.Address)))
-                                                {
-                                                    <td class="p-0 vertical-align-top">
-                                                        <table>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>Shipped From:</td>
-                                                                </tr>
-                                                                @if (!string.IsNullOrEmpty(Model?.WarehouseDetails?.Name))
-                                                                {
-                                                                    <tr>
-                                                                        <td>
-                                                                            <strong>@Model?.WarehouseDetails?.Name</strong>
-                                                                        </td>
-                                                                    </tr>
-                                                                }
-                                                                @if (!string.IsNullOrEmpty(Model?.WarehouseDetails?.Address))
-                                                                {
-                                                                    <tr>
-                                                                        <td>
-                                                                            <address>@Model?.WarehouseDetails?.Address</address>
-                                                                        </td>
-                                                                    </tr>
-                                                                }
-                                                            </tbody>
-                                                        </table>
+                                                                    @if (!string.IsNullOrEmpty(Model?.WarehouseDetails?.Name))
+                                                                    {
+                                                                        <tr>
+                                                                            <td>
+                                                                                <strong>@Model?.WarehouseDetails?.Name</strong>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                    @if (!string.IsNullOrEmpty(Model?.WarehouseDetails?.Address))
+                                                                    {
+                                                                        <tr>
+                                                                            <td>
+                                                                                <address>@Model?.WarehouseDetails?.Address</address>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="100%">
+                                                        <hr class="color-grey" />
                                                     </td>
-                                                }
-                                            </tr>
-                                            <tr>
-                                                <td colspan="100%">
-                                                    <hr class="color-grey" />
-                                                </td>
-                                            </tr>
+                                                </tr>
+                                            }
                                             <tr>
                                                 <td colspan="100%" class="p-0 pd-t1">
                                                     <div class="grid-view">
@@ -552,7 +558,7 @@
                                                                         </td>
                                                                     </tr>
 
-                                                                    @if (Model?.Settings?.ShowDescriptionInRows?.Display == true)
+                                                                    @if (Model?.Settings?.ShowDescriptionInRows?.Display == true && Model?.Settings?.Item?.Display == true)
                                                                     {
                                                                         <tr>
                                                                             <td width="25px"></td>
