@@ -85,9 +85,13 @@ namespace GiddhTemplate.Services
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "OpenSans");
                 _openSansFontCSS = BuildFontCSS("Open Sans", fontPath);
-            }
-            else if (fontFamily == "Roboto" && string.IsNullOrEmpty(_openRobotoFontCSS))
+            } else if (fontFamily == "Roboto" && string.IsNullOrEmpty(_openRobotoFontCSS))
             {
+                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Roboto");
+                _openRobotoFontCSS = BuildFontCSS("Roboto", fontPath);
+            } else if (string.IsNullOrEmpty(_openRobotoFontCSS))
+            {
+
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Roboto");
                 _openRobotoFontCSS = BuildFontCSS("Roboto", fontPath);
             }
@@ -96,7 +100,7 @@ namespace GiddhTemplate.Services
             {
                 "Open Sans" => _openSansFontCSS,
                 "Roboto" => _openRobotoFontCSS,
-                _ => string.Empty
+                _ => _openRobotoFontCSS
             };
         }
 
@@ -137,7 +141,8 @@ namespace GiddhTemplate.Services
             // Console.WriteLine("Load Font End: " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
             themeCSS.Append("html, body {");
-            themeCSS.Append($"--font-family: \"{request?.Theme?.Font?.Family}\";");
+            var fontFamily = request?.Theme?.Font?.Family == "Open Sans" ? "Open Sans" : "Roboto";
+            themeCSS.Append($"--font-family: \"{fontFamily}\";");
             themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;");
             themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault + 4}px;");
             themeCSS.Append($"--font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;");
