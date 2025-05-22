@@ -23,6 +23,7 @@
   <ItemGroup>
     <Content Include="Templates/**" CopyToOutputDirectory="Always" />
     <Content Include=".ebextensions/**" CopyToOutputDirectory="Always" />
+    <Content Include=".platform/**" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 </Project>
