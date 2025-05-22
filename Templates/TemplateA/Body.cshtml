@@ -71,23 +71,23 @@
                                                                     <tr>
                                                                         <td>Company Details:</td>
                                                                     </tr>
-                                                                        @if (Model?.Settings?.HeaderCompanyName?.Display == true)
+                                                                        @if (!string.IsNullOrEmpty(Model.Company.HeaderCompanyName))
                                                                         {
                                                                             <tr>
                                                                                 <td>
-                                                                                    <strong>@Model?.Company?.HeaderCompanyName</strong>
+                                                                                    <strong>@Model.Company.HeaderCompanyName</strong>
                                                                                 </td>
                                                                             </tr>
                                                                         }
-                                                                        @if (Model?.Settings?.CompanyAddress?.Display == true)
+                                                                        @if (!string.IsNullOrEmpty(Model.Company.DefaultAddress))
                                                                         {
                                                                             <tr>
                                                                                 <td>
-                                                                                    <address>@Model?.Company?.Address</address>
+                                                                                    <address>@Model.Company.DefaultAddress</address>
                                                                                 </td>
                                                                             </tr>
                                                                         }
-                                                                        @if (Model?.Settings?.CompanyTaxNumber?.Display == true)
+                                                                        @if (!string.IsNullOrEmpty(Model?.Company?.TaxNumber))
                                                                         {
                                                                             <tr>
                                                                                 <td>
@@ -1009,6 +1009,14 @@
                                                 <td colspan="100%">
                                                     <table style="margin-top: 20px;">
                                                         <tbody>
+                                                            @if (Model?.Reversecharge == true)
+                                                            {
+                                                                <tr>
+                                                                    <td>
+                                                                        <p>@Model?.ReverseChargeMessage</p>
+                                                                    </td>
+                                                                </tr>
+                                                            }
                                                             @if (Model?.Settings?.DisplayExportMessage?.Display == true)
                                                             {
                                                                 <tr>
@@ -1016,6 +1024,25 @@
                                                                         <p>@Model?.Settings?.DisplayExportMessage?.Label</p>
                                                                     </td>
                                                                 </tr>
+                                                            }
+                                                            @if (Model?.Settings?.ShowNotesAtLastPage?.Display == true)
+                                                            {
+                                                                @if (Model?.Settings?.Message1?.Display == true && !string.IsNullOrEmpty(Model?.Message1))
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            <pre class="wrap-pre">@Model.Message1</pre>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                @if (Model?.Settings?.ShowMessage2?.Display == true && !string.IsNullOrEmpty(Model?.Message2))
+                                                                {
+                                                                    <tr>
+                                                                        <td>
+                                                                            <pre class="wrap-pre">@Model.Message2</pre>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
                                                             }
                                                         </tbody>
                                                     </table>
