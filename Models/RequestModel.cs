@@ -390,5 +390,7 @@ namespace InvoiceData
         public Amount? TdsTotalTax { get; set; }
         public string? TypeOfCopy { get; set; }
         public string? SealPath { get; set;}
+        public bool? Reversecharge { get; set; }
+        public string? ReverseChargeMessage { get; set; }
     }
 }

@@ -10,27 +10,30 @@
                 <td class="p-0" width="33%">
                     <table>
                         <tbody>
-                            @if (Model?.Settings?.Message1?.Display == true && !string.IsNullOrEmpty(Model?.Message1))
+                            @if (Model?.Settings?.ShowNotesAtLastPage?.Display != true)
                             {
-                                <tr>
-                                    <td>
-                                        <p>@Model.Message1</p>
-                                    </td>
-                                </tr>
-                            }
-                            @if (Model?.Settings?.ShowMessage2?.Display == true && !string.IsNullOrEmpty(Model?.Message2))
-                            {
-                                <tr>
-                                    <td>
-                                        <p>@Model.Message2</p>
-                                    </td>
-                                </tr>
+                                @if (Model?.Settings?.Message1?.Display == true && !string.IsNullOrEmpty(Model?.Message1))
+                                {
+                                    <tr>
+                                        <td>
+                                            <p class="text-wrap-pre">@Model.Message1</p>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (Model?.Settings?.ShowMessage2?.Display == true && !string.IsNullOrEmpty(Model?.Message2))
+                                {
+                                    <tr>
+                                        <td>
+                                            <p class="text-wrap-pre">@Model.Message2</p>
+                                        </td>
+                                    </tr>
+                                }
                             }
                             @if (Model?.Settings?.Thanks?.Display == true)
                             {
                                 <tr>
                                     <td>
-                                        <strong class="color-primary">@Model?.Settings?.Thanks?.Label</strong>
+                                        <strong class="color-primary">@(!string.IsNullOrEmpty(Model?.Settings?.Thanks?.Label) ? Model.Settings.Thanks.Label : "Thank you for your business!")</strong>
                                     </td>
                                 </tr>
                             }
