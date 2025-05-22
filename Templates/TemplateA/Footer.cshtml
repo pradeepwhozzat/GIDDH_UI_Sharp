@@ -10,13 +10,13 @@
                 <td class="p-0" width="33%">
                     <table>
                         <tbody>
-                            @if (Model?.Settings?.ShowNotesAtLastPage?.Display == false)
+                            @if (Model?.Settings?.ShowNotesAtLastPage?.Display != true)
                             {
                                 @if (Model?.Settings?.Message1?.Display == true && !string.IsNullOrEmpty(Model?.Message1))
                                 {
                                     <tr>
                                         <td>
-                                            <p class="wrap-pre">@Model.Message1</p>
+                                            <p class="text-wrap-pre">@Model.Message1</p>
                                         </td>
                                     </tr>
                                 }
@@ -24,7 +24,7 @@
                                 {
                                     <tr>
                                         <td>
-                                            <p class="wrap-pre">@Model.Message2</p>
+                                            <p class="text-wrap-pre">@Model.Message2</p>
                                         </td>
                                     </tr>
                                 }

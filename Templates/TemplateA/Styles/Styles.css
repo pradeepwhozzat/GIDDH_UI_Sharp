@@ -295,7 +295,7 @@ table tr td {
   text-transform: capitalize !important;
 }
 /* Allow text to wrap within the container.*/
-.wrap-pre {
+.text-wrap-pre {
   white-space: pre-wrap;
   word-wrap: break-word;
   overflow-wrap: break-word;
