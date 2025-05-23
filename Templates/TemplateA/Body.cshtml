@@ -396,7 +396,7 @@
 
                                                                                         @if (!Model?.Settings?.ShowDescriptionInRows?.Display == true && !string.IsNullOrEmpty(Entry?.Description))
                                                                                         {
-                                                                                            <p class="font-size-small capitalize-text">@Entry.Description </p>
+                                                                                            <p class="font-size-small capitalize-only-first">@Entry.Description </p>
                                                                                         }
 
                                                                                         @if (Model?.Settings?.SkuCode?.Display == true && !string.IsNullOrEmpty(Entry?.Stock?.SkuCodeHeading) && !string.IsNullOrEmpty(Entry?.Stock?.Sku))
@@ -563,7 +563,7 @@
                                                                         <tr>
                                                                             <td width="25px"></td>
                                                                             <td colspan="100%">
-                                                                                <p class="font-size-medium pd-b05 capitalize-text">@Entry?.Description</p>
+                                                                                <p class="font-size-medium pd-b05 capitalize-only-first">@Entry?.Description</p>
                                                                             </td>
                                                                         </tr>
                                                                     }

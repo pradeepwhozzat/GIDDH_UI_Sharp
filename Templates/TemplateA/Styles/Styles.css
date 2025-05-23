@@ -303,8 +303,8 @@ table tr td {
   overflow-wrap: break-word;
 }
 
-.capitalize-text {
-  text-transform: capitalize;
+.capitalize-only-first::first-letter {
+  text-transform: uppercase;
 }
 
 /* Print Media CSS */
