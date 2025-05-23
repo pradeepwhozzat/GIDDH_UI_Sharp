@@ -153,10 +153,6 @@ namespace GiddhTemplate.Services
             themeCSS.Append($"--padding-bottom: {request?.Theme?.Margin?.Bottom}px;");
             themeCSS.Append($"--padding-left: {request?.Theme?.Margin?.Left}px;");
             themeCSS.Append($"--padding-right: {request?.Theme?.Margin?.Right}px;");
-            if (request?.Theme?.Font?.Family == "Roboto")
-            {
-                themeCSS.Append($"font-weight: var(--font-weight-500, 500);");
-            }
             themeCSS.Append("}");
 
             var allStyles = $"{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}";

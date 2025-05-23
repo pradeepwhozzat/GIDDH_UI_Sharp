@@ -36,6 +36,10 @@ table.entry-summary tr td {
   padding-right: 5px;
 }
 
+.entry-table thead tr th, .entry-table tbody tr td, .entry-table tfoot tr td {
+  padding: 5px;
+}
+
 .grid-view {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

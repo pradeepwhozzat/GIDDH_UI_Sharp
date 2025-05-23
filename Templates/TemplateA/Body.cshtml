@@ -274,15 +274,15 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr class="mr-b1 mr-t1">
                                                 <td colspan="100%" class="p-0">
-                                                    <table class="entry-table mr-b1 mr-t1">
+                                                    <table class="entry-table">
                                                         <thead>
                                                             <tr>
                                                                 
                                                                 @if (Model?.Settings?.SNo?.Display == true)
                                                                 {
-                                                                    <th width="30px" class="text-center pd-t05 pd-b05">@Model?.Settings?.SNo?.Label</th>
+                                                                    <th width="30px" class="text-center">@Model?.Settings?.SNo?.Label</th>
                                                                 }
                                                                 
                                                                 @if (Model?.Settings?.ShowVariantImage?.Display == true)
@@ -396,7 +396,7 @@
 
                                                                                         @if (!Model?.Settings?.ShowDescriptionInRows?.Display == true && !string.IsNullOrEmpty(Entry?.Description))
                                                                                         {
-                                                                                            <p class="font-size-small">@Entry.Description </p>
+                                                                                            <p class="font-size-small capitalize-text">@Entry.Description </p>
                                                                                         }
 
                                                                                         @if (Model?.Settings?.SkuCode?.Display == true && !string.IsNullOrEmpty(Entry?.Stock?.SkuCodeHeading) && !string.IsNullOrEmpty(Entry?.Stock?.Sku))
@@ -563,7 +563,7 @@
                                                                         <tr>
                                                                             <td width="25px"></td>
                                                                             <td colspan="100%">
-                                                                                <p class="font-size-medim">@Entry?.Description</p>
+                                                                                <p class="font-size-medium pd-b05 capitalize-text">@Entry?.Description</p>
                                                                             </td>
                                                                         </tr>
                                                                     }
@@ -575,47 +575,47 @@
 
                                                                 @if (Model?.Settings?.SNo?.Display == true)
                                                                 {
-                                                                    <td class="pd-t05 pd-b05"></td>
+                                                                    <td></td>
                                                                 }
                                                                 
                                                                 @if (Model?.Settings?.Item?.Display == true)
                                                                 {
-                                                                    <td class="pd-t05 pd-b05"></td>
+                                                                    <td></td>
                                                                 }
 
                                                                 @if (Model?.Settings?.ShowVariantImage?.Display == true)
                                                                 {
-                                                                    <td class="pd-t05 pd-b05"></td>
+                                                                    <td></td>
                                                                 }
 
                                                                 @if (Model?.Settings?.HsnSac?.Display == true)
                                                                 {
-                                                                    <td class="pd-t05 pd-b05"></td>
+                                                                    <td></td>
                                                                 }
 
                                                                 @if (Model?.Settings?.Quantity?.Display == true)
                                                                 {
-                                                                    <td class="text-right pd-t05 pd-b05">@Model?.StockQuantityWithUnit</td>
+                                                                    <td class="text-right">@Model?.StockQuantityWithUnit</td>
                                                                 }
 
                                                                 @if (Model?.Settings?.Rate?.Display == true)
                                                                 {
-                                                                    <td class="pd-t05 pd-b05"></td>
+                                                                    <td></td>
                                                                 }
 
                                                                 @if (Model?.Settings?.AmountBeforeDiscount?.Display == true)
                                                                 {
-                                                                    <td class="pd-t05 pd-b05"></td>
+                                                                    <td></td>
                                                                 }
 
                                                                 @if (Model?.Settings?.Discount?.Display == true)
                                                                 {
-                                                                    <td class="text-right pd-t05 pd-b05"></td>
+                                                                    <td></td>
                                                                 }
 
                                                                 @if (Model?.Settings?.TaxableValue?.Display == true)
                                                                 {
-                                                                    <td class="text-right pd-t05 pd-b05">
+                                                                    <td class="text-right">
                                                                         @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                         @Model?.TaxableTotal?.AmountForAccount
                                                                     </td>
@@ -625,14 +625,14 @@
                                                                 {
                                                                     @foreach (var tax in Model.GstTaxesTotal)
                                                                     {
-                                                                        <td class="text-right pd-t05 pd-b05">
+                                                                        <td class="text-right">
                                                                             @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) 
                                                                             @tax?.Amount?.AmountForAccount
                                                                         </td>
                                                                     }
                                                                 }
 
-                                                                <td class="text-right pd-t05 pd-b05">
+                                                                <td class="text-right">
                                                                     @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
                                                                     @Model?.GstEntriesTotal?.AmountForAccount
                                                                 </td>
@@ -854,18 +854,18 @@
                                                                     
                                                                     @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
                                                                     {
-                                                                        <th class="text-left pd-b05 pd-t05"><strong>HSN/SAC</strong></th>
+                                                                        <th class="text-left"><strong>HSN/SAC</strong></th>
                                                                     }
 
-                                                                    <th class="text-right pd-b05 pd-t05"><strong>Taxable Amt.</strong></th>
+                                                                    <th class="text-right"><strong>Taxable Amt.</strong></th>
 
                                                                     @if (Model?.GstTaxesTotalOnly?.Any() == true)
                                                                     {
                                                                         @foreach (var tax in Model.GstTaxesTotalOnly)
                                                                         {
                                                                             taxKeys.Add(tax?.Key);
-                                                                            <th class="text-right pd-b05 pd-t05"><strong>@tax?.AccountName%</strong></th>
-                                                                            <th class="text-right pd-b05 pd-t05"><strong>@tax?.AccountName Amt.</strong></th>
+                                                                            <th class="text-right"><strong>@tax?.AccountName%</strong></th>
+                                                                            <th class="text-right"><strong>@tax?.AccountName Amt.</strong></th>
                                                                         }
                                                                     }
 
@@ -874,7 +874,7 @@
                                                                         @foreach (var tax in Model.CessTotal)
                                                                         {
                                                                             taxKeys.Add(tax.Key);
-                                                                            <th class="text-right pd-b05 pd-t05"><strong>@tax?.AccountName%</strong></th>
+                                                                            <th class="text-right"><strong>@tax?.AccountName%</strong></th>
                                                                         }
                                                                     }
 
@@ -883,11 +883,11 @@
                                                                         @foreach (var tax in Model.OtherTotal)
                                                                         {
                                                                             taxKeys.Add(tax.Key);
-                                                                            <th class="text-right pd-b05 pd-t05"><strong>@tax?.AccountName%</strong></th>
+                                                                            <th class="text-right"><strong>@tax?.AccountName%</strong></th>
                                                                         }
                                                                     }
                                                                     <!-- Total -->
-                                                                    <th class="text-right pd-b05 pd-t05"><strong>Total Amt.</strong></th>
+                                                                    <th class="text-right"><strong>Total Amt.</strong></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
