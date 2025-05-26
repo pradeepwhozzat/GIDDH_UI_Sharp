@@ -10,6 +10,7 @@ namespace GiddhTemplate.Services
         private readonly RazorTemplateService _razorTemplateService;
         private string _openSansFontCSS = string.Empty; // Cache the Open Sans CSS
         private string _openRobotoFontCSS = string.Empty; // Cache the Roboto CSS
+        private string _openLatoFontCSS = string.Empty; // Cache the Lato CSS
         private static readonly SemaphoreSlim _semaphore = new(1, 1);
         private static IBrowser? _browser;
         private static readonly PdfOptions _cachedPdfOptions = new()
@@ -40,8 +41,8 @@ namespace GiddhTemplate.Services
                         _browser = await Puppeteer.LaunchAsync(new LaunchOptions
                         {
                             Headless = true,
-                            ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
-                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
+                            // ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
+                            ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
                             // ExecutablePath ="C:/Program Files/Google/Chrome/Application/chrome.exe", // Local path Windows
                             Args = new[] { "--no-sandbox", "--disable-setuid-sandbox", "--lang=en-US,ar-SA" }
                         });
@@ -89,9 +90,12 @@ namespace GiddhTemplate.Services
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Roboto");
                 _openRobotoFontCSS = BuildFontCSS("Roboto", fontPath);
+            } else if (fontFamily == "Lato" && string.IsNullOrEmpty(_openLatoFontCSS))
+            {
+                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Lato");
+                _openLatoFontCSS = BuildFontCSS("Lato", fontPath);
             } else if (string.IsNullOrEmpty(_openRobotoFontCSS))
             {
-
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Roboto");
                 _openRobotoFontCSS = BuildFontCSS("Roboto", fontPath);
             }
@@ -100,6 +104,7 @@ namespace GiddhTemplate.Services
             {
                 "Open Sans" => _openSansFontCSS,
                 "Roboto" => _openRobotoFontCSS,
+                "Lato" => _openLatoFontCSS,
                 _ => _openRobotoFontCSS
             };
         }
@@ -141,7 +146,7 @@ namespace GiddhTemplate.Services
             // Console.WriteLine("Load Font End: " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
             themeCSS.Append("html, body {");
-            var fontFamily = request?.Theme?.Font?.Family == "Open Sans" ? "Open Sans" : "Roboto";
+            var fontFamily = request?.Theme?.Font?.Family == "Open Sans" ? "Open Sans" : request?.Theme?.Font?.Family == "Lato" ? "Lato" : "Roboto";
             themeCSS.Append($"--font-family: \"{fontFamily}\";");
             themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;");
             themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault + 4}px;");
@@ -218,9 +223,9 @@ namespace GiddhTemplate.Services
                 await page.EmulateMediaTypeAsync(MediaType.Print);
 
                 // ###### Uncomment below line to save PDF file in local ######
-                // string pdfName = GetFileNameWithPath(request);
-                // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
-                // await page.PdfAsync(pdfName, _cachedPdfOptions);
+                string pdfName = GetFileNameWithPath(request);
+                Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
+                await page.PdfAsync(pdfName, _cachedPdfOptions);
 
                 return await page.PdfDataAsync(_cachedPdfOptions);
             }
