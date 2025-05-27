@@ -149,7 +149,7 @@ namespace GiddhTemplate.Services
             themeCSS.Append("html, body {");
             var fontFamily = request?.Theme?.Font?.Family == "Open Sans" ? "Open Sans" : request?.Theme?.Font?.Family == "Lato" ? "Lato" : request?.Theme?.Font?.Family == "Roboto" ? "Roboto" : "Inter";
             themeCSS.Append($"--font-family: \"{fontFamily}\";");
-            themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;");
+            themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault - 2}px;");
             themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault + 4}px;");
             themeCSS.Append($"--font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;");
             themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
