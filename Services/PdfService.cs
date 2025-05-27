@@ -9,9 +9,9 @@ namespace GiddhTemplate.Services
     {
         private readonly RazorTemplateService _razorTemplateService;
         private string _openSansFontCSS = string.Empty; // Cache the Open Sans CSS
-        private string _openRobotoFontCSS = string.Empty; // Cache the Roboto CSS
-        private string _openLatoFontCSS = string.Empty; // Cache the Lato CSS
-        private string _openInterFontCSS = string.Empty; // Cache the Inter CSS
+        private string _robotoFontCSS = string.Empty; // Cache the Roboto CSS
+        private string _latoFontCSS = string.Empty; // Cache the Lato CSS
+        private string _interFontCSS = string.Empty; // Cache the Inter CSS
         private static readonly SemaphoreSlim _semaphore = new(1, 1);
         private static IBrowser? _browser;
         private static readonly PdfOptions _cachedPdfOptions = new()
@@ -87,26 +87,26 @@ namespace GiddhTemplate.Services
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "OpenSans");
                 _openSansFontCSS = BuildFontCSS("Open Sans", fontPath);
-            } else if (fontFamily == "Roboto" && string.IsNullOrEmpty(_openRobotoFontCSS))
+            } else if (fontFamily == "Roboto" && string.IsNullOrEmpty(_robotoFontCSS))
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Roboto");
-                _openRobotoFontCSS = BuildFontCSS("Roboto", fontPath);
-            } else if (fontFamily == "Lato" && string.IsNullOrEmpty(_openLatoFontCSS))
+                _robotoFontCSS = BuildFontCSS("Roboto", fontPath);
+            } else if (fontFamily == "Lato" && string.IsNullOrEmpty(_latoFontCSS))
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Lato");
-                _openLatoFontCSS = BuildFontCSS("Lato", fontPath);
-            } else if (string.IsNullOrEmpty(_openInterFontCSS))
+                _latoFontCSS = BuildFontCSS("Lato", fontPath);
+            } else if (string.IsNullOrEmpty(_interFontCSS))
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Inter");
-                _openInterFontCSS = BuildFontCSS("Inter_18pt", fontPath);
+                _interFontCSS = BuildFontCSS("Inter", fontPath);
             }
 
             return fontFamily switch
             {
                 "Open Sans" => _openSansFontCSS,
-                "Roboto" => _openRobotoFontCSS,
-                "Lato" => _openLatoFontCSS,
-                _ => _openInterFontCSS
+                "Roboto" => _robotoFontCSS,
+                "Lato" => _latoFontCSS,
+                _ => _interFontCSS
             };
         }
 

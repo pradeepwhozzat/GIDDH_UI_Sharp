@@ -22,7 +22,7 @@
 @property --font-family {
   syntax: "<string>";
   inherits: true;
-  initial-value: "Inter"; /* 'Roboto' | 'Open Sans' | 'sans-serif' */
+  initial-value: "Inter"; /* 'Roboto' | 'Open Sans' | 'Inter' */
 }
 @property --font-weight-200 {
   syntax: "<integer>";
