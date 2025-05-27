@@ -22,7 +22,7 @@
 @property --font-family {
   syntax: "<string>";
   inherits: true;
-  initial-value: "Roboto"; /* 'Roboto' | 'Open Sans' | 'sans-serif' */
+  initial-value: "Inter"; /* 'Roboto' | 'Open Sans' | 'sans-serif' */
 }
 @property --font-weight-200 {
   syntax: "<integer>";
@@ -98,7 +98,7 @@
 html,
 body {
   color: #000000;
-  font-family: var(--font-family, "Roboto");
+  font-family: var(--font-family, "Inter");
   font-size: var(--font-size-default, 14px);
   font-weight: var(--font-weight-400, 400);
   line-height: 1.4;
