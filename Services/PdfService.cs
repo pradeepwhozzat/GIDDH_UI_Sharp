@@ -9,8 +9,9 @@ namespace GiddhTemplate.Services
     {
         private readonly RazorTemplateService _razorTemplateService;
         private string _openSansFontCSS = string.Empty; // Cache the Open Sans CSS
-        private string _openRobotoFontCSS = string.Empty; // Cache the Roboto CSS
-        private string _openLatoFontCSS = string.Empty; // Cache the Lato CSS
+        private string _robotoFontCSS = string.Empty; // Cache the Roboto CSS
+        private string _latoFontCSS = string.Empty; // Cache the Lato CSS
+        private string _interFontCSS = string.Empty; // Cache the Inter CSS
         private static readonly SemaphoreSlim _semaphore = new(1, 1);
         private static IBrowser? _browser;
         private static readonly PdfOptions _cachedPdfOptions = new()
@@ -86,26 +87,26 @@ namespace GiddhTemplate.Services
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "OpenSans");
                 _openSansFontCSS = BuildFontCSS("Open Sans", fontPath);
-            } else if (fontFamily == "Roboto" && string.IsNullOrEmpty(_openRobotoFontCSS))
+            } else if (fontFamily == "Roboto" && string.IsNullOrEmpty(_robotoFontCSS))
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Roboto");
-                _openRobotoFontCSS = BuildFontCSS("Roboto", fontPath);
-            } else if (fontFamily == "Lato" && string.IsNullOrEmpty(_openLatoFontCSS))
+                _robotoFontCSS = BuildFontCSS("Roboto", fontPath);
+            } else if (fontFamily == "Lato" && string.IsNullOrEmpty(_latoFontCSS))
             {
                 string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Lato");
-                _openLatoFontCSS = BuildFontCSS("Lato", fontPath);
-            } else if (string.IsNullOrEmpty(_openRobotoFontCSS))
+                _latoFontCSS = BuildFontCSS("Lato", fontPath);
+            } else if (string.IsNullOrEmpty(_interFontCSS))
             {
-                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Roboto");
-                _openRobotoFontCSS = BuildFontCSS("Roboto", fontPath);
+                string fontPath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "Fonts", "Inter");
+                _interFontCSS = BuildFontCSS("Inter", fontPath);
             }
 
             return fontFamily switch
             {
                 "Open Sans" => _openSansFontCSS,
-                "Roboto" => _openRobotoFontCSS,
-                "Lato" => _openLatoFontCSS,
-                _ => _openRobotoFontCSS
+                "Roboto" => _robotoFontCSS,
+                "Lato" => _latoFontCSS,
+                _ => _interFontCSS
             };
         }
 
@@ -146,9 +147,9 @@ namespace GiddhTemplate.Services
             // Console.WriteLine("Load Font End: " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
             themeCSS.Append("html, body {");
-            var fontFamily = request?.Theme?.Font?.Family == "Open Sans" ? "Open Sans" : request?.Theme?.Font?.Family == "Lato" ? "Lato" : "Roboto";
+            var fontFamily = request?.Theme?.Font?.Family == "Open Sans" ? "Open Sans" : request?.Theme?.Font?.Family == "Lato" ? "Lato" : request?.Theme?.Font?.Family == "Roboto" ? "Roboto" : "Inter";
             themeCSS.Append($"--font-family: \"{fontFamily}\";");
-            themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault}px;");
+            themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault - 2}px;");
             themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault + 4}px;");
             themeCSS.Append($"--font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;");
             themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
