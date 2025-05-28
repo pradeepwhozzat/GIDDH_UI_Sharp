@@ -1,8 +1,3 @@
-main {
-  padding-left: var(--header-footer-body-padding, 15px);
-  padding-right: var(--header-footer-body-padding, 15px);
-}
-
 main table.remove-left-right-border tr th:first-child,
 main table.remove-left-right-border tr td:first-child {
   border-left: none !important;

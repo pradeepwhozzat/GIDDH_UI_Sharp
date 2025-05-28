@@ -1,8 +1,3 @@
-main {
-  padding-left: var(--padding-left, 15px);
-  padding-right: var(--padding-right, 15px);
-}
-
 hr {
   border-style: solid;
   border-color: currentColor;
@@ -37,7 +32,7 @@ table.entry-summary tr td {
 }
 
 .entry-table thead tr th, .entry-table tbody tr td, .entry-table tfoot tr td {
-  padding: 5px;
+  padding: 3px;
 }
 
 .grid-view {

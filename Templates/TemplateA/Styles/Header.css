@@ -1,9 +1,6 @@
 /* Header CSS */
 header {
   position: relative;
-  padding-left: var(--padding-left, 15px);
-  padding-right: var(--padding-right, 15px);
-  padding-top:  var(--padding-top, 15px);
   padding-bottom: 15px;
 }
 

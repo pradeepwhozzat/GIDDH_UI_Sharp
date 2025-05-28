@@ -154,12 +154,12 @@
                                                                                         <tbody>
                                                                                             <tr>
                                                                                                 @if (GetDisplayStatus("ShowLogo") &&
-                                                                                            !string.IsNullOrEmpty(Model?.Company?.Logo?.Url))
+                                                                                            !string.IsNullOrEmpty(Model?.Company?.Logo?.Bytes))
                                                                                                 {
                                                                                                     <td class="p-0 border-none pd-r1 vertical-align-top"
                                                                                                         width="@Model?.Company?.Logo?.Size">
                                                                                                         <figure class="m-0">
-                                                                                                            <img src="@Model?.Company?.Logo?.Url"
+                                                                                                            <img src="data:image/png;base64,@Model?.Company?.Logo?.Bytes"
                                                                                                                 width="@Model?.Company?.Logo?.Size"
                                                                                                                 height="auto" />
                                                                                                         </figure>

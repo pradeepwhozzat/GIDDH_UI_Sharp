@@ -1,24 +1,4 @@
 /* Global CSS Variables */
-@property --padding-top {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 15px;
-}
-@property --padding-bottom {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 15px;
-}
-@property --padding-left {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 15px;
-}
-@property --padding-right {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 15px;
-}
 @property --font-family {
   syntax: "<string>";
   inherits: true;
@@ -305,6 +285,12 @@ table tr td {
 
 .capitalize-only-first::first-letter {
   text-transform: uppercase;
+}
+
+.square-image {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* Print Media CSS */
