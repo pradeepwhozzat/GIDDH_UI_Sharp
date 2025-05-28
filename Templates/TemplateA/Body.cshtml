@@ -345,8 +345,8 @@
                                                             {
                                                                 <tr class="border-top">
                                                                     <td colspan="100%" class="text-right">
-                                                                        @Model?.Settings?.PreviousDue?.Label : @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code ?? string.Empty
-                                                                            : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol) ?? string.Empty) @Model?.PreviousDueAmount?.AmountForAccount
+                                                                        @Model?.Settings?.PreviousDue?.Label :
+                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model?.PreviousDueAmount?.AmountForAccount
                                                                     </td>
                                                                 </tr>
                                                             }
@@ -452,15 +452,13 @@
                                                                                 @if (Entry?.Stock?.Rate != null)
                                                                                 {
                                                                                     <p>
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                        @Entry.Stock.Rate.AmountForAccount
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Entry.Stock.Rate.AmountForAccount
                                                                                     </p>
                                                                                     
                                                                                     @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && Entry.Stock.Rate?.AmountForCompany != null)
                                                                                     {
                                                                                         <p class="text-light pr-3 font-size-small">
-                                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))
-                                                                                            @Entry.Stock.Rate.AmountForCompany
+                                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))@Entry.Stock.Rate.AmountForCompany
                                                                                         </p>
                                                                                     }
                                                                                 }
@@ -471,8 +469,7 @@
                                                                         @if (Model?.Settings?.AmountBeforeDiscount?.Display == true)
                                                                         {
                                                                             <td class="text-right">
-                                                                                @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                @Entry?.Amount?.AmountForAccount
+                                                                                @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Entry?.Amount?.AmountForAccount
                                                                             </td>
                                                                         }
 
@@ -486,9 +483,9 @@
                                                                                     {
                                                                                         @if (Model?.AccountCurrency?.Code == "AED")
                                                                                         {
-                                                                                            <span>- @Entry?.SumOfDiscounts?.AmountForAccount @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))</span>
+                                                                                            <span>-@Entry?.SumOfDiscounts?.AmountForAccount@(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))</span>
                                                                                         } else {
-                                                                                            <span>@(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) - @Entry?.SumOfDiscounts?.AmountForAccount</span>
+                                                                                            <span>@(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))-@Entry?.SumOfDiscounts?.AmountForAccount</span>
                                                                                         }
                                                                                     }
                                                                                 }
@@ -501,15 +498,13 @@
                                                                                 @if (Entry?.TaxableValue != null)
                                                                                 {
                                                                                     <p>
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                        @Entry?.TaxableValue.AmountForAccount
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Entry?.TaxableValue.AmountForAccount
                                                                                     </p>
                                                                                     
                                                                                     @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && Entry?.TaxableValue?.AmountForCompany != null)
                                                                                     {
                                                                                         <p class="text-light pr-3 font-size-small">
-                                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))
-                                                                                            @Entry?.TaxableValue?.AmountForCompany
+                                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))@Entry?.TaxableValue?.AmountForCompany
                                                                                         </p>
                                                                                     }
                                                                                 }
@@ -527,7 +522,7 @@
                                                                                     {
                                                                                         isTaxApplied = true;
                                                                                         <td class="text-right">
-                                                                                            <p>@(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) @entryTax?.Amount?.AmountForAccount</p>
+                                                                                            <p>@(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@entryTax?.Amount?.AmountForAccount</p>
                                                                                             <p class="font-size-small">@entryTax?.TaxPercent%</p>
                                                                                         </td>
                                                                                         break;
@@ -544,15 +539,13 @@
                                                                         <!-- Total -->
                                                                         <td class="text-right">
                                                                             <p>
-                                                                                @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) 
-                                                                                @Entry?.EntryTotal?.AmountForAccount
+                                                                                @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Entry?.EntryTotal?.AmountForAccount
                                                                             </p>
 
                                                                             @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && Entry?.EntryTotal?.AmountForCompany != null)
                                                                             {
                                                                                 <p class="text-light pr-3 font-size-small">
-                                                                                    @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))
-                                                                                    @Entry?.TaxableValue?.AmountForCompany
+                                                                                    @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))@Entry?.TaxableValue?.AmountForCompany
                                                                                 </p>
                                                                             }
                                                                         </td>
@@ -616,8 +609,7 @@
                                                                 @if (Model?.Settings?.TaxableValue?.Display == true)
                                                                 {
                                                                     <td class="text-right">
-                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                        @Model?.TaxableTotal?.AmountForAccount
+                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model?.TaxableTotal?.AmountForAccount
                                                                     </td>
                                                                 }
                                                                 
@@ -626,15 +618,13 @@
                                                                     @foreach (var tax in Model.GstTaxesTotal)
                                                                     {
                                                                         <td class="text-right">
-                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) 
-                                                                            @tax?.Amount?.AmountForAccount
+                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@tax?.Amount?.AmountForAccount
                                                                         </td>
                                                                     }
                                                                 }
 
                                                                 <td class="text-right">
-                                                                    @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                    @Model?.GstEntriesTotal?.AmountForAccount
+                                                                    @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model?.GstEntriesTotal?.AmountForAccount
                                                                 </td>
                                                             </tr>
                                                         </tfoot>
@@ -663,8 +653,7 @@
                                                                                 <tr class="line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">@Model?.Settings?.TaxableAmount?.Label</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                        @Model?.TaxableTotal?.AmountForAccount
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model?.TaxableTotal?.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
@@ -673,8 +662,7 @@
                                                                                 <tr class="p-0 m-0 line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">@Model?.Settings?.TotalTax?.Label</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                        @Model?.TotalTax?.AmountForAccount
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model?.TotalTax?.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
@@ -683,8 +671,7 @@
                                                                                 <tr class="p-0 m-0 line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">RoundOff</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                        @Model?.RoundOff
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model?.RoundOff
                                                                                     </td>
                                                                                 </tr>
                                                                             }
@@ -727,8 +714,8 @@
                                                                                             </strong>
                                                                                         </td>
                                                                                         <td class="text-right p-0">
-                                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))
-                                                                                            <strong>@Model?.GstEntriesTotal.AmountForCompany</strong>
+                                                                                            @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : 
+                                                                                            WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))<strong>@Model?.GstEntriesTotal.AmountForCompany</strong>
                                                                                         </td>
                                                                                     </tr>
                                                                                 }
@@ -752,15 +739,13 @@
                                                                                 <tr class="line-height-10">
                                                                                     <td class="p-0 text-right" width="50%" >Paid</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) 
-                                                                                        @Model.PaidAmount
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model.PaidAmount
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr class="line-height-10">
                                                                                     <td class="p-0 text-right" width="50%">Due Amount</td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol)) 
-                                                                                        @Model.Balance.AmountForAccount
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model.Balance.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
@@ -773,8 +758,7 @@
                                                                                         @(!string.IsNullOrEmpty(Model?.Company?.Currency?.Code) ? $"(IN {Model.Company.Currency.Code})" : "")
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))
-                                                                                        @Model?.GrandTotalInAccountsCurrency
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.Company?.Currency?.Code : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol))@Model?.GrandTotalInAccountsCurrency
                                                                                     </td>
                                                                                 </tr>
                                                                             }
@@ -786,8 +770,8 @@
                                                                                         </strong>
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                        <strong>@Model.TotalInWordsInAccountsCurrency</strong>
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : 
+                                                                                        WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))<strong>@Model.TotalInWordsInAccountsCurrency</strong>
                                                                                     </td>
                                                                                 </tr>
                                                                             }
@@ -799,8 +783,7 @@
                                                                                         @Model?.Settings?.Tcs?.Label
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                        @Model.TcsTotalTax.AmountForAccount
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model.TcsTotalTax.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
@@ -812,8 +795,7 @@
                                                                                         @Model?.Settings?.Tds?.Label
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                        @Model.TdsTotalTax.AmountForAccount
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model.TdsTotalTax.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
@@ -825,8 +807,7 @@
                                                                                         @Model?.Settings?.TotalDue?.Label
                                                                                     </td>
                                                                                     <td class="text-right p-0">
-                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))
-                                                                                        @Model?.TotalDue.AmountForAccount
+                                                                                        @(Model?.CurrencyFormat == "CODE" ? Model?.AccountCurrency?.Code : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol))@Model?.TotalDue.AmountForAccount
                                                                                     </td>
                                                                                 </tr>
                                                                             }
