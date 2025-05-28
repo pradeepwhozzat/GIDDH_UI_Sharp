@@ -1,9 +1,6 @@
 /* Header CSS */
 header {
   position: relative;
-  padding-left: var(--padding-left, 15px);
-  padding-right: var(--padding-right, 15px);
-  padding-top:  var(--padding-top, 15px);
   padding-bottom: 15px;
 }
 
@@ -40,5 +37,13 @@ body.repeat-header-footer header {
   background-color: #ffffff;
   padding-left: 15px;
   padding-right: 15px;
+}
+
+.align-bottom-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: end; 
+  height: 100%;
+  background-color: red;
 }
 /* ---------------- Invoice-title end-------------------- */

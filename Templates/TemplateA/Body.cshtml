@@ -287,7 +287,7 @@
                                                                 
                                                                 @if (Model?.Settings?.ShowVariantImage?.Display == true)
                                                                 {
-                                                                    <th width="15%" class="text-center">@Model?.Settings?.ShowVariantImage?.Label</th>
+                                                                    <th width="10%">@Model?.Settings?.ShowVariantImage?.Label</th>
                                                                 }
                                                                 
                                                                 @if (Model?.Settings?.Item?.Display == true)
@@ -372,11 +372,11 @@
 
                                                                         @if (Model?.Settings?.ShowVariantImage?.Display == true)
                                                                         {
-                                                                            <td class="text-center">
+                                                                            <td>
                                                                                 @if (!string.IsNullOrEmpty(Entry?.Stock?.Variant?.Value))
                                                                                 {
                                                                                     <img src="data:image/png;base64,@Entry.Stock.Variant.Value"
-                                                                                        width="40px" />
+                                                                                        width="40px" class="square-image"/>
                                                                                 }
                                                                             </td>
                                                                         }
@@ -558,12 +558,12 @@
                                                                         </td>
                                                                     </tr>
 
-                                                                    @if (Model?.Settings?.ShowDescriptionInRows?.Display == true && Model?.Settings?.Item?.Display == true)
+                                                                    @if (Model?.Settings?.ShowDescriptionInRows?.Display == true && Model?.Settings?.Item?.Display == true && !string.IsNullOrEmpty(Entry?.Description))
                                                                     {
                                                                         <tr>
                                                                             <td width="25px"></td>
                                                                             <td colspan="100%">
-                                                                                <p class="font-size-medium pd-b05 capitalize-only-first">@Entry?.Description</p>
+                                                                                <p class="font-size-medium pd-b05 capitalize-only-first">@Entry.Description</p>
                                                                             </td>
                                                                         </tr>
                                                                     }

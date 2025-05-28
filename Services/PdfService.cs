@@ -14,21 +14,6 @@ namespace GiddhTemplate.Services
         private string _interFontCSS = string.Empty; // Cache the Inter CSS
         private static readonly SemaphoreSlim _semaphore = new(1, 1);
         private static IBrowser? _browser;
-        private static readonly PdfOptions _cachedPdfOptions = new()
-        {
-            Format = PaperFormat.A4,
-            Landscape = false,
-            MarginOptions = new MarginOptions
-            {
-                Top = "0px",
-                Bottom = "15px",
-                Left = "0px",
-                Right = "0px"
-            },
-            PrintBackground = true,
-            PreferCSSPageSize = true,
-            DisplayHeaderFooter = false,
-        };
 
         public static async Task<IBrowser> GetBrowserAsync()
         {
@@ -155,8 +140,6 @@ namespace GiddhTemplate.Services
             themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
             themeCSS.Append($"--color-primary: {request?.Theme?.PrimaryColor};");
             themeCSS.Append($"--color-secondary: {request?.Theme?.SecondaryColor};");
-            themeCSS.Append($"--padding-top: {request?.Theme?.Margin?.Top}px;");
-            themeCSS.Append($"--padding-bottom: {request?.Theme?.Margin?.Bottom}px;");
             themeCSS.Append($"--padding-left: {request?.Theme?.Margin?.Left}px;");
             themeCSS.Append($"--padding-right: {request?.Theme?.Margin?.Right}px;");
             themeCSS.Append("}");
@@ -192,6 +175,21 @@ namespace GiddhTemplate.Services
         {
             var browser = await GetBrowserAsync();
             var page = await browser.NewPageAsync();
+            var _pdfOptions = new PdfOptions
+            {
+                Format = PaperFormat.A4,
+                Landscape = false,
+                MarginOptions = new MarginOptions
+                {
+                    Top = $"{request?.Theme?.Margin?.Top ?? 0}px",
+                    Bottom = $"{(request?.Theme?.Margin?.Bottom ?? 0) + 15}px",
+                    Left = $"{request?.Theme?.Margin?.Left ?? 0}px",
+                    Right = $"{request?.Theme?.Margin?.Right ?? 0}px"
+                },
+                PrintBackground = true,
+                PreferCSSPageSize = true,
+                DisplayHeaderFooter = false
+            };
 
             try
             {
@@ -224,13 +222,12 @@ namespace GiddhTemplate.Services
                 await page.EmulateMediaTypeAsync(MediaType.Print);
 
                 // Console.WriteLine("after both await statement " + DateTime.Now.ToString("HH:mm:ss.fff"));
-
                 // ###### Uncomment below line to save PDF file in local ######
                 string pdfName = GetFileNameWithPath(request);
                 // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
-                await page.PdfAsync(pdfName, _cachedPdfOptions);
+                await page.PdfAsync(pdfName, _pdfOptions);
 
-                // byte[] pdfData = await page.PdfDataAsync(_cachedPdfOptions);
+                // byte[] pdfData = await page.PdfDataAsync(_pdfOptions);
                 // Console.WriteLine("after PdfDataAsync " + DateTime.Now.ToString("HH:mm:ss.fff"));
                 byte[] pdfBytes = File.ReadAllBytes(pdfName);
                 System.IO.File.Delete(pdfName);
