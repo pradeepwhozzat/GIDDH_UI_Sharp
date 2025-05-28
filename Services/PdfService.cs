@@ -42,8 +42,8 @@ namespace GiddhTemplate.Services
                         _browser = await Puppeteer.LaunchAsync(new LaunchOptions
                         {
                             Headless = true,
-                            ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
-                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
+                            // ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
+                            ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
                             // ExecutablePath ="C:/Program Files/Google/Chrome/Application/chrome.exe", // Local path Windows
                             Args = new[] { "--no-sandbox", "--disable-setuid-sandbox", "--lang=en-US,ar-SA" }
                         });
@@ -195,13 +195,13 @@ namespace GiddhTemplate.Services
 
             try
             {
-                Console.WriteLine("PDF Generation Started ...");
-                Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                // Console.WriteLine("PDF Generation Started ...");
+                // Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
                 string templateFolderName = request?.TemplateType?.ToUpper() == "TALLY" ? "Tally" : "TemplateA";
                 string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", templateFolderName);
                 var styles = LoadStyles(templatePath);
-                Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
+                // Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
 
                 // Run template rendering in parallel
                 var renderTasks = new[]
@@ -216,23 +216,25 @@ namespace GiddhTemplate.Services
                 string footer = renderTasks[1].Result;
                 string body = renderTasks[2].Result;
 
-                Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                // Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
                 string template = CreatePdfDocument(header, body, footer, styles.Common, styles.Header, styles.Footer, styles.Body, request, styles.Background);
-                Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                // Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
                 await page.SetContentAsync(template);
                 await page.EmulateMediaTypeAsync(MediaType.Print);
 
-                Console.WriteLine("after both await statement " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                // Console.WriteLine("after both await statement " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
                 // ###### Uncomment below line to save PDF file in local ######
-                // string pdfName = GetFileNameWithPath(request);
-                // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
-                // await page.PdfAsync(pdfName, _cachedPdfOptions);
+                 string pdfName = GetFileNameWithPath(request);
+                 // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
+                 await page.PdfAsync(pdfName, _cachedPdfOptions);
 
-                byte[] pdfData = await page.PdfDataAsync(_cachedPdfOptions);
-                Console.WriteLine("after PdfDataAsync " + DateTime.Now.ToString("HH:mm:ss.fff"));
-                return pdfData;
+//                byte[] pdfData = await page.PdfDataAsync(_cachedPdfOptions);
+//                Console.WriteLine("after PdfDataAsync " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                byte[] pdfBytes = File.ReadAllBytes(pdfName);
+                System.IO.File.Delete(pdfName);
+                return pdfBytes;
             }
             catch (Exception ex)
             {
