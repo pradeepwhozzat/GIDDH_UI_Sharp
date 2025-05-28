@@ -140,8 +140,6 @@ namespace GiddhTemplate.Services
             themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
             themeCSS.Append($"--color-primary: {request?.Theme?.PrimaryColor};");
             themeCSS.Append($"--color-secondary: {request?.Theme?.SecondaryColor};");
-            themeCSS.Append($"--padding-left: {request?.Theme?.Margin?.Left}px;");
-            themeCSS.Append($"--padding-right: {request?.Theme?.Margin?.Right}px;");
             themeCSS.Append("}");
 
             var allStyles = $"{commonStyles}{headerStyles}{bodyStyles}{footerStyles}{themeCSS}";
@@ -181,10 +179,10 @@ namespace GiddhTemplate.Services
                 Landscape = false,
                 MarginOptions = new MarginOptions
                 {
-                    Top = $"{request?.Theme?.Margin?.Top ?? 0}px",
-                    Bottom = $"{(request?.Theme?.Margin?.Bottom ?? 0) + 15}px",
-                    Left = $"{request?.Theme?.Margin?.Left ?? 0}px",
-                    Right = $"{request?.Theme?.Margin?.Right ?? 0}px"
+                    Top = $"{Math.Max(request?.Theme?.Margin?.Top ?? 0, 10)}px",
+                    Bottom = $"{Math.Max(request?.Theme?.Margin?.Bottom ?? 0, 15)}px",
+                    Left = $"{Math.Max(request?.Theme?.Margin?.Left ?? 0, 10)}px",
+                    Right = $"{Math.Max(request?.Theme?.Margin?.Right ?? 0, 10)}px"
                 },
                 PrintBackground = true,
                 PreferCSSPageSize = true,

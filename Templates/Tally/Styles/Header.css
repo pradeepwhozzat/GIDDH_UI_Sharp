@@ -1,7 +1,5 @@
 /* Header CSS */
 header {
-  padding-left: var(--header-footer-body-padding, 15px);
-  padding-right: var(--header-footer-body-padding, 15px);
   padding-bottom: 15px;
 }
 

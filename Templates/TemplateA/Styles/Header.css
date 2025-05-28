@@ -38,12 +38,4 @@ body.repeat-header-footer header {
   padding-left: 15px;
   padding-right: 15px;
 }
-
-.align-bottom-column {
-  display: flex;
-  flex-direction: column;
-  justify-content: end; 
-  height: 100%;
-  background-color: red;
-}
 /* ---------------- Invoice-title end-------------------- */
