@@ -221,15 +221,11 @@ namespace GiddhTemplate.Services
 
                 // Console.WriteLine("after both await statement " + DateTime.Now.ToString("HH:mm:ss.fff"));
                 // ###### Uncomment below line to save PDF file in local ######
-                string pdfName = GetFileNameWithPath(request);
+                // string pdfName = GetFileNameWithPath(request);
                 // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
-                await page.PdfAsync(pdfName, _pdfOptions);
+                // await page.PdfAsync(pdfName, _pdfOptions);
 
-                // byte[] pdfData = await page.PdfDataAsync(_pdfOptions);
-                // Console.WriteLine("after PdfDataAsync " + DateTime.Now.ToString("HH:mm:ss.fff"));
-                byte[] pdfBytes = File.ReadAllBytes(pdfName);
-                System.IO.File.Delete(pdfName);
-                return pdfBytes;
+                return await page.PdfDataAsync(_pdfOptions);
             }
             catch (Exception ex)
             {
