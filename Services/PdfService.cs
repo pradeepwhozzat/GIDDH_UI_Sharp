@@ -223,13 +223,15 @@ namespace GiddhTemplate.Services
                 await page.SetContentAsync(template);
                 await page.EmulateMediaTypeAsync(MediaType.Print);
 
+                Console.WriteLine("after both await statement " + DateTime.Now.ToString("HH:mm:ss.fff"));
+
                 // ###### Uncomment below line to save PDF file in local ######
                 // string pdfName = GetFileNameWithPath(request);
                 // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
                 // await page.PdfAsync(pdfName, _cachedPdfOptions);
 
                 byte[] pdfData = await page.PdfDataAsync(_cachedPdfOptions);
-                Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                Console.WriteLine("after PdfDataAsync " + DateTime.Now.ToString("HH:mm:ss.fff"));
                 return pdfData;
             }
             catch (Exception ex)
