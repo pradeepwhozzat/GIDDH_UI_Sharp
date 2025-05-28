@@ -195,8 +195,8 @@ namespace GiddhTemplate.Services
 
             try
             {
-                // Console.WriteLine("PDF Generation Started ...");
-                // Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                Console.WriteLine("PDF Generation Started ...");
+                Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
                 string templateFolderName = request?.TemplateType?.ToUpper() == "TALLY" ? "Tally" : "TemplateA";
                 string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", templateFolderName);
@@ -228,7 +228,9 @@ namespace GiddhTemplate.Services
                 // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
                 // await page.PdfAsync(pdfName, _cachedPdfOptions);
 
-                return await page.PdfDataAsync(_cachedPdfOptions);
+                byte[] pdfData = await page.PdfDataAsync(_cachedPdfOptions);
+                Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                return pdfData;
             }
             catch (Exception ex)
             {
