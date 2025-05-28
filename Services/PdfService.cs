@@ -201,7 +201,7 @@ namespace GiddhTemplate.Services
                 string templateFolderName = request?.TemplateType?.ToUpper() == "TALLY" ? "Tally" : "TemplateA";
                 string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", templateFolderName);
                 var styles = LoadStyles(templatePath);
-                // Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
+                Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
 
                 // Run template rendering in parallel
                 var renderTasks = new[]
@@ -216,9 +216,9 @@ namespace GiddhTemplate.Services
                 string footer = renderTasks[1].Result;
                 string body = renderTasks[2].Result;
 
-                // Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
                 string template = CreatePdfDocument(header, body, footer, styles.Common, styles.Header, styles.Footer, styles.Body, request, styles.Background);
-                // Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
                 await page.SetContentAsync(template);
                 await page.EmulateMediaTypeAsync(MediaType.Print);
