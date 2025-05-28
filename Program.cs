@@ -11,9 +11,6 @@ public class Program
         {
             options.ListenAnyIP(5000);
         });
-        builder.Host.ConfigureHostOptions(opts => {
-            opts.ShutdownTimeout = TimeSpan.FromMinutes(5);
-        });
         var app = builder.Build();
         await PdfService.GetBrowserAsync();
         app.MapControllers();
