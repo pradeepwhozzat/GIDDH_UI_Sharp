@@ -42,8 +42,8 @@ namespace GiddhTemplate.Services
                         _browser = await Puppeteer.LaunchAsync(new LaunchOptions
                         {
                             Headless = true,
-                            // ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
-                            ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
+                            ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
+                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
                             // ExecutablePath ="C:/Program Files/Google/Chrome/Application/chrome.exe", // Local path Windows
                             Args = new[] { "--no-sandbox", "--disable-setuid-sandbox", "--lang=en-US,ar-SA" }
                         });
@@ -226,12 +226,12 @@ namespace GiddhTemplate.Services
                 // Console.WriteLine("after both await statement " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
                 // ###### Uncomment below line to save PDF file in local ######
-                 string pdfName = GetFileNameWithPath(request);
-                 // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
-                 await page.PdfAsync(pdfName, _cachedPdfOptions);
+                string pdfName = GetFileNameWithPath(request);
+                // Console.WriteLine($"PDF Downloaded, Please check -> {pdfName}");
+                await page.PdfAsync(pdfName, _cachedPdfOptions);
 
-//                byte[] pdfData = await page.PdfDataAsync(_cachedPdfOptions);
-//                Console.WriteLine("after PdfDataAsync " + DateTime.Now.ToString("HH:mm:ss.fff"));
+                // byte[] pdfData = await page.PdfDataAsync(_cachedPdfOptions);
+                // Console.WriteLine("after PdfDataAsync " + DateTime.Now.ToString("HH:mm:ss.fff"));
                 byte[] pdfBytes = File.ReadAllBytes(pdfName);
                 System.IO.File.Delete(pdfName);
                 return pdfBytes;
