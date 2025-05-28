@@ -126,7 +126,7 @@ namespace InvoiceData
 
     public class Logo
     {
-        public string? Bytes { get; set; }
+        public string? Url { get; set; }
         public string? Size { get; set; }
     }
 

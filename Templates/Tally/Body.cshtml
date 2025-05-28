@@ -153,15 +153,14 @@
                                                                                     <table>
                                                                                         <tbody>
                                                                                             <tr>
-                                                                                                @if (GetDisplayStatus("ShowLogo") &&
-                                                                                            !string.IsNullOrEmpty(Model?.Company?.Logo?.Bytes))
+                                                                                                @if (GetDisplayStatus("ShowLogo") && !string.IsNullOrEmpty(Model?.Company?.Logo?.Url))
                                                                                                 {
                                                                                                     <td class="p-0 border-none pd-r1 vertical-align-top"
                                                                                                         width="@Model?.Company?.Logo?.Size">
                                                                                                         <figure class="m-0">
-                                                                                                            <img src="data:image/png;base64,@Model?.Company?.Logo?.Bytes"
+                                                                                                            <img src="@Model?.Company?.Logo?.Url"
                                                                                                                 width="@Model?.Company?.Logo?.Size"
-                                                                                                                height="auto" />
+                                                                                                                height="auto"/>
                                                                                                         </figure>
                                                                                                     </td>
                                                                                                 }

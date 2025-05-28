@@ -7,7 +7,7 @@
     <table>
         <tbody>
             <tr>
-                <td class="p-0" width="33%">
+                <td class="p-0 vertical-align-bottom" width="33%">
                     <table>
                         <tbody>
                             @if (Model?.Settings?.ShowNotesAtLastPage?.Display != true)
@@ -41,7 +41,7 @@
                     </table>
                 </td>
                 <td class="p-0 vertical-align-bottom text-center" width="33%">
-                    @if (!string.IsNullOrEmpty(Model.SealPath))
+                    @if (!string.IsNullOrEmpty(Model?.SealPath))
                     {
                         <img src="@Model.SealPath"
                             height="100px" width="180px" />

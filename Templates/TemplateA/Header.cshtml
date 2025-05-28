@@ -21,10 +21,10 @@
                             <tr>
                                 <td class="p-0 vertical-align-bottom" width="50%">
                                     @if (Model?.Settings?.ShowLogo?.Display == true &&
-                                    !string.IsNullOrEmpty(Model?.Company?.Logo?.Bytes))
+                                    !string.IsNullOrEmpty(Model?.Company?.Logo?.Url))
                                     {
                                         <figure class="m-0">
-                                            <img src="data:image/png;base64,@Model?.Company?.Logo?.Bytes" height="@Model?.Company?.Logo?.Size"
+                                            <img src="@Model?.Company?.Logo?.Url" height="@Model?.Company?.Logo?.Size"
                                                 width="auto" />
                                         </figure>
                                     }

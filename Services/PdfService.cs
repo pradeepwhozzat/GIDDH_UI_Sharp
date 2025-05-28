@@ -14,6 +14,7 @@ namespace GiddhTemplate.Services
         private string _interFontCSS = string.Empty; // Cache the Inter CSS
         private static readonly SemaphoreSlim _semaphore = new(1, 1);
         private static IBrowser? _browser;
+        private int decreaseFontSize = 2;
 
         public static async Task<IBrowser> GetBrowserAsync()
         {
@@ -134,10 +135,10 @@ namespace GiddhTemplate.Services
             themeCSS.Append("html, body {");
             var fontFamily = request?.Theme?.Font?.Family == "Open Sans" ? "Open Sans" : request?.Theme?.Font?.Family == "Lato" ? "Lato" : request?.Theme?.Font?.Family == "Roboto" ? "Roboto" : "Inter";
             themeCSS.Append($"--font-family: \"{fontFamily}\";");
-            themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault - 2}px;");
-            themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault + 4}px;");
-            themeCSS.Append($"--font-size-small: {request?.Theme?.Font?.FontSizeSmall}px;");
-            themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium}px;");
+            themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault - decreaseFontSize}px;");
+            themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault + decreaseFontSize + 2}px;");
+            themeCSS.Append($"--font-size-small: {request?.Theme?.Font?.FontSizeSmall - decreaseFontSize}px;");
+            themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium - decreaseFontSize}px;");
             themeCSS.Append($"--color-primary: {request?.Theme?.PrimaryColor};");
             themeCSS.Append($"--color-secondary: {request?.Theme?.SecondaryColor};");
             themeCSS.Append("}");
