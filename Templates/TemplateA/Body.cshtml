@@ -632,20 +632,18 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="100%" class="p-0">
+                                                <td colspan="100%" class="pd-t1">
                                                     <table>
                                                         <tbody>
                                                             <tr>
-                                                                <td width="30%">
-                                                                    @if (Model?.Settings?.ShowQrCode?.Display == true && !string.IsNullOrEmpty(Model?.QRCodeBase64String))
-                                                                    {
-                                                                        <figure class="m-0">
-                                                                            <img src="data:image/png;base64,@Model?.QRCodeBase64String" class="qr-code-image"
-                                                                                width="120" />
-                                                                        </figure>
-                                                                    }
-                                                                </td>
-                                                                <td width="70%">
+                                                                @if (Model?.ShowBankQr == true && !string.IsNullOrEmpty(Model?.BankQRDetails?.BankQRCodeBase64))
+                                                                {
+                                                                    <td width="30%">
+                                                                            <img src="data:image/png;base64,@Model.BankQRDetails.BankQRCodeBase64" class="qr-code-image"
+                                                                                width="170" />
+                                                                    </td>
+                                                                }
+                                                                <td width="70%" style="vertical-align: top;">
                                                                     <table class="entry-summary">
                                                                         <tbody>
                                                                             @if (Model?.Settings?.TaxableAmount?.Display == true && Model?.TaxableTotal != null)
