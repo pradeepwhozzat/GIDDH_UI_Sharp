@@ -636,14 +636,14 @@
                                                     <table>
                                                         <tbody>
                                                             <tr>
-                                                                <td width="30%">
-                                                                    @if (Model?.ShowBankQr == true && !string.IsNullOrEmpty(Model?.BankQRDetails?.BankQRCodeBase64))
-                                                                    {
-                                                                        <img src="data:image/png;base64,@Model.BankQRDetails.BankQRCodeBase64" class="qr-code-image"
-                                                                            width="120" />
-                                                                    }
-                                                                </td>
-                                                                <td width="70%">
+                                                                @if (Model?.ShowBankQr == true && !string.IsNullOrEmpty(Model?.BankQRDetails?.BankQRCodeBase64))
+                                                                {
+                                                                    <td width="30%">
+                                                                            <img src="data:image/png;base64,@Model.BankQRDetails.BankQRCodeBase64" class="qr-code-image"
+                                                                                width="170" />
+                                                                    </td>
+                                                                }
+                                                                <td width="70%" style="vertical-align: top;">
                                                                     <table class="entry-summary">
                                                                         <tbody>
                                                                             @if (Model?.Settings?.TaxableAmount?.Display == true && Model?.TaxableTotal != null)

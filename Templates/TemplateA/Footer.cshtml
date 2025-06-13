@@ -75,7 +75,7 @@
                 <td colspan="100%" class="text-center">
                     @if (Model?.Settings?.FooterCompanyName?.Display == true)
                     {
-                        <p class="font-weight-500">@Model?.Company?.Name</p>
+                        <p class="font-weight-500">@Model.Settings.FooterCompanyName.Label</p>
                     }
                     @if (Model?.Settings?.CompanyAddress?.Display == true)
                     {
