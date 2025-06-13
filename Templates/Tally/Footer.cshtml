@@ -36,6 +36,15 @@
                             <tr>
                                 <td class="p-0 border-none vertical-align-bottom">
                                     <table class="mr-t1">
+                                       @if (Model?.ShowBankQr == true && !string.IsNullOrEmpty(Model?.BankQRDetails?.BankQRCodeBase64) && GetDisplayStatus("Message1"))
+                                        {
+                                            <tr>
+                                                <td class="border-none">
+                                                    <img src="data:image/png;base64,@Model?.BankQRDetails.BankQRCodeBase64" class="qr-code-image"
+                                                        width="170"/>
+                                                </td>
+                                            </tr>
+                                        }
                                         <tr>
                                             <td class="border-none border-right" width="50%" rowspan="2">
                                                 @if (GetDisplayStatus("Message1"))
@@ -44,6 +53,10 @@
                                                     <p class="margin-0">
                                                         @GetLabel("Message1")
                                                     </p>
+                                                } else if (Model?.ShowBankQr == true && !string.IsNullOrEmpty(Model?.BankQRDetails.BankQRCodeBase64)) 
+                                                {
+                                                    <img src="data:image/png;base64,@Model?.BankQRDetails.BankQRCodeBase64" class="qr-code-image"
+                                                    width="170"/>
                                                 }
                                             </td>
                                             @if (GetDisplayStatus("FooterCompanyName"))

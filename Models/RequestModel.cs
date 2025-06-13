@@ -316,6 +316,11 @@ namespace InvoiceData
         public string? SacNumber { get; set; }
     }
 
+    public class BankQRDetails
+    {
+        public string? BankQRCodeBase64 { get; set; }
+    }
+
     public class Root
     {
         public Settings? Settings { get; set; }
@@ -392,5 +397,7 @@ namespace InvoiceData
         public string? SealPath { get; set;}
         public bool? Reversecharge { get; set; }
         public string? ReverseChargeMessage { get; set; }
+        public BankQRDetails? BankQRDetails { get; set; }
+        public bool? ShowBankQr { get; set; }
     }
 }
