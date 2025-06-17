@@ -253,6 +253,10 @@ table tr td {
   padding-bottom: 5px !important;
 }
 
+.pd-1 {
+  padding: 10px !important;
+}
+
 .h-inherit {
   height: inherit !important;
 }

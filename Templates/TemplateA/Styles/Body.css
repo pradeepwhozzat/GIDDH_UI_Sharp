@@ -22,17 +22,29 @@ table.entry-summary tr td {
   line-height: 10px;
 }
 
+.line-height-14 {
+  line-height: 14px;
+}
+
 .tax-bifurcation-table tbody tr td, .tax-bifurcation-table tfoot tr td {
   padding-top: 5px;
 }
 
-.tax-bifurcation-table thead tr th, .tax-bifurcation-table tbody tr td, .tax-bifurcation-table tfoot tr td {
+.tax-bifurcation-table tbody tr td {
   padding-left: 5px;
   padding-right: 5px;
 }
 
-.entry-table thead tr th, .entry-table tbody tr td, .entry-table tfoot tr td {
+.tax-bifurcation-table thead tr th, .tax-bifurcation-table tfoot tr td{
+  padding: 7px 5px;
+}
+
+.entry-table tbody tr td {
   padding: 3px;
+}
+
+.entry-table thead tr th, .entry-table tfoot tr td {
+  padding: 7px 3px;
 }
 
 .grid-view {

@@ -321,6 +321,12 @@ namespace InvoiceData
         public string? BankQRCodeBase64 { get; set; }
     }
 
+    public class CommonDiscountEntry
+    {
+        public string? AccountName { get; set; }
+        public double? Amount { get; set; }
+    }
+
     public class Root
     {
         public Settings? Settings { get; set; }
@@ -394,10 +400,14 @@ namespace InvoiceData
         public string? Currency { get; set; }
         public Amount? TdsTotalTax { get; set; }
         public string? TypeOfCopy { get; set; }
-        public string? SealPath { get; set;}
+        public string? SealPath { get; set; }
         public bool? Reversecharge { get; set; }
         public string? ReverseChargeMessage { get; set; }
         public BankQRDetails? BankQRDetails { get; set; }
         public bool? ShowBankQr { get; set; }
+        public string? formNameInvoice { get; set; }
+        public string? CompanyTaxType { get; set; }
+        public List<CommonDiscountEntry>? CommonDiscountEntries { get; set; }
+        public double? OtherDiscount { get; set; }
     }
 }
