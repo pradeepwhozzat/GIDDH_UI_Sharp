@@ -28,7 +28,7 @@ namespace GiddhTemplate.Services
                         _browser = await Puppeteer.LaunchAsync(new LaunchOptions
                         {
                             Headless = true,
-                            // ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
+                            ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
                             // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
                             // ExecutablePath ="C:/Program Files/Google/Chrome/Application/chrome.exe", // Local path Windows
                             Args = new[] { "--no-sandbox", "--disable-setuid-sandbox", "--lang=en-US,ar-SA" }
@@ -136,7 +136,7 @@ namespace GiddhTemplate.Services
             var fontFamily = request?.Theme?.Font?.Family == "Open Sans" ? "Open Sans" : request?.Theme?.Font?.Family == "Lato" ? "Lato" : request?.Theme?.Font?.Family == "Roboto" ? "Roboto" : "Inter";
             themeCSS.Append($"--font-family: \"{fontFamily}\";");
             themeCSS.Append($"--font-size-default: {request?.Theme?.Font?.FontSizeDefault - decreaseFontSize}px;");
-            themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault + decreaseFontSize + 2}px;");
+            themeCSS.Append($"--font-size-large: {request?.Theme?.Font?.FontSizeDefault}px;");
             themeCSS.Append($"--font-size-small: {request?.Theme?.Font?.FontSizeSmall - decreaseFontSize}px;");
             themeCSS.Append($"--font-size-medium: {request?.Theme?.Font?.FontSizeMedium - decreaseFontSize}px;");
             themeCSS.Append($"--color-primary: {request?.Theme?.PrimaryColor};");

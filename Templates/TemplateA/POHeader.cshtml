@@ -19,7 +19,7 @@
                     <table>
                         <tbody>
                             <tr>
-                                <td class="p-0 vertical-align-bottom pd-b1 pd-l1" width="50%">
+                                <td class="p-0 vertical-align-bottom pd-b1 pd-l1" width="40%">
                                     @if (Model?.Settings?.ShowLogo?.Display == true &&
                                     !string.IsNullOrEmpty(Model?.Company?.Logo?.Url))
                                     {
@@ -29,18 +29,20 @@
                                         </figure>
                                     }
                                 </td>
-                                <td class="p-0 invoice-info vertical-align-bottom pd-b1"> @* Added classes and
+                                <td class="p-0 invoice-info vertical-align-bottom pd-b1" width="60%"> @* Added classes and
                                     width *@
                                     <table>
                                         <tbody>
                                             <tr>
-                                                <td colspan="100%" class="text-right font-size-default"><strong>Purchase Order</strong></td>
+                                                <td colspan="100%" class="text-right font-size-large"><strong>Purchase Order</strong></td>
                                             </tr>
                                             
                                             <tr>
-                                                <td class="text-right">Delivery: @Model.DueDate</td>
-                                                <td class="text-left"> #@Model.VoucherNumber;</td>
-                                                <td class="text-right">&nbsp; PO Date:@Model.VoucherDate</td>
+                                                <td class="text-right">
+                                                    <span>Delivery: @Model.DueDate</span>
+                                                    <span> #@Model.VoucherNumber;</span>
+                                                    <span>&nbsp; PO Date:@Model.VoucherDate</span>
+                                                </td>
                                             </tr>
                                             
                                         </tbody>
@@ -48,15 +50,7 @@
                                 </td>
                             </tr>
 
-                            <tr>
-                                <td colspan="100%" class="text-center pb-1">
-                                    @if (Model?.Settings?.FormNameInvoice?.Display == true || Model?.Settings?.FormNameTaxInvoice?.Display == true)
-                                    {
-                                        <p class="invoice-title color-primary">
-                                            
-                                        </p>
-                                    }
-                                </td>
+                            <tr class="invoice-title">
                             </tr>
                         </tbody>
                     </table>

@@ -27,8 +27,8 @@
                                     <table>
                                         <tbody>
                                                 <tr>
-                                                    <td class="p-0 vertical-align-top pd-l1 pd-b1 line-height-14" width="50%">
-                                                        <p class="font-13"><strong>Bill To:</strong></p>
+                                                    <td class="p-0 vertical-align-top pd-l1 pd-b1 scaled-line-height" width="50%">
+                                                        <p><strong>Bill To:</strong></p>
                                                         <p>
                                                             @Model?.Company?.Name
                                                         </p>
@@ -49,9 +49,9 @@
                                                             <p>@Model?.CompanyTaxType: @Model?.Company?.Billing?.TaxNumber</p>
                                                         }
                                                     </td>
-                                                    <td class="p-0 vertical-align-top pd-l1 pd-b1 line-height-14">
+                                                    <td class="p-0 vertical-align-top pd-l1 pd-b1 scaled-line-height">
 
-                                                        <p class="font-13"><strong>Shipped To:</strong></p>
+                                                        <p><strong>Shipped To:</strong></p>
                                                         @if (Model?.Company?.Shipping?.Address != null)
                                                         {
                                                             <p>@Model?.Company?.Shipping?.Address</p>
@@ -76,8 +76,8 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="p-0 vertical-align-top pd-1 line-height-14" width="50%">
-                                                        <p class="font-13"><strong>From:</strong></p>
+                                                    <td class="p-0 vertical-align-top pd-1 scaled-line-height" width="50%">
+                                                        <p><strong>From:</strong></p>
                                                         <p>
                                                             @Model?.CustomerDetails?.Name</strong>
                                                         </p>
@@ -98,9 +98,9 @@
                                                             <p>@Model?.Settings?.BillingTaxNumber?.Label: @Model?.Billing?.TaxNumber</p>
                                                         }
                                                     </td>
-                                                    <td class="p-0 vertical-align-top pd-1 line-height-14">
+                                                    <td class="p-0 vertical-align-top pd-1 scaled-line-height">
 
-                                                        <p class="font-13"><strong>Shipped From:</strong></p>
+                                                        <p><strong>Shipped From:</strong></p>
                                                         @if (Model?.Shipping?.Address != null)
                                                         {
                                                             <p>@Model?.Shipping?.Address</p>
