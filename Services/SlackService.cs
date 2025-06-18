@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace GiddhTemplate.Services
 {
@@ -12,9 +13,9 @@ namespace GiddhTemplate.Services
     {
         private readonly string _slackWebhookUrl;
 
-        public SlackService(HttpClient httpClient)
+        public SlackService(IConfiguration configuration)
         {
-            _slackWebhookUrl = "https://flow.sokt.io/func/scriCC1OrB0A";
+            _slackWebhookUrl = configuration.GetValue<string>("AppSettings:SlackWebhookUrl");
         }
 
         public async Task SendErrorAlertAsync(string url, string environment, string error, string stackTrace)
@@ -30,7 +31,7 @@ namespace GiddhTemplate.Services
                     { "errorStackTrace", stackTrace }
                 };
 
-                Console.WriteLine($"Sending error data: {string.Join(", ", keyValuePairs.Select(kv => $"{kv.Key}={kv.Value}"))}");
+                Console.WriteLine($"Json payload: {string.Join(", ", keyValuePairs.Select(kv => $"{kv.Key}={kv.Value}"))}");
                 using var _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
 
                 var json = JsonSerializer.Serialize(keyValuePairs);

@@ -3,6 +3,7 @@ using GiddhTemplate.Services;
 using InvoiceData;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace GiddhTemplate.Controllers
 {
@@ -23,11 +24,13 @@ namespace GiddhTemplate.Controllers
     {
         private readonly PdfService _pdfService;
         private readonly ISlackService _slackService;
+        private readonly string _environment;
 
-        public PdfController(PdfService pdfService, ISlackService slackService)
+        public PdfController(PdfService pdfService, ISlackService slackService, IConfiguration configuration)
         {
             _pdfService = pdfService;
             _slackService = slackService;
+            _environment = configuration.GetValue<string>("AppSettings:Environment");
         }
 
         [HttpPost]
@@ -50,10 +53,9 @@ namespace GiddhTemplate.Controllers
             catch (Exception ex)
             {
                  var url = "api/v1/pdf";
-                 var environment = "Test";
                  var error = ex.Message;
                  var stackTrace = ex.StackTrace ?? "No stack trace available";
-                 _ = Task.Run(async () => await _slackService.SendErrorAlertAsync(url, environment, error, stackTrace));
+                 _ = Task.Run(async () => await _slackService.SendErrorAlertAsync(url, _environment, error, stackTrace));
 
                 return StatusCode(500, new { error = ex.Message });
             }

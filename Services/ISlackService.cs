@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace GiddhTemplate.Services
 {
     public interface ISlackService

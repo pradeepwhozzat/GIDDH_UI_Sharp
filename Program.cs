@@ -7,11 +7,12 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddHttpClient<ISlackService, SlackService>();
+        // Register services
+        builder.Services.AddHttpClient();
         builder.Services.AddScoped<ISlackService, SlackService>();
+        builder.Services.AddSingleton<PdfService>();
 
         builder.Services.AddControllers();
-        builder.Services.AddSingleton<PdfService>();
         builder.WebHost.ConfigureKestrel(options =>
         {
             options.ListenAnyIP(5000);
