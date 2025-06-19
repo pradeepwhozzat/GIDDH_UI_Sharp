@@ -1,12 +1,18 @@
 using GiddhTemplate.Services;
+using GiddhTemplate.Controllers;
 
 public class Program
 {
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddControllers();
+
+        // Register services
+        builder.Services.AddHttpClient();
+        builder.Services.AddScoped<ISlackService, SlackService>();
         builder.Services.AddSingleton<PdfService>();
+
+        builder.Services.AddControllers();
         builder.WebHost.ConfigureKestrel(options =>
         {
             options.ListenAnyIP(5000);
