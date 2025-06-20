@@ -48,7 +48,7 @@
                     }
                 </td>
                 <td class="vertical-align-bottom text-center" width="33%">
-                    @if (Model?.Settings?.TextUnderSlogan?.Display == true || Model?.Settings?.ImageSignature?.Display == true)
+                    @if (Model?.Settings?.Slogan?.Display == true || Model?.Settings?.ImageSignature?.Display == true)
                     {
                         <div class="border-bottom" style="padding-bottom: 5px;"> @* Added class and inline style *@
                             @if (Model?.Settings?.ImageSignature?.Display == true && !string.IsNullOrEmpty(Model?.ImageSignature))
@@ -56,6 +56,9 @@
                                 <figure class="m-0">
                                     <img src="@Model.ImageSignature" height="60px" width="auto" />
                                 </figure>
+                            } else if (Model.Settings.Slogan.Display == true && Model?.Settings?.Slogan?.Label != null)
+                            {
+                                <p>@Model.Settings.Slogan.Label</p>
                             }
                         </div>
                     }

@@ -50,7 +50,16 @@
                                 </td>
                             </tr>
 
-                            <tr class="invoice-title">
+                            <tr>
+                                <td colspan="100%" class="text-center pb-1">
+                                    @if (Model?.Settings?.FormNameInvoice?.Display == true || Model?.Settings?.FormNameTaxInvoice?.Display == true)
+                                    {
+                                        <p class="invoice-title color-primary">
+                                            <strong>@(Model?.Settings?.FormNameInvoice?.Display == true ? Model?.Settings?.FormNameInvoice?.Label :
+                                                        Model?.Settings?.FormNameTaxInvoice?.Label)</strong>
+                                        </p>
+                                    }
+                                </td>
                             </tr>
                         </tbody>
                     </table>

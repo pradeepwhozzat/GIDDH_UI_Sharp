@@ -42,8 +42,8 @@
                                     }
                                 </td>
 
-                                <td class="p-0 invoice-info vertical-align-bottom" width="25%"> @* Added classes and
-                                    width *@
+                                <td class="p-0 invoice-info vertical-align-bottom" width="@(Model?.Settings?.ShowQrCode?.Display == true &&
+                                                !string.IsNullOrEmpty(Model?.QRCodeBase64String) ? "30%" : "50%")">
                                     <table>
                                         <tbody>
                                             @if (Model?.Settings?.VoucherDate?.Display == true)
@@ -63,15 +63,17 @@
                                         </tbody>
                                     </table>
                                 </td>
-
-                                <td class="vertical-align-bottom text-right" width="25%">
-                                    @if (Model?.Settings?.ShowQrCode?.Display == true &&
-                                    !string.IsNullOrEmpty(Model?.QRCodeBase64String))
-                                    {
-                                        <img src="data:image/png;base64,@Model?.QRCodeBase64String" class="qr-code-image"
-                                            width="120" />
-                                    }
-                                </td>
+                                @if (Model?.Settings?.ShowQrCode?.Display == true && !string.IsNullOrEmpty(Model?.QRCodeBase64String))
+                                {
+                                    <td class="vertical-align-bottom text-right" width="20%">
+                                        @if (Model?.Settings?.ShowQrCode?.Display == true &&
+                                        !string.IsNullOrEmpty(Model?.QRCodeBase64String))
+                                        {
+                                            <img src="data:image/png;base64,@Model?.QRCodeBase64String" class="qr-code-image"
+                                                width="120" />
+                                        }
+                                    </td>
+                                }
                             </tr>
 
                             <tr>
