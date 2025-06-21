@@ -287,7 +287,7 @@
                                                                                             <p>@Entry?.AccountName</p>
                                                                                         }
 
-                                                                                        @if (!string.IsNullOrEmpty(Entry?.Description))
+                                                                                        @if (!Model?.Settings?.ShowDescriptionInRows?.Display == true && !string.IsNullOrEmpty(Entry?.Description))
                                                                                         {
                                                                                             <p class="color-grey capitalize-only-first">@Entry.Description </p>
                                                                                         }
@@ -443,6 +443,16 @@
                                                                             }
                                                                         </td>
                                                                     </tr>
+                                                                    
+                                                                    @if (Model?.Settings?.ShowDescriptionInRows?.Display == true && Model?.Settings?.Item?.Display == true && !string.IsNullOrEmpty(Entry?.Description))
+                                                                    {
+                                                                        <tr>
+                                                                            <td width="25px"></td>
+                                                                            <td colspan="100%">
+                                                                                <p class="font-size-medium pd-b05 capitalize-only-first">@Entry.Description</p>
+                                                                            </td>
+                                                                        </tr>
+                                                                    }
                                                                 }
                                                             }
                                                         </tbody>
