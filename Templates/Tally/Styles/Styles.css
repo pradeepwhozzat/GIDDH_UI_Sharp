@@ -280,6 +280,12 @@ table.table-row-height tr td {
   text-transform: capitalize !important;
 }
 
+.square-image {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+}
+
 /* Print Media CSS */
 @media print {
   table {

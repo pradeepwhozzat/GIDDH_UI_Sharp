@@ -69,7 +69,7 @@
                                         @if (Model?.Settings?.ShowQrCode?.Display == true &&
                                         !string.IsNullOrEmpty(Model?.QRCodeBase64String))
                                         {
-                                            <img src="data:image/png;base64,@Model?.QRCodeBase64String" class="qr-code-image"
+                                            <img src="data:image/png;base64,@Model?.QRCodeBase64String" class="square-image"
                                                 width="120" />
                                         }
                                     </td>
