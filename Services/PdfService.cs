@@ -217,6 +217,7 @@ namespace GiddhTemplate.Services
 
                 // Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
                 string template = CreatePdfDocument(header, body, footer, styles.Common, styles.Header, styles.Footer, styles.Body, request, styles.Background);
+                Console.WriteLine(template);
                 // Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
                 await page.SetContentAsync(template);
