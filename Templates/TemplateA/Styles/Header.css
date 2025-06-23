@@ -13,10 +13,6 @@ body.repeat-header-footer header {
   background-color: #ffffff;
 }
 
-.qr-code-image {
-  aspect-ratio: 1/1;
-}
-
 /* ---------------- Invoice-title start------------------ */
 .invoice-title {
   position: relative;

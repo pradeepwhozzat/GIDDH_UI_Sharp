@@ -124,7 +124,7 @@
                                                         @{
                                                             var qrCodeSrc = "data:image/png;base64," + Model?.QRCodeBase64String;
                                                         }
-                                                        <img src="@qrCodeSrc" class="qr-code-image" width="120px" />
+                                                        <img src="@qrCodeSrc" class="square-image" width="120px" />
                                                     </td>
                                                 }
                                             </tr>
@@ -853,13 +853,13 @@
                                         <tr >
                                             @if (Model?.ShowBankQr == true && !string.IsNullOrEmpty(Model?.BankQRDetails?.BankQRCodeBase64))
                                             {
-                                                <td width="10%" class="@(GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true ? "border-left-none text-center" : "border-none") border-right">
-                                                    <img src="data:image/png;base64,@Model?.BankQRDetails?.BankQRCodeBase64" class="qr-code-image" width="90px" />
+                                                <td width="110px" class="@(GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true ? "border-left-none text-center" : "border-none") border-right">
+                                                    <img src="data:image/png;base64,@Model?.BankQRDetails?.BankQRCodeBase64" class="square-image" width="100%" />
                                                 </td>
                                             }
                                             @if (GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true)
                                             {
-                                                <td class="p-0 border-right-none border-left-none" width="90%">
+                                                <td class="p-0 border-right-none border-left-none">
                                                     <table class="repeated-header remove-left-right-border">
                                                         <thead>
                                                             @{
