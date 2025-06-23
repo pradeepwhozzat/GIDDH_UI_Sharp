@@ -853,8 +853,8 @@
                                         <tr >
                                             @if (Model?.ShowBankQr == true && !string.IsNullOrEmpty(Model?.BankQRDetails?.BankQRCodeBase64))
                                             {
-                                                <td width="110px" class="@(GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true ? "border-left-none text-center" : "border-none") border-right">
-                                                    <img src="data:image/png;base64,@Model?.BankQRDetails?.BankQRCodeBase64" class="square-image" width="100%" />
+                                                <td width="110px" class="@(GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true ? "border-left-none text-center border-right" : "border-none")">
+                                                    <img src="data:image/png;base64,@Model?.BankQRDetails?.BankQRCodeBase64" class="square-image" style="max-width: 120px" width="100%" />
                                                 </td>
                                             }
                                             @if (GetDisplayStatus("TaxBifurcation") && Model?.IsTaxesApplied == true)
