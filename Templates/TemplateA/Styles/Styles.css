@@ -2,7 +2,7 @@
 @property --font-family {
   syntax: "<string>";
   inherits: true;
-  initial-value: "Inter"; /* 'Roboto' | 'Open Sans' | 'Inter' */
+  initial-value: "Inter"; /* 'Roboto' | 'Open Sans' | 'Lato' | 'Inter' */
 }
 @property --font-weight-200 {
   syntax: "<integer>";
