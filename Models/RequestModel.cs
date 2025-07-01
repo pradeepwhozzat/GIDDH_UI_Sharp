@@ -409,5 +409,6 @@ namespace InvoiceData
         public string? CompanyTaxType { get; set; }
         public List<CommonDiscountEntry>? CommonDiscountEntries { get; set; }
         public double? OtherDiscount { get; set; }
+        public string? VoucherType { get; set; }
     }
 }

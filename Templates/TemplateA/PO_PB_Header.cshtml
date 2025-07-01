@@ -34,14 +34,14 @@
                                     <table>
                                         <tbody>
                                             <tr>
-                                                <td colspan="100%" class="text-right font-size-large"><strong>Purchase Order</strong></td>
+                                                <td colspan="100%" class="text-right font-size-large"><strong>@Model?.VoucherType</strong></td>
                                             </tr>
                                             
                                             <tr>
                                                 <td class="text-right">
                                                     <span>Delivery: @Model.DueDate</span>
                                                     <span> #@Model.VoucherNumber;</span>
-                                                    <span>&nbsp; PO Date:@Model.VoucherDate</span>
+                                                    <span>&nbsp; @(Model?.VoucherType == "Purchase Order" ? "PO" : "PB") Date:@Model.VoucherDate</span>
                                                 </td>
                                             </tr>
                                             
