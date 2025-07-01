@@ -200,8 +200,8 @@ namespace GiddhTemplate.Services
                 var styles = LoadStyles(templatePath);
                 // Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
 
-                var headerFile = request?.formNameInvoice == "Purchase Order" && templateFolderName == "TemplateA" ? "POHeader.cshtml" : "Header.cshtml";
-                var bodyFile = request?.formNameInvoice == "Purchase Order" && templateFolderName == "TemplateA" ? "POBody.cshtml" : "Body.cshtml";
+                var headerFile = (request?.VoucherType == "Purchase Order" || request?.VoucherType == "Purchase Bill") && templateFolderName == "TemplateA" ? "PO_PB_Header.cshtml" : "Header.cshtml";
+                var bodyFile = (request?.VoucherType == "Purchase Order" || request?.VoucherType == "Purchase Bill") && templateFolderName == "TemplateA" ? "PO_PB_Body.cshtml" : "Body.cshtml";
 
                 var renderTasks = new[]
                 {
