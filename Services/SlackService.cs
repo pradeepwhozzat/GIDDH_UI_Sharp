@@ -22,6 +22,13 @@ namespace GiddhTemplate.Services
         {
             try
             {
+                // Validate webhook URL
+                if (string.IsNullOrEmpty(_slackWebhookUrl))
+                {
+                    Console.WriteLine("Error: Slack webhook URL is not configured.");
+                    return;
+                }
+                Console.WriteLine($"Sending error alert to Slack webhook URL: {_slackWebhookUrl}");
                 // Create key-value pairs instead of JSON string
                 var keyValuePairs = new Dictionary<string, string>
                 {
