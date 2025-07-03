@@ -79,7 +79,7 @@
                                     @if (Model?.Settings?.FormNameInvoice?.Display == true || Model?.Settings?.FormNameTaxInvoice?.Display == true)
                                     {
                                         <p class="invoice-title color-primary">
-                                            <strong>@(Model?.Settings?.FormNameInvoice?.Display == true ? Model?.Settings?.FormNameInvoice?.Label :
+                                            <strong>@(Model?.Settings?.FormNameInvoice?.Display == true && Model?.IsTaxesApplied == false ? Model?.Settings?.FormNameInvoice?.Label :
                                                         Model?.Settings?.FormNameTaxInvoice?.Label)</strong>
                                         </p>
                                     }
