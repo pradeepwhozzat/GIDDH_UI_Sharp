@@ -48,7 +48,7 @@ namespace GiddhTemplate.Services
             catch (Exception ex)
             {
                 // Log the exception but don't throw to avoid breaking the main flow
-                Console.WriteLine($"Error while sending alter on slack", ex.StackTrace);
+                Console.WriteLine($"Error while sending alert on slack: {ex.Message}");
             }
         }
     }
