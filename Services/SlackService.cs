@@ -15,7 +15,8 @@ namespace GiddhTemplate.Services
 
         public SlackService(IConfiguration configuration)
         {
-            _slackWebhookUrl = configuration.GetValue<string>("AppSettings:SlackWebhookUrl");
+            // Get the Slack webhook URL from environment variable and for development use appsettings.Development.json
+            _slackWebhookUrl = Environment.GetEnvironmentVariable("SLACK_WEBHOOK_URL") ?? configuration.GetValue<string>("AppSettings:SlackWebhookUrl");
         }
 
         public async Task SendErrorAlertAsync(string url, string environment, string error, string stackTrace)
