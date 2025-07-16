@@ -28,9 +28,10 @@
                                         <tbody>
                                             @if(@Model?.Settings?.ShowEInvoiceDetails?.Display == true)
                                             {
-                                                
+                                                var eInvoiceDetailsVisible = false;
                                                 @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.IrnNumber))
                                                 {
+                                                    eInvoiceDetailsVisible = true;
                                                     <tr>
                                                         <td class="px-0" colspan="100%">
                                                             IRN: @Model?.EInvoiceDetails?.IrnNumber
@@ -42,23 +43,27 @@
                                                     <tr>
                                                         @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementNumber))
                                                         {
+                                                            eInvoiceDetailsVisible = true;
                                                             <td class="px-0">
                                                                 Ack No: @Model?.EInvoiceDetails?.AcknowledgementNumber
                                                             </td>
                                                         }
                                                         @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementDate))
                                                         {
+                                                            eInvoiceDetailsVisible = true;
                                                             <td class="px-0 text-right">
                                                                 Ack Date: @Model?.EInvoiceDetails?.AcknowledgementDate
                                                             </td>
                                                         }
                                                     </tr>
                                                 }
-                                                <tr>
-                                                    <td colspan="100%" class="px-0">
-                                                        <hr class="color-grey" />
-                                                    </td>
-                                                </tr>
+                                                @if (eInvoiceDetailsVisible) {
+                                                    <tr>
+                                                        <td colspan="100%" class="px-0">
+                                                            <hr class="color-grey" />
+                                                        </td>
+                                                    </tr>
+                                                }
                                             }
                                             @if (Model?.Settings?.ShowCompanyAddress?.Display == true || Model?.Settings?.WarehouseAddress?.Display == true)
                                             {
