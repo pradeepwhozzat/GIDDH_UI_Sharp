@@ -71,7 +71,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="100%">
+                                                    <td colspan="100%" class="px-0">
                                                         <hr class="color-grey" />
                                                     </td>
                                                 </tr>
@@ -122,48 +122,48 @@
                                             <tr>
                                                 <td colspan="100%" class="p-0 pd-1">
                                                     <div class="grid-view">
-                                                        @if (Model?.Settings?.ShippingDate?.Display == true && !string.IsNullOrEmpty(Model?.ShippingDate))
-                                                        {
-                                                            <div class="grid-item">
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.ShippingDate?.Display == true && !string.IsNullOrEmpty(Model?.ShippingDate))
+                                                            {
                                                                 <p>@Model?.Settings?.ShippingDate?.Label</p>
                                                                 <p>@Model?.ShippingDate</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.ShippedVia?.Display == true && !string.IsNullOrEmpty(Model?.ShippedVia))
-                                                        {
-                                                            <div class="grid-item">
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.ShippedVia?.Display == true && !string.IsNullOrEmpty(Model?.ShippedVia))
+                                                            {
                                                                 <p>@Model?.Settings?.ShippedVia?.Label</p>
                                                                 <p>@Model.ShippedVia</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.TrackingNumber?.Display == true && !string.IsNullOrEmpty(Model?.TrackingNumber))
-                                                        {
-                                                            <div class="grid-item">
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.TrackingNumber?.Display == true && !string.IsNullOrEmpty(Model?.TrackingNumber))
+                                                            {
                                                                 <p>@Model?.Settings?.TrackingNumber?.Label</p>
                                                                 <p>@Model.TrackingNumber</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.CustomField1?.Display == true && !string.IsNullOrEmpty(Model?.CustomField1))
-                                                        {
-                                                            <div class="grid-item">
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.CustomField1?.Display == true && !string.IsNullOrEmpty(Model?.CustomField1))
+                                                            {
                                                                 <p>@Model?.Settings?.CustomField1?.Label</p>
                                                                 <p>@Model.CustomField1</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.CustomField2?.Display == true && !string.IsNullOrEmpty(Model?.CustomField2))
-                                                        {
-                                                            <div class="grid-item">
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.CustomField2?.Display == true && !string.IsNullOrEmpty(Model?.CustomField2))
+                                                            {
                                                                 <p>@Model?.Settings?.CustomField2?.Label</p>
                                                                 <p>@Model.CustomField2</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.CustomField3?.Display == true && !string.IsNullOrEmpty(Model?.CustomField3))
-                                                        {
-                                                            <div class="grid-item">
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.CustomField3?.Display == true && !string.IsNullOrEmpty(Model?.CustomField3))
+                                                            {
                                                                 <p>@Model?.Settings?.CustomField3?.Label</p>
                                                                 <p>@Model.CustomField3</p>
-                                                            </div>
-                                                        }
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
