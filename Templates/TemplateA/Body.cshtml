@@ -28,37 +28,37 @@
                                         <tbody>
                                             @if(@Model?.Settings?.ShowEInvoiceDetails?.Display == true)
                                             {
-                                            <tr>
-                                                <td class="p-0">
-                                                    <table>
-                                                        <tbody>
-                                                            @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.IrnNumber))
-                                                            {
-                                                                <tr>
-                                                                    <td class="border-none p-0" width="100px">IRN</td>
-                                                                    <td class="border-none p-0">: @Model?.EInvoiceDetails?.IrnNumber</td>
-                                                                </tr>
-                                                            }
-                                                            @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementNumber))
-                                                            {
-                                                                <tr>
-                                                                        <td class="border-none p-0" width="100px">Ack No</td>
-                                                                        <td class="border-none p-0">:
-                                                                            @Model?.EInvoiceDetails?.AcknowledgementNumber</td>
-                                                                </tr>
-                                                            }
-                                                            @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementDate))
-                                                            {
-                                                                <tr>
-                                                                    <td class="border-none p-0" width="100px">Ack Date</td>
-                                                                    <td class="border-none p-0">:
-                                                                        @Model?.EInvoiceDetails?.AcknowledgementDate</td>
-                                                                </tr>
-                                                            }
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
+                                                
+                                                @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.IrnNumber))
+                                                {
+                                                    <tr>
+                                                        <td class="px-0" colspan="100%">
+                                                            IRN: @Model?.EInvoiceDetails?.IrnNumber
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementNumber))
+                                                {
+                                                    <tr>
+                                                        @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementNumber))
+                                                        {
+                                                            <td class="px-0">
+                                                                Ack No: @Model?.EInvoiceDetails?.AcknowledgementNumber
+                                                            </td>
+                                                        }
+                                                        @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementDate))
+                                                        {
+                                                            <td class="px-0 text-right">
+                                                                Ack Date: @Model?.EInvoiceDetails?.AcknowledgementDate
+                                                            </td>
+                                                        }
+                                                    </tr>
+                                                }
+                                                <tr>
+                                                    <td colspan="100%" class="px-0">
+                                                        <hr class="color-grey" />
+                                                    </td>
+                                                </tr>
                                             }
                                             @if (Model?.Settings?.ShowCompanyAddress?.Display == true || Model?.Settings?.WarehouseAddress?.Display == true)
                                             {
@@ -129,7 +129,7 @@
                                                     }
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="100%">
+                                                    <td colspan="100%" class="px-0">
                                                         <hr class="color-grey" />
                                                     </td>
                                                 </tr>
@@ -137,140 +137,148 @@
                                             <tr>
                                                 <td colspan="100%" class="p-0 pd-t1">
                                                     <div class="grid-view">
-                                                        @if (Model?.Settings?.CustomerName?.Display == true)
-                                                        {
-                                                            <div class="grid-item">
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.CustomerName?.Display == true)
+                                                            {
                                                                 <p>@Model?.Settings?.CustomerName?.Label</p>
                                                                 <p>@Model?.CustomerDetails?.Name</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.BillingAddress?.Display == true)
-                                                        {
-                                                            <div class="grid-item">
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.BillingAddress?.Display == true)
+                                                            {
                                                                 <strong>@Model?.Settings?.BillingAddress?.Label</strong>
                                                                 <address>@Model?.Billing?.Address</address>
                                                                 <p>@Model?.Billing?.StateCounty</p>
                                                                 <p>@Model?.Billing?.Country</p>
-                                                                @if (Model?.Settings?.BillingTaxNumber?.Display == true && !string.IsNullOrEmpty(Model?.Billing?.TaxNumber))
-                                                                {
-                                                                    <p class="mr-t1">@Model?.Settings?.BillingTaxNumber?.Label</p>
-                                                                    <p>@Model?.Billing?.TaxNumber</p>
-                                                                }
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.ShippingAddress?.Display == true)
-                                                        {
-                                                            <div class="grid-item">
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.ShippingAddress?.Display == true)
+                                                            {
                                                                 <strong>@Model?.Settings?.ShippingAddress?.Label</strong>
                                                                 <address>@Model?.Shipping?.Address</address>
                                                                 <p>@Model?.Shipping?.StateCounty</p>
                                                                 <p>@Model?.Shipping?.Country</p>
-                                                                @if (Model?.Settings?.ShippingTaxNumber?.Display == true && !string.IsNullOrEmpty(Model?.Shipping?.TaxNumber))
-                                                                {
-                                                                    <p class="mr-t1">@Model?.Settings?.ShippingTaxNumber?.Label</p>
-                                                                    <p>@Model?.Shipping?.TaxNumber</p>
-                                                                }
-                                                            </div>
-                                                        }
-                                                        @if ((Model?.Settings?.AttentionTo?.Display == true && !string.IsNullOrEmpty(Model?.AttentionTo)) || (Model?.Settings?.CustomerEmail?.Display == true && !string.IsNullOrEmpty(Model?.CustomerDetails?.Email)) || (Model?.Settings?.CustomerContactNumber?.Display == true && !string.IsNullOrEmpty(Model?.CustomerDetails?.ContactNumber)))
-                                                        {
-                                                            <div class="grid-item">
-                                                                @if (Model?.Settings?.AttentionTo?.Display == true)
-                                                                {
-                                                                    <p>@Model?.AttentionTo</p>
-                                                                }
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if ((Model?.Settings?.AttentionTo?.Display == true && !string.IsNullOrEmpty(Model?.AttentionTo)) || (Model?.Settings?.CustomerEmail?.Display == true && !string.IsNullOrEmpty(Model?.CustomerDetails?.Email)) || (Model?.Settings?.CustomerContactNumber?.Display == true && !string.IsNullOrEmpty(Model?.CustomerDetails?.ContactNumber)))
+                                                            {
+                                                                    @if (Model?.Settings?.AttentionTo?.Display == true)
+                                                                    {
+                                                                        <p>@Model?.AttentionTo</p>
+                                                                    }
 
-                                                                @if (Model?.Settings?.CustomerEmail?.Display == true)
-                                                                {
-                                                                    <p>@Model?.CustomerDetails?.Email</p>
-                                                                }
+                                                                    @if (Model?.Settings?.CustomerEmail?.Display == true)
+                                                                    {
+                                                                        <p>@Model?.CustomerDetails?.Email</p>
+                                                                    }
 
-                                                                @if (Model?.Settings?.CustomerContactNumber?.Display == true)
-                                                                {
-                                                                    <p>@Model?.CustomerDetails?.ContactNumber</p>
-                                                                }
-                                                            </div>
-                                                        }
+                                                                    @if (Model?.Settings?.CustomerContactNumber?.Display == true)
+                                                                    {
+                                                                        <p>@Model?.CustomerDetails?.ContactNumber</p>
+                                                                    }
+                                                            }
+                                                        </div>
+                                                        @* Empty space for customer name *@
+                                                        <div class="grid-item"></div>
+                                                        @* Billing Tax Number *@
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.BillingTaxNumber?.Display == true && !string.IsNullOrEmpty(Model?.Billing?.TaxNumber))
+                                                            {
+                                                                <p>@Model?.Settings?.BillingTaxNumber?.Label</p>
+                                                                <p>@Model?.Billing?.TaxNumber</p>
+                                                            }
+                                                        </div>
+                                                        @* Shipping Tax Number *@
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.ShippingTaxNumber?.Display == true && !string.IsNullOrEmpty(Model?.Shipping?.TaxNumber))
+                                                            {
+                                                                <p>@Model?.Settings?.ShippingTaxNumber?.Label</p>
+                                                                <p>@Model?.Shipping?.TaxNumber</p>
+                                                            }
+                                                        </div>
 
-                                                        @if (Model?.Settings?.DueDate?.Display == true && !string.IsNullOrEmpty(Model?.DueDate))
-                                                        {
-                                                            <div class="grid-item">
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.DueDate?.Display == true && !string.IsNullOrEmpty(Model?.DueDate))
+                                                            {
                                                                 <p>@Model?.Settings?.DueDate?.Label</p>
                                                                 <p>@Model?.DueDate</p>
-                                                            </div>
-                                                        }
+                                                            }
+                                                        </div>
 
-                                                        @if (Model?.Settings?.ShippingDate?.Display == true && !string.IsNullOrEmpty(Model?.ShippingDate))
-                                                        {
-                                                            <div class="grid-item">
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.ShippingDate?.Display == true && !string.IsNullOrEmpty(Model?.ShippingDate))
+                                                            {
                                                                 <p>@Model?.Settings?.ShippingDate?.Label</p>
                                                                 <p>@Model?.ShippingDate</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.ShippedVia?.Display == true && !string.IsNullOrEmpty(Model?.ShippedVia))
-                                                        {
-                                                            <div class="grid-item">
-                                                                <p>@Model?.Settings?.ShippedVia?.Label</p>
-                                                                <p>@Model.ShippedVia</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.TrackingNumber?.Display == true && !string.IsNullOrEmpty(Model?.TrackingNumber))
-                                                        {
-                                                            <div class="grid-item">
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.ShippedVia?.Display == true && !string.IsNullOrEmpty(Model?.ShippedVia))
+                                                            {
+                                                                    <p>@Model?.Settings?.ShippedVia?.Label</p>
+                                                                    <p>@Model.ShippedVia</p>
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.TrackingNumber?.Display == true && !string.IsNullOrEmpty(Model?.TrackingNumber))
+                                                            {
                                                                 <p>@Model?.Settings?.TrackingNumber?.Label</p>
                                                                 <p>@Model.TrackingNumber</p>
-                                                            </div>
-                                                        }
+                                                            }
+                                                        </div>
 
-                                                        @if (Model?.Settings?.DisplayExchangeRate?.Display == true && Model?.ExchangeRate != null)
-                                                        {
-                                                            <div class="grid-item">
-                                                                <p>@Model?.Settings?.DisplayExchangeRate?.Label</p>
-                                                                <p>@Model.ExchangeRate</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.DisplayPlaceOfSupply?.Display == true && !string.IsNullOrEmpty(Model?.PlaceOfSupply))
-                                                        {
-                                                            <div class="grid-item">
-                                                                <p>@Model?.Settings?.DisplayPlaceOfSupply?.Label</p>
-                                                                <p>@Model.PlaceOfSupply</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.DisplayPlaceOfCountry?.Display == true && !string.IsNullOrEmpty(Model?.PlaceOfCountry))
-                                                        {
-                                                            <div class="grid-item">
-                                                                <p>@Model?.Settings?.DisplayPlaceOfCountry?.Label</p>
-                                                                <p>@Model.PlaceOfCountry</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.DisplayLutNumber?.Display == true && !string.IsNullOrEmpty(Model?.LutNumber))
-                                                        {
-                                                            <div class="grid-item">
-                                                                <p>@Model?.Settings?.DisplayLutNumber?.Label</p>
-                                                                <p>@Model.LutNumber</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.CustomField1?.Display == true && !string.IsNullOrEmpty(Model?.CustomField1))
-                                                        {
-                                                            <div class="grid-item">
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.DisplayExchangeRate?.Display == true && Model?.ExchangeRate != null)
+                                                            {
+                                                                    <p>@Model?.Settings?.DisplayExchangeRate?.Label</p>
+                                                                    <p>@Model.ExchangeRate</p>
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.DisplayPlaceOfSupply?.Display == true && !string.IsNullOrEmpty(Model?.PlaceOfSupply))
+                                                            {
+                                                                    <p>@Model?.Settings?.DisplayPlaceOfSupply?.Label</p>
+                                                                    <p>@Model.PlaceOfSupply</p>
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.DisplayPlaceOfCountry?.Display == true && !string.IsNullOrEmpty(Model?.PlaceOfCountry))
+                                                            {
+                                                                    <p>@Model?.Settings?.DisplayPlaceOfCountry?.Label</p>
+                                                                    <p>@Model.PlaceOfCountry</p>
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.DisplayLutNumber?.Display == true && !string.IsNullOrEmpty(Model?.LutNumber))
+                                                            {
+                                                                    <p>@Model?.Settings?.DisplayLutNumber?.Label</p>
+                                                                    <p>@Model.LutNumber</p>
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.CustomField1?.Display == true && !string.IsNullOrEmpty(Model?.CustomField1))
+                                                            {
                                                                 <p>@Model?.Settings?.CustomField1?.Label</p>
                                                                 <p>@Model.CustomField1</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.CustomField2?.Display == true && !string.IsNullOrEmpty(Model?.CustomField2))
-                                                        {
-                                                            <div class="grid-item">
-                                                                <p>@Model?.Settings?.CustomField2?.Label</p>
-                                                                <p>@Model.CustomField2</p>
-                                                            </div>
-                                                        }
-                                                        @if (Model?.Settings?.CustomField3?.Display == true && !string.IsNullOrEmpty(Model?.CustomField3))
-                                                        {
-                                                            <div class="grid-item">
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.CustomField2?.Display == true && !string.IsNullOrEmpty(Model?.CustomField2))
+                                                            {
+                                                                    <p>@Model?.Settings?.CustomField2?.Label</p>
+                                                                    <p>@Model.CustomField2</p>
+                                                            }
+                                                        </div>
+                                                        <div class="grid-item">
+                                                            @if (Model?.Settings?.CustomField3?.Display == true && !string.IsNullOrEmpty(Model?.CustomField3))
+                                                            {
                                                                 <p>@Model?.Settings?.CustomField3?.Label</p>
                                                                 <p>@Model.CustomField3</p>
-                                                            </div>
-                                                        }
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
