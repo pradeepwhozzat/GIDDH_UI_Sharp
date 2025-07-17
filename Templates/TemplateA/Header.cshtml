@@ -36,9 +36,9 @@
                                     {
                                         <p><strong>@Model?.Settings?.CompanyTaxNumber?.Label</strong> @Model?.Company?.TaxNumber</p>
                                     }
-                                    @if (Model?.Settings?.GstComposition?.Display == true)
+                                    @if (Model?.Settings?.GstComposition?.Display == true && !string.IsNullOrEmpty(Model?.Settings?.GstComposition?.Label))
                                     {
-                                        <p>@(!string.IsNullOrEmpty(Model?.Settings?.GstComposition?.Label) ? Model.Settings.GstComposition.Label : "Registered under Composition Scheme")</p>
+                                        <p>@Model.Settings.GstComposition.Label</p>
                                     }
                                 </td>
 
