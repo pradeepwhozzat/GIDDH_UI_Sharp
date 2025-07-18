@@ -224,6 +224,12 @@ table tr td {
 .p-0 {
   padding: 0;
 }
+.px-0 {
+  padding-inline: 0;
+}
+.py-0 {
+  padding-block: 0;
+}
 
 .py-0 {
   /* Need to optmise this code for entry table */
