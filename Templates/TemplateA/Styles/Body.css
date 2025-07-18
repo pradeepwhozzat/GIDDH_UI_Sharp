@@ -55,3 +55,7 @@ table.entry-summary tr td {
   grid-row-gap: 10px;
   align-items: start;
 }
+
+.grid-view > .grid-item:nth-child(4n + 4) {
+  text-align: right;
+}
