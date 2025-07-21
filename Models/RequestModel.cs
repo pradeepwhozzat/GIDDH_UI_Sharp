@@ -114,7 +114,7 @@ namespace InvoiceData
     public class EInvoiceDetails
     {
         public string? IrnNumber { get; set; } = string.Empty;
-        public string? AcknowledgementNumber { get; set; } = string.Empty;
+        public ulong? AcknowledgementNumber { get; set; }
         public string? AcknowledgementDate { get; set; } = string.Empty;
     }
 
