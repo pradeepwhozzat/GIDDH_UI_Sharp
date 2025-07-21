@@ -97,7 +97,7 @@
                                                                         <td class="border-none p-0">: @Model?.EInvoiceDetails?.IrnNumber</td>
                                                                     </tr>
                                                                 }
-                                                                @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementNumber))
+                                                                @if (Model?.EInvoiceDetails?.AcknowledgementNumber != null)
                                                                 {
                                                                     <tr>
                                                                         <td class="border-none p-0" width="100px">Ack No</td>

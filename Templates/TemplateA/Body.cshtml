@@ -38,10 +38,10 @@
                                                         </td>
                                                     </tr>
                                                 }
-                                                @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementNumber))
+                                                @if (Model?.EInvoiceDetails?.AcknowledgementNumber != null || !string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementDate))
                                                 {
                                                     <tr>
-                                                        @if (!string.IsNullOrEmpty(Model?.EInvoiceDetails?.AcknowledgementNumber))
+                                                        @if (Model?.EInvoiceDetails?.AcknowledgementNumber != null)
                                                         {
                                                             eInvoiceDetailsVisible = true;
                                                             <td class="px-0">
