@@ -30,7 +30,7 @@ namespace GiddhTemplate.Controllers
         {
             _pdfService = pdfService;
             _slackService = slackService;
-            _environment = configuration.GetValue<string>("AppSettings:Environment");
+            _environment = Environment.GetEnvironmentVariable("ENVIRONMENT");
         }
 
         [HttpPost]
