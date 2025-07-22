@@ -15,13 +15,21 @@ namespace GiddhTemplate.Services
 
         public SlackService(IConfiguration configuration)
         {
-            _slackWebhookUrl = configuration.GetValue<string>("AppSettings:SlackWebhookUrl");
+            // Get the Slack webhook URL from environment variable and for development use appsettings.Development.json
+            _slackWebhookUrl = Environment.GetEnvironmentVariable("SLACK_WEBHOOK_URL");
         }
 
         public async Task SendErrorAlertAsync(string url, string environment, string error, string stackTrace)
         {
             try
             {
+                // Validate webhook URL
+                if (string.IsNullOrEmpty(_slackWebhookUrl))
+                {
+                    Console.WriteLine("Error: Slack webhook URL is not configured.");
+                    return;
+                }
+                Console.WriteLine($"Sending error alert to Slack webhook URL: {_slackWebhookUrl}");
                 // Create key-value pairs instead of JSON string
                 var keyValuePairs = new Dictionary<string, string>
                 {
@@ -48,7 +56,7 @@ namespace GiddhTemplate.Services
             catch (Exception ex)
             {
                 // Log the exception but don't throw to avoid breaking the main flow
-                Console.WriteLine($"Error while sending alter on slack", ex.StackTrace);
+                Console.WriteLine($"Error while sending alert on slack: {ex.Message}");
             }
         }
     }

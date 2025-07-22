@@ -392,7 +392,7 @@ namespace InvoiceData
 
         public List<Entry>? Entries { get; set; }
         public EInvoiceDetails? EInvoiceDetails { get; set; }
-        public decimal? RoundOff { get; set; }
+        public string? RoundOff { get; set; }
         public string? PdfRename { get; set; } = string.Empty; // This key used only in local pdf generation to Rename based on request
         public string? ShippingDate { get; set; }
         public string? GrandTotalInAccountsCurrency { get; set; }
