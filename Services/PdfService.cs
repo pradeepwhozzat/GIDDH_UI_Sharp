@@ -2,7 +2,7 @@ using PuppeteerSharp;
 using System.Text;
 using InvoiceData;
 using PuppeteerSharp.Media;
-using GIDDH_UI_Sharp.Models.Enums;
+using GiddhTemplate.Models.Enums;
 
 namespace GiddhTemplate.Services
 {
@@ -201,8 +201,8 @@ namespace GiddhTemplate.Services
                 var styles = LoadStyles(templatePath);
                 // Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
 
-                var headerFile = (request?.VoucherType == VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() || request?.VoucherType == VoucherTypeEnums.PurchaseBill.GetEnumMemberValue()) && templateFolderName == "TemplateA" ? "PO_PB_Header.cshtml" : "Header.cshtml";
-                var bodyFile = (request?.VoucherType == VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() || request?.VoucherType == VoucherTypeEnums.PurchaseBill.GetEnumMemberValue()) && templateFolderName == "TemplateA" ? "PO_PB_Body.cshtml" : "Body.cshtml";
+                var headerFile = (request?.VoucherType == VoucherTypeEnums.PurchaseOrder.GetVoucherTypeEnumValue() || request?.VoucherType == VoucherTypeEnums.PurchaseBill.GetVoucherTypeEnumValue()) && templateFolderName == "TemplateA" ? "PO_PB_Header.cshtml" : "Header.cshtml";
+                var bodyFile = (request?.VoucherType == VoucherTypeEnums.PurchaseOrder.GetVoucherTypeEnumValue() || request?.VoucherType == VoucherTypeEnums.PurchaseBill.GetVoucherTypeEnumValue()) && templateFolderName == "TemplateA" ? "PO_PB_Body.cshtml" : "Body.cshtml";
 
                 var renderTasks = new[]
                 {

@@ -4,7 +4,7 @@
 @using System.Collections.Generic;
 @using System.Linq;
 @using System.Reflection;
-@using GIDDH_UI_Sharp.Models.Enums;
+@using GiddhTemplate.Models.Enums;
 
 <table class="repeated-header repeated-footer pd-l1">
     @if (Model?.ShowSectionsInline != true)
@@ -217,7 +217,7 @@
                                                                     <th class="text-right">@Model?.Settings?.TaxableValue?.Label</th>
                                                                 }
 
-                                                                @if (Model?.Settings?.Taxes?.Display == true && Model?.GstTaxesTotal?.Any() == true && (Model?.VoucherType != VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() || Model?.Settings?.TaxBifurcation?.Display == false))
+                                                                @if (Model?.Settings?.Taxes?.Display == true && Model?.GstTaxesTotal?.Any() == true && Model?.Settings?.TaxBifurcation?.Display == false)
                                                                 {
                                                                     @foreach (var tax in Model.GstTaxesTotal)
                                                                     {
@@ -405,7 +405,7 @@
                                                                                 }
                                                                             </td>
                                                                         }
-                                                                        @if (Model?.Settings?.Taxes?.Display == true && Model.GstTaxesTotal?.Any() == true && (Model?.VoucherType != VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() || Model?.Settings?.TaxBifurcation?.Display == false))
+                                                                        @if (Model?.Settings?.Taxes?.Display == true && Model.GstTaxesTotal?.Any() == true && Model?.Settings?.TaxBifurcation?.Display == false)
                                                                         {
                                                                             @foreach (var tax in Model.GstTaxesTotal)
                                                                             {
@@ -508,7 +508,7 @@
                                                                     </td>
                                                                 }
                                                                 
-                                                                @if (Model?.Settings?.Taxes?.Display == true && Model.GstTaxesTotal?.Any() == true && (Model?.VoucherType != VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() || Model?.Settings?.TaxBifurcation?.Display == false))
+                                                                @if (Model?.Settings?.Taxes?.Display == true && Model.GstTaxesTotal?.Any() == true && Model?.Settings?.TaxBifurcation?.Display == false)
                                                                 {
                                                                     @foreach (var tax in Model.GstTaxesTotal)
                                                                     {
@@ -732,7 +732,7 @@
                                                     </table>
                                                 </td>
                                             </tr>
-                                            @if (Model?.VoucherType == VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() && Model?.Settings?.TaxableAmount?.Display == true && Model?.Settings?.TaxBifurcation?.Display == true && @Model?.TaxBifurcation?.Any() == true)
+                                            @if (Model?.VoucherType == VoucherTypeEnums.PurchaseOrder.GetVoucherTypeEnumValue() && Model?.Settings?.TaxableAmount?.Display == true && Model?.Settings?.TaxBifurcation?.Display == true && @Model?.TaxBifurcation?.Any() == true)
                                             {
                                                 <tr>
                                                     <td colspan="100%" class="p-0">

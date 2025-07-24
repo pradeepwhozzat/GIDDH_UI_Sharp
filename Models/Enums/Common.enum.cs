@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using System.Runtime.Serialization;
 
-namespace GIDDH_UI_Sharp.Models.Enums
+namespace GiddhTemplate.Models.Enums
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum VoucherTypeEnums
@@ -55,9 +55,9 @@ namespace GIDDH_UI_Sharp.Models.Enums
         CashBill
     }
 
-    public static class VoucherTypeEnumsExtensions
+    public static class CommonEnumsExtensions
     {
-        public static string GetEnumMemberValue(this VoucherTypeEnums value)
+        public static string GetVoucherTypeEnumValue(this VoucherTypeEnums value)
         {
             var field = value.GetType().GetField(value.ToString());
             var attribute = (EnumMemberAttribute)Attribute.GetCustomAttribute(field, typeof(EnumMemberAttribute));

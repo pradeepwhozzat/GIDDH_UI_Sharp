@@ -1,4 +1,4 @@
-using GIDDH_UI_Sharp.Models.Enums;
+using GiddhTemplate.Models.Enums;
 namespace InvoiceData
 {
     public class Settings
