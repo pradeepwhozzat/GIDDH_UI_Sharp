@@ -4,6 +4,7 @@
 @using System.Collections.Generic;
 @using System.Linq;
 @using System.Reflection;
+@using GIDDH_UI_Sharp.Models.Enums;
 
 <table class="repeated-header repeated-footer pd-l1">
     @if (Model?.ShowSectionsInline != true)
@@ -216,7 +217,7 @@
                                                                     <th class="text-right">@Model?.Settings?.TaxableValue?.Label</th>
                                                                 }
 
-                                                                @if (Model?.Settings?.Taxes?.Display == true && Model?.GstTaxesTotal?.Any() == true && (Model?.VoucherType != "Purchase Order" || Model?.Settings?.TaxBifurcation?.Display == false))
+                                                                @if (Model?.Settings?.Taxes?.Display == true && Model?.GstTaxesTotal?.Any() == true && (Model?.VoucherType != VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() || Model?.Settings?.TaxBifurcation?.Display == false))
                                                                 {
                                                                     @foreach (var tax in Model.GstTaxesTotal)
                                                                     {
@@ -404,7 +405,7 @@
                                                                                 }
                                                                             </td>
                                                                         }
-                                                                        @if (Model?.Settings?.Taxes?.Display == true && Model.GstTaxesTotal?.Any() == true && (Model?.VoucherType != "Purchase Order" || Model?.Settings?.TaxBifurcation?.Display == false))
+                                                                        @if (Model?.Settings?.Taxes?.Display == true && Model.GstTaxesTotal?.Any() == true && (Model?.VoucherType != VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() || Model?.Settings?.TaxBifurcation?.Display == false))
                                                                         {
                                                                             @foreach (var tax in Model.GstTaxesTotal)
                                                                             {
@@ -507,7 +508,7 @@
                                                                     </td>
                                                                 }
                                                                 
-                                                                @if (Model?.Settings?.Taxes?.Display == true && Model.GstTaxesTotal?.Any() == true && (Model?.VoucherType != "Purchase Order" || Model?.Settings?.TaxBifurcation?.Display == false))
+                                                                @if (Model?.Settings?.Taxes?.Display == true && Model.GstTaxesTotal?.Any() == true && (Model?.VoucherType != VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() || Model?.Settings?.TaxBifurcation?.Display == false))
                                                                 {
                                                                     @foreach (var tax in Model.GstTaxesTotal)
                                                                     {
@@ -525,173 +526,6 @@
                                                     </table>
                                                 </td>
                                             </tr>
-                                            @if (Model?.VoucherType == "Purchase Order" && Model?.Settings?.TaxableAmount?.Display == true && Model?.Settings?.TaxBifurcation?.Display == true && @Model?.TaxBifurcation?.Any() == true)
-                                            {
-                                                <tr>
-                                                    <td colspan="100%" class="p-0">
-                                                        <table class="tax-bifurcation-table" style="margin-top: 20px;">
-                                                            @{
-                                                                var taxKeys = new List<string>();
-                                                                decimal grandEntryTotal = 0;
-                                                                decimal taxableTotalForTax = 0;
-                                                            }
-                                                            <thead>
-                                                                <!-- Description (HSN/Tax Rate) -->
-                                                                <tr class="border-bottom">
-                                                                    
-                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
-                                                                    {
-                                                                        <th class="text-left"><strong>HSN/SAC</strong></th>
-                                                                    }
-
-                                                                    <th class="text-right"><strong>Taxable Amt.</strong></th>
-
-                                                                    @if (Model?.GstTaxesTotalOnly?.Any() == true)
-                                                                    {
-                                                                        @foreach (var tax in Model.GstTaxesTotalOnly)
-                                                                        {
-                                                                            taxKeys.Add(tax?.Key);
-                                                                            <th class="text-right"><strong>@tax?.AccountName%</strong></th>
-                                                                            <th class="text-right"><strong>@tax?.AccountName Amt.</strong></th>
-                                                                        }
-                                                                    }
-
-                                                                    @if (Model?.CessTotal?.Any() == true)
-                                                                    {
-                                                                        @foreach (var tax in Model.CessTotal)
-                                                                        {
-                                                                            taxKeys.Add(tax.Key);
-                                                                            <th class="text-right"><strong>@tax?.AccountName%</strong></th>
-                                                                        }
-                                                                    }
-
-                                                                    @if (Model?.OtherTotal?.Any() == true)
-                                                                    {
-                                                                        @foreach (var tax in Model.OtherTotal)
-                                                                        {
-                                                                            taxKeys.Add(tax.Key);
-                                                                            <th class="text-right"><strong>@tax?.AccountName%</strong></th>
-                                                                        }
-                                                                    }
-                                                                    <!-- Total -->
-                                                                    <th class="text-right"><strong>Total Amt.</strong></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @foreach (var bifurcation in Model?.TaxBifurcation)
-                                                                {
-                                                                    grandEntryTotal += bifurcation?.EntryTotal ?? 0;
-                                                                    taxableTotalForTax += bifurcation?.TaxableValue ?? 0;
-                                                                        
-                                                                        var taxFields = new[] {
-                                                                            ("camt", bifurcation?.Camt),
-                                                                            ("samt", bifurcation?.Samt),
-                                                                            ("iamt", bifurcation?.Iamt),
-                                                                            ("vatamt", bifurcation?.Vatamt),
-                                                                            ("salesTaxAmount", bifurcation?.SalesTaxAmount)
-                                                                        };
-                                                                        
-                                                                    <tr>
-                                                                        @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
-                                                                        {
-                                                                            <td class="text-left border-right">@bifurcation?.HsnSc
-                                                                                <small>
-                                                                                    @(!string.IsNullOrEmpty(bifurcation?.HsnSc) ? bifurcation?.HsnStatus == true ? "(H)" : "(S)" : "")
-                                                                                </small>
-                                                                            </td>
-                                                                        }
-
-                                                                        <td class="text-right border-right">@bifurcation?.TaxableValue</td>
-
-                                                                        @foreach (var (key, value) in taxFields)
-                                                                        {
-                                                                            if (value.HasValue)
-                                                                            {
-                                                                                <td class="text-right border-right">@bifurcation?.GstOrVatTaxRate %</td>
-                                                                                <td class="text-right border-right">@value</td>
-                                                                            }
-                                                                            else if (taxKeys.Contains(key))
-                                                                            {
-                                                                                <td class="border-right"></td>
-                                                                                <td class="border-right"></td>
-                                                                            }
-                                                                        }
-
-                                                                        @if (bifurcation?.CsAmountList?.Any() == true)
-                                                                        {
-                                                                            @foreach (var cessAmount in bifurcation?.CsAmountList)
-                                                                            {
-                                                                                <td class="text-right border-right">@(cessAmount != 0 ? cessAmount.ToString() : "")</td>
-                                                                            }
-                                                                        }
-
-                                                                        @if (bifurcation?.OthAmountList?.Any() == true)
-                                                                        {
-                                                                            @foreach (var otherAmount in bifurcation?.OthAmountList)
-                                                                            {
-                                                                                <td class="text-right border-right">@(otherAmount != 0 ? otherAmount.ToString() : "")</td>
-                                                                            }
-                                                                        }
-
-                                                                        @if (bifurcation?.Vatamt.HasValue == true && bifurcation.OthTaxRate == 0 && taxKeys.Contains("otheramt"))
-                                                                        {
-                                                                            <td></td>
-                                                                        }
-                                                                        
-                                                                        <td class="text-right">@bifurcation.EntryTotal</td>
-                                                                    </tr>
-                                                                }
-                                                            </tbody>
-                                                            <tfoot>
-                                                                <tr class="border-bottom border-top">
-                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
-                                                                    {
-                                                                        <td class="text-right border-right"><strong>Total</strong></td>
-                                                                    }
-
-                                                                    <td class="text-right border-right"><strong>@taxableTotalForTax</strong></td>
-
-                                                                    @if (Model?.GstTaxesTotalOnly?.Any() == true)
-                                                                    {
-                                                                        @foreach (var sum in Model.GstTaxesTotalOnly)
-                                                                        {
-                                                                            @if (sum.Amount != null)
-                                                                            {
-                                                                                <td class="text-right border-right"></td>
-                                                                                <td class="text-right border-right"><strong>@sum.Amount.AmountForCompany</strong></td>
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    @if (Model?.CessTotal?.Any() == true)
-                                                                    {
-                                                                        @foreach (var sum in Model?.CessTotal)
-                                                                        {
-                                                                            @if (sum.Amount != null)
-                                                                            {
-                                                                                <td class="text-right border-right"><strong>@sum.Amount.AmountForCompany</strong></td>
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    @if (Model?.OtherTotal?.Any() == true)
-                                                                    {
-                                                                        @foreach (var sum in Model?.OtherTotal)
-                                                                        {
-                                                                            @if (sum.Amount != null)
-                                                                            {
-                                                                                <td class="text-right border-right"><strong>@sum.Amount.AmountForCompany</strong></td>
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    <td class="text-right"><strong>@grandEntryTotal</strong></td>
-                                                                </tr>
-                                                            </tfoot>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            }
                                             <tr>
                                                 <td colspan="100%" class="pd-t1">
                                                     <table>
@@ -898,6 +732,173 @@
                                                     </table>
                                                 </td>
                                             </tr>
+                                            @if (Model?.VoucherType == VoucherTypeEnums.PurchaseOrder.GetEnumMemberValue() && Model?.Settings?.TaxableAmount?.Display == true && Model?.Settings?.TaxBifurcation?.Display == true && @Model?.TaxBifurcation?.Any() == true)
+                                            {
+                                                <tr>
+                                                    <td colspan="100%" class="p-0">
+                                                        <table class="tax-bifurcation-table" style="margin-top: 20px;">
+                                                            @{
+                                                                var taxKeys = new List<string>();
+                                                                decimal grandEntryTotal = 0;
+                                                                decimal taxableTotalForTax = 0;
+                                                            }
+                                                            <thead>
+                                                                <!-- Description (HSN/Tax Rate) -->
+                                                                <tr class="border-bottom">
+                                                                    
+                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
+                                                                    {
+                                                                        <th class="text-left"><strong>HSN/SAC</strong></th>
+                                                                    }
+
+                                                                    <th class="text-right"><strong>Taxable Amt.</strong></th>
+
+                                                                    @if (Model?.GstTaxesTotalOnly?.Any() == true)
+                                                                    {
+                                                                        @foreach (var tax in Model.GstTaxesTotalOnly)
+                                                                        {
+                                                                            taxKeys.Add(tax?.Key);
+                                                                            <th class="text-right"><strong>@tax?.AccountName%</strong></th>
+                                                                            <th class="text-right"><strong>@tax?.AccountName Amt.</strong></th>
+                                                                        }
+                                                                    }
+
+                                                                    @if (Model?.CessTotal?.Any() == true)
+                                                                    {
+                                                                        @foreach (var tax in Model.CessTotal)
+                                                                        {
+                                                                            taxKeys.Add(tax.Key);
+                                                                            <th class="text-right"><strong>@tax?.AccountName%</strong></th>
+                                                                        }
+                                                                    }
+
+                                                                    @if (Model?.OtherTotal?.Any() == true)
+                                                                    {
+                                                                        @foreach (var tax in Model.OtherTotal)
+                                                                        {
+                                                                            taxKeys.Add(tax.Key);
+                                                                            <th class="text-right"><strong>@tax?.AccountName%</strong></th>
+                                                                        }
+                                                                    }
+                                                                    <!-- Total -->
+                                                                    <th class="text-right"><strong>Total Amt.</strong></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var bifurcation in Model?.TaxBifurcation)
+                                                                {
+                                                                    grandEntryTotal += bifurcation?.EntryTotal ?? 0;
+                                                                    taxableTotalForTax += bifurcation?.TaxableValue ?? 0;
+                                                                        
+                                                                        var taxFields = new[] {
+                                                                            ("camt", bifurcation?.Camt),
+                                                                            ("samt", bifurcation?.Samt),
+                                                                            ("iamt", bifurcation?.Iamt),
+                                                                            ("vatamt", bifurcation?.Vatamt),
+                                                                            ("salesTaxAmount", bifurcation?.SalesTaxAmount)
+                                                                        };
+                                                                        
+                                                                    <tr>
+                                                                        @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
+                                                                        {
+                                                                            <td class="text-left border-right">@bifurcation?.HsnSc
+                                                                                <small>
+                                                                                    @(!string.IsNullOrEmpty(bifurcation?.HsnSc) ? bifurcation?.HsnStatus == true ? "(H)" : "(S)" : "")
+                                                                                </small>
+                                                                            </td>
+                                                                        }
+
+                                                                        <td class="text-right border-right">@bifurcation?.TaxableValue</td>
+
+                                                                        @foreach (var (key, value) in taxFields)
+                                                                        {
+                                                                            if (value.HasValue)
+                                                                            {
+                                                                                <td class="text-right border-right">@bifurcation?.GstOrVatTaxRate %</td>
+                                                                                <td class="text-right border-right">@value</td>
+                                                                            }
+                                                                            else if (taxKeys.Contains(key))
+                                                                            {
+                                                                                <td class="border-right"></td>
+                                                                                <td class="border-right"></td>
+                                                                            }
+                                                                        }
+
+                                                                        @if (bifurcation?.CsAmountList?.Any() == true)
+                                                                        {
+                                                                            @foreach (var cessAmount in bifurcation?.CsAmountList)
+                                                                            {
+                                                                                <td class="text-right border-right">@(cessAmount != 0 ? cessAmount.ToString() : "")</td>
+                                                                            }
+                                                                        }
+
+                                                                        @if (bifurcation?.OthAmountList?.Any() == true)
+                                                                        {
+                                                                            @foreach (var otherAmount in bifurcation?.OthAmountList)
+                                                                            {
+                                                                                <td class="text-right border-right">@(otherAmount != 0 ? otherAmount.ToString() : "")</td>
+                                                                            }
+                                                                        }
+
+                                                                        @if (bifurcation?.Vatamt.HasValue == true && bifurcation.OthTaxRate == 0 && taxKeys.Contains("otheramt"))
+                                                                        {
+                                                                            <td></td>
+                                                                        }
+                                                                        
+                                                                        <td class="text-right">@bifurcation.EntryTotal</td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr class="border-bottom border-top">
+                                                                    @if (Model?.Settings?.TaxBifurcation?.Label == "hsnSac")
+                                                                    {
+                                                                        <td class="text-right border-right"><strong>Total</strong></td>
+                                                                    }
+
+                                                                    <td class="text-right border-right"><strong>@taxableTotalForTax</strong></td>
+
+                                                                    @if (Model?.GstTaxesTotalOnly?.Any() == true)
+                                                                    {
+                                                                        @foreach (var sum in Model.GstTaxesTotalOnly)
+                                                                        {
+                                                                            @if (sum.Amount != null)
+                                                                            {
+                                                                                <td class="text-right border-right"></td>
+                                                                                <td class="text-right border-right"><strong>@sum.Amount.AmountForCompany</strong></td>
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    @if (Model?.CessTotal?.Any() == true)
+                                                                    {
+                                                                        @foreach (var sum in Model?.CessTotal)
+                                                                        {
+                                                                            @if (sum.Amount != null)
+                                                                            {
+                                                                                <td class="text-right border-right"><strong>@sum.Amount.AmountForCompany</strong></td>
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    @if (Model?.OtherTotal?.Any() == true)
+                                                                    {
+                                                                        @foreach (var sum in Model?.OtherTotal)
+                                                                        {
+                                                                            @if (sum.Amount != null)
+                                                                            {
+                                                                                <td class="text-right border-right"><strong>@sum.Amount.AmountForCompany</strong></td>
+                                                                            }
+                                                                        }
+                                                                    }
+
+                                                                    <td class="text-right"><strong>@grandEntryTotal</strong></td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            }
                                             <tr>
                                                 <td colspan="100%">
                                                     <table style="margin-top: 20px;">

@@ -1,3 +1,4 @@
+using GIDDH_UI_Sharp.Models.Enums;
 namespace InvoiceData
 {
     public class Settings
@@ -410,5 +411,6 @@ namespace InvoiceData
         public List<CommonDiscountEntry>? CommonDiscountEntries { get; set; }
         public double? OtherDiscount { get; set; }
         public string? VoucherType { get; set; }
+        public VoucherTypeEnums VoucherTypeEnums { get; set; }
     }
 }
