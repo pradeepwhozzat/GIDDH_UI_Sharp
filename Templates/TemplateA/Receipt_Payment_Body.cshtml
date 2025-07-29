@@ -1,0 +1,142 @@
+@model InvoiceData.Root;
+@using InvoiceData;
+@using System.Net;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Reflection;
+@using GiddhTemplate.Models.Enums;
+
+<div id="template-main">
+    <main class="main-container">
+        <table style="width:100%;" cellspacing="0" cellpadding="0">
+            <tbody>
+                <tr>
+                    <td style="vertical-align:middle">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="voucher-type text-uppercase">
+                                        @Model.VoucherType&nbsp;&nbsp;&nbsp;&nbsp;#@Model.VoucherNumber
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="voucher-date">@Model.VoucherDate</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td rowspan="2" style="text-align:right;">
+                        @if (@Model?.Company?.Logo?.Url?.Length > 0)
+                        {
+                            <div class="clogo_figure">
+                                <img class="clogo" src="@Model.Company?.Logo?.Url" style="height:@Model.Company?.Logo?.Size;" />
+                            </div>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <br />
+        @if (@Model?.VoucherType == "receipt")
+        {
+            <span class="main-span1">
+                <span class="main-span2">Dear</span>
+            </span><br />
+            <span class="main-span2">@Model.CustomerDetails?.Name</span><br />
+
+            @if (!string.IsNullOrEmpty(@Model.Billing?.Address))
+            {
+                <span class="main-span3">@Model.Billing?.Address</span><br />
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.AttentionTo))
+            {
+                <span class="main-span3">Att: @Model.AttentionTo</span><br />
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.CustomerDetails?.Email) || !string.IsNullOrEmpty(@Model.CustomerDetails?.ContactNumber))
+            {
+                <span class="main-span3">
+                    @Model.CustomerDetails?.Email
+                    @if (!string.IsNullOrEmpty(@Model.CustomerDetails?.Email) && !string.IsNullOrEmpty(@Model.CustomerDetails?.ContactNumber))
+                    {
+                        @: , 
+                    }
+                    @Model.CustomerDetails?.ContactNumber
+                </span><br />
+            }
+        }
+        @if (@Model?.VoucherType == "payment")
+        {
+            <div id="template-footer">
+                <span class="company-name">@Model.Company?.Name</span><br />
+                @if (!string.IsNullOrEmpty(@Model.Company?.Billing?.Address))
+                {
+                    <span class="company-address">@Model.Company?.Billing?.Address</span><br />
+                }
+                @if (!string.IsNullOrEmpty(@Model.Company?.Billing?.TaxNumber))
+                {
+                    <span class="company-address">GSTIN: @Model.Company?.Billing?.TaxNumber</span>
+                }
+            </div>
+        }
+
+        <br />
+        <span class="main-span4">
+            @if (@Model?.VoucherType == "receipt")
+            {
+                <text>
+                    Thank you for your payment of
+                    <span class="font-weight-500">@Model.AccountCurrency?.Code @Model.PaymentTotal /-</span>
+                    @if (@Model?.ChequeNumber != null)
+                    {
+                        @: via <u>cheque number @Model.ChequeNumber</u>
+                    }
+                    .
+                </text>
+            }
+
+            @if (@Model?.VoucherType == "payment")
+            {
+                <text>
+                    A payment of <b>@Model.AccountCurrency?.Code @Model.PaymentTotal /-</b>
+                    @if (@Model?.ChequeNumber != null)
+                    {
+                        @: via <u>cheque number @Model.ChequeNumber</u>
+                    }
+                    has been made.
+                </text>
+            }
+        </span>
+
+        <br />
+        <span class="below-rc">Below is the bifurcation of your payment:</span><br />
+        <span class="payment-span">
+            Payment: @Model.AccountCurrency?.Code @Model.PaymentTotal
+        </span><br />
+
+        @if (@Model?.TcsTotalTax?.AmountForCompany != null)
+        {
+            <span class="rc-tcs font-weight-500">TCS: @Model.TcsTotalTax?.AmountForCompany</span><br />
+        }
+
+        @if (@Model?.TdsTotalTax?.AmountForCompany != null)
+        {
+            <span class="rc-tcs font-weight-500">TDS: @Model.TdsTotalTax?.AmountForCompany</span><br />
+        }
+
+        <br />
+        @if (@Model?.VoucherType == "payment")
+        {
+            <span class="total-receipt-span">Total Payment: @Model.PaymentTotal</span>
+        }
+        else if (@Model?.VoucherType == "receipt")
+        {
+            <span class="total-receipt-span">Total Receipt: @Model.PaymentTotal</span>
+        }
+
+        <br /><br />
+        <span class="main-span2">It has been a pleasure working with you.</span>
+    </main>
+</div>

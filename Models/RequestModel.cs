@@ -412,5 +412,7 @@ namespace InvoiceData
         public double? OtherDiscount { get; set; }
         public string? VoucherType { get; set; }
         public VoucherTypeEnums VoucherTypeEnums { get; set; }
+        public double? PaymentTotal { get; set; }
+        public string? ChequeNumber { get; set; }
     }
 }
