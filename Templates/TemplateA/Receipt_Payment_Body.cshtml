@@ -8,6 +8,8 @@
 
 <div id="template-main">
     <main class="main-container">
+    @VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue()
+    @Model?.VoucherType
         <table style="width:100%;" cellspacing="0" cellpadding="0">
             <tbody>
                 <tr>
@@ -15,12 +17,12 @@
                         <table>
                             <tbody>
                                 <tr>
-                                    <td class="voucher-type text-uppercase">
+                                    <td class="font-size-large text-uppercase font-weight-500">
                                         @Model.VoucherType&nbsp;&nbsp;&nbsp;&nbsp;#@Model.VoucherNumber
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="voucher-date">@Model.VoucherDate</td>
+                                    <td class="color-light-gray font-size-default">@Model.VoucherDate</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -29,7 +31,7 @@
                         @if (@Model?.Company?.Logo?.Url?.Length > 0)
                         {
                             <div class="clogo_figure">
-                                <img class="clogo" src="@Model.Company?.Logo?.Url" style="height:@Model.Company?.Logo?.Size;" />
+                                <img class="clogo" style="max-height: 50px;" src="@Model.Company?.Logo?.Url" style="height:@Model.Company?.Logo?.Size;" />
                             </div>
                         }
                     </td>
@@ -38,26 +40,26 @@
         </table>
         <hr />
         <br />
-        @if (@Model?.VoucherType == "receipt")
+        @if (@Model?.VoucherType == VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue())
         {
-            <span class="main-span1">
+            <span class="font-size-large">
                 <span class="main-span2">Dear</span>
             </span><br />
             <span class="main-span2">@Model.CustomerDetails?.Name</span><br />
 
             @if (!string.IsNullOrEmpty(@Model.Billing?.Address))
             {
-                <span class="main-span3">@Model.Billing?.Address</span><br />
+                <span class="color-light-gray font-size-default">@Model.Billing?.Address</span><br />
             }
 
             @if (!string.IsNullOrEmpty(@Model.AttentionTo))
             {
-                <span class="main-span3">Att: @Model.AttentionTo</span><br />
+                <span class="color-light-gray font-size-default">Att: @Model.AttentionTo</span><br />
             }
 
             @if (!string.IsNullOrEmpty(@Model.CustomerDetails?.Email) || !string.IsNullOrEmpty(@Model.CustomerDetails?.ContactNumber))
             {
-                <span class="main-span3">
+                <span class="color-light-gray font-size-default">
                     @Model.CustomerDetails?.Email
                     @if (!string.IsNullOrEmpty(@Model.CustomerDetails?.Email) && !string.IsNullOrEmpty(@Model.CustomerDetails?.ContactNumber))
                     {
@@ -67,24 +69,24 @@
                 </span><br />
             }
         }
-        @if (@Model?.VoucherType == "payment")
+        @if (@Model?.VoucherType == VoucherTypeEnums.Payment.GetVoucherTypeEnumValue())
         {
             <div id="template-footer">
-                <span class="company-name">@Model.Company?.Name</span><br />
+                <span class="font-size-default color-light-gray font-weight-500">@Model.Company?.Name</span><br />
                 @if (!string.IsNullOrEmpty(@Model.Company?.Billing?.Address))
                 {
-                    <span class="company-address">@Model.Company?.Billing?.Address</span><br />
+                    <span class="font-size-default color-light-gray">@Model.Company?.Billing?.Address</span><br />
                 }
                 @if (!string.IsNullOrEmpty(@Model.Company?.Billing?.TaxNumber))
                 {
-                    <span class="company-address">GSTIN: @Model.Company?.Billing?.TaxNumber</span>
+                    <span class="font-size-default color-light-gray">GSTIN: @Model.Company?.Billing?.TaxNumber</span>
                 }
             </div>
         }
 
         <br />
-        <span class="main-span4">
-            @if (@Model?.VoucherType == "receipt")
+        <span class="font-size-default">
+            @if (@Model?.VoucherType == VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue())
             {
                 <text>
                     Thank you for your payment of
@@ -97,7 +99,7 @@
                 </text>
             }
 
-            @if (@Model?.VoucherType == "payment")
+            @if (@Model?.VoucherType == VoucherTypeEnums.Payment.GetVoucherTypeEnumValue())
             {
                 <text>
                     A payment of <b>@Model.AccountCurrency?.Code @Model.PaymentTotal /-</b>
@@ -111,32 +113,32 @@
         </span>
 
         <br />
-        <span class="below-rc">Below is the bifurcation of your payment:</span><br />
-        <span class="payment-span">
+        <span class="font-size-default mr-t2">Below is the bifurcation of your payment:</span><br />
+        <span class="font-size-default font-weight-500 mr-t05">
             Payment: @Model.AccountCurrency?.Code @Model.PaymentTotal
         </span><br />
 
-        @if (@Model?.TcsTotalTax?.AmountForCompany != null)
+        @if (@Model?.TcsTotalTax?.AmountForAccount != null)
         {
-            <span class="rc-tcs font-weight-500">TCS: @Model.TcsTotalTax?.AmountForCompany</span><br />
+            <span class="color-light-gray font-size-default font-weight-500">TCS: @Model.TcsTotalTax?.AmountForAccount</span><br />
         }
 
-        @if (@Model?.TdsTotalTax?.AmountForCompany != null)
+        @if (@Model?.TdsTotalTax?.AmountForAccount != null)
         {
-            <span class="rc-tcs font-weight-500">TDS: @Model.TdsTotalTax?.AmountForCompany</span><br />
+            <span class="color-light-gray font-size-default font-weight-500">TDS: @Model.TdsTotalTax?.AmountForAccount</span><br />
         }
 
         <br />
-        @if (@Model?.VoucherType == "payment")
+        @if (@Model?.VoucherType == VoucherTypeEnums.Payment.GetVoucherTypeEnumValue())
         {
-            <span class="total-receipt-span">Total Payment: @Model.PaymentTotal</span>
+            <span class="font-size-default pd-t05 font-weight-500 mr-t05">Total Payment: @Model.PaymentTotal</span>
         }
-        else if (@Model?.VoucherType == "receipt")
+        else if (@Model?.VoucherType == VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue())
         {
-            <span class="total-receipt-span">Total Receipt: @Model.PaymentTotal</span>
+            <span class="font-size-default pd-t05 font-weight-500 mr-t05">Total Receipt: @Model.PaymentTotal</span>
         }
 
         <br /><br />
-        <span class="main-span2">It has been a pleasure working with you.</span>
+        <span class="font-size-default">It has been a pleasure working with you.</span>
     </main>
 </div>
