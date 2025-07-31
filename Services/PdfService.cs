@@ -232,14 +232,17 @@ namespace GiddhTemplate.Services
                         bodyFile = "Body.cshtml";
                         break;
                     case "TemplateA":
-                        if (templateType == "RECEIPT" || templateType == "PAYMENT")
+                        if (
+                            string.Equals(request?.VoucherType, VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(request?.VoucherType, VoucherTypeEnums.Payment.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase)
+                        )
                         {
                             headerFile = null;
                             bodyFile = "Receipt_Payment_Body.cshtml";
                             isReceiptOrPayment = true;
                         }
-                        else if (request?.VoucherType == VoucherTypeEnums.PurchaseOrder.GetVoucherTypeEnumValue() ||
-                                 request?.VoucherType == VoucherTypeEnums.PurchaseBill.GetVoucherTypeEnumValue())
+                        else if (string.Equals(request?.VoucherType, VoucherTypeEnums.PurchaseOrder.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase) ||
+                                 string.Equals(request?.VoucherType, VoucherTypeEnums.PurchaseBill.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
                         {
                             headerFile = "PO_PB_Header.cshtml";
                             bodyFile = "PO_PB_Body.cshtml";
