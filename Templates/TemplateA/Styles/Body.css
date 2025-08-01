@@ -59,3 +59,12 @@ table.entry-summary tr td {
 .grid-view > .grid-item:nth-child(4n + 4) {
   text-align: right;
 }
+
+.watermark-image {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  opacity: 0.3;
+  transform: translate(-50%, -50%) rotate(-10deg) scale(2);
+  max-width: 60%;
+}

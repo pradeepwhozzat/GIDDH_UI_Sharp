@@ -7,12 +7,12 @@
 @using System.Reflection;
 @using GiddhTemplate.Models.Enums;
 
-<div id="template-main">
-    <main class="main-container">
-        <table style="width:100%;" cellspacing="0" cellpadding="0">
+<div>
+    <main>
+        <table>
             <tbody>
                 <tr>
-                    <td style="vertical-align:middle">
+                    <td class="vertical-align-middle">
                         <table>
                             <tbody>
                                 <tr>
@@ -26,25 +26,25 @@
                             </tbody>
                         </table>
                     </td>
-                    <td rowspan="2" style="text-align:right;">
+                    <td rowspan="2" class="text-right">
                         @if (@Model?.Company?.Logo?.Url?.Length > 0)
                         {
-                            <div class="clogo_figure">
-                                <img class="clogo" style="max-height: 50px;" src="@Model.Company?.Logo?.Url" style="height:@Model.Company?.Logo?.Size;" />
+                            <div>
+                                <img style="max-height: 50px;" src="@Model.Company?.Logo?.Url" style="height:@Model.Company?.Logo?.Size;" />
                             </div>
                         }
                     </td>
                 </tr>
             </tbody>
         </table>
-        <hr />
+       <div class="border-top mr-t1"></div>
         <br />
         @if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
         {
-            <span class="font-size-large">
-                <span class="main-span2">Dear</span>
+            <span class="font-size-default">
+                <span>Dear</span>
             </span><br />
-            <span class="main-span2">@Model.CustomerDetails?.Name</span><br />
+            <span>@Model.CustomerDetails?.Name</span><br />
 
             @if (!string.IsNullOrEmpty(@Model.Billing?.Address))
             {
@@ -70,7 +70,7 @@
         }
         @if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Payment.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
         {
-            <div id="template-footer">
+            <div>
                 <span class="font-size-default color-light-gray font-weight-500">@Model.Company?.Name</span><br />
                 @if (!string.IsNullOrEmpty(@Model.Company?.Billing?.Address))
                 {
@@ -110,34 +110,42 @@
                 </text>
             }
         </span>
-
         <br />
-        <span class="font-size-default mr-t2">Below is the bifurcation of your payment:</span><br />
+        <br />
+        <span class="font-size-default mr-t2">Below is the bifurcation of your payment:</span>
+        <br />
         <span class="font-size-default font-weight-500 mr-t05">
             Payment: @Model.AccountCurrency?.Code @Model.PaymentTotal
         </span><br />
 
         @if (@Model?.TcsTotalTax?.AmountForAccount != null)
         {
-            <span class="color-light-gray font-size-default font-weight-500">TCS: @Model.TcsTotalTax?.AmountForAccount</span><br />
+            <span class="font-size-default font-weight-500">TCS: @Model.TcsTotalTax?.AmountForAccount</span><br />
         }
 
         @if (@Model?.TdsTotalTax?.AmountForAccount != null)
         {
-            <span class="color-light-gray font-size-default font-weight-500">TDS: @Model.TdsTotalTax?.AmountForAccount</span><br />
+            <span class="font-size-default font-weight-500">TDS: @Model.TdsTotalTax?.AmountForAccount</span><br />
         }
 
         <br />
+
         @if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Payment.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
         {
-            <span class="font-size-default pd-t05 font-weight-500 mr-t05">Total Payment: @Model.PaymentTotal</span>
+            <span class="font-size-default pd-t05 font-weight-500 mr-t05 border-top">Total Payment: @Model.PaymentTotal</span>
         }
         else if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
         {
-            <span class="font-size-default pd-t05 font-weight-500 mr-t05">Total Receipt: @Model.PaymentTotal</span>
+            <span class="font-size-default pd-t05 font-weight-500 mr-t05 border-top">Total Receipt: @Model.PaymentTotal</span>
         }
 
         <br /><br />
         <span class="font-size-default">It has been a pleasure working with you.</span>
     </main>
+    @if (Model?.Company?.Logo?.Url?.Length > 0)
+    {
+        <img src="@Model.Company.Logo.Url"
+            height="@Model?.Company?.Logo?.Size" 
+            class="watermark-image" />
+    }
 </div>
