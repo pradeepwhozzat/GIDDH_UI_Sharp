@@ -29,9 +29,7 @@
                     <td rowspan="2" class="text-right">
                         @if (@Model?.Company?.Logo?.Url?.Length > 0)
                         {
-                            <div>
-                                <img style="max-height: 50px;" src="@Model.Company?.Logo?.Url" style="height:@Model.Company?.Logo?.Size;" />
-                            </div>
+                            <img src="@Model.Company?.Logo?.Url" height="@Model?.Company?.Logo?.Size" width="auto" />
                         }
                     </td>
                 </tr>
@@ -101,7 +99,7 @@
             @if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Payment.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
             {
                 <text>
-                    A payment of <b>@Model.AccountCurrency?.Code @Model.PaymentTotal /-</b>
+                    A payment of  <span class="font-weight-500">@Model.AccountCurrency?.Code @Model.PaymentTotal /-</span>
                     @if (@Model?.ChequeNumber != null)
                     {
                         @: via <u>cheque number @Model.ChequeNumber</u>
