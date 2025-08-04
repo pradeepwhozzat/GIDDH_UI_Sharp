@@ -140,7 +140,7 @@
                                                 </tr>
                                             }
                                             <tr>
-                                                <td colspan="100%" class="p-0 pd-t1">
+                                                <td colspan="100%" class="p-0 pd-t1 pd-b1">
                                                     <div class="grid-view">
                                                         <div class="grid-item">
                                                             @if (Model?.Settings?.CustomerName?.Display == true)
@@ -150,7 +150,7 @@
                                                             }
                                                             @if ((Model?.Settings?.AttentionTo?.Display == true && !string.IsNullOrEmpty(Model?.AttentionTo)) || (Model?.Settings?.CustomerEmail?.Display == true && !string.IsNullOrEmpty(Model?.CustomerDetails?.Email)) || (Model?.Settings?.CustomerContactNumber?.Display == true && !string.IsNullOrEmpty(Model?.CustomerDetails?.ContactNumber)))
                                                             {
-                                                                <strong class="pd-t1">@Model?.Settings?.AttentionTo?.Label</strong>
+                                                                <strong>@Model?.Settings?.AttentionTo?.Label</strong>
                                                                 @if (Model?.Settings?.AttentionTo?.Display == true)
                                                                 {
                                                                     <p class="no-wrap">@Model?.AttentionTo</p>
@@ -200,7 +200,7 @@
                                                     </div>
                                                     
                                                     <div style="display: flex;" class="pd-t1">
-                                                        <div class="grid-view grid-columns-4" style="width: 85%; flex-grow: 1;">
+                                                        <div class="grid-view grid-columns-4" style="flex-grow: 1;">
                                                             @if (Model?.Settings?.DisplayExchangeRate?.Display == true && Model?.ExchangeRate != null)
                                                             {
                                                                 <div class="grid-item">
@@ -230,7 +230,7 @@
                                                                 </div>
                                                             }
                                                         </div>
-                                                        <div class="text-right" style="width: 15%;">
+                                                        <div class="text-right">
                                                             @if (Model?.Settings?.DueDate?.Display == true && !string.IsNullOrEmpty(Model?.DueDate))
                                                             {
                                                                 <div class="grid-item">
