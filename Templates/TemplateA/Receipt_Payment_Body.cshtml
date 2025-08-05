@@ -1,0 +1,149 @@
+@model InvoiceData.Root;
+@using InvoiceData;
+@using System;
+@using System.Net;
+@using System.Collections.Generic;
+@using System.Linq;
+@using System.Reflection;
+@using GiddhTemplate.Models.Enums;
+
+<div>
+    <main>
+        <table>
+            <tbody>
+                <tr>
+                    <td class="vertical-align-middle">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="font-size-large text-uppercase font-weight-500">
+                                        @Model.VoucherType&nbsp;&nbsp;&nbsp;&nbsp;#@Model.VoucherNumber
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="color-light-gray font-size-default">@Model.VoucherDate</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td rowspan="2" class="text-right">
+                        @if (@Model?.Company?.Logo?.Url?.Length > 0)
+                        {
+                            <img src="@Model.Company?.Logo?.Url" height="@Model?.Company?.Logo?.Size" width="auto" />
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+       <div class="border-top mr-t1"></div>
+        <br />
+        @if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
+        {
+            <span class="font-size-default">
+                <span>Dear</span>
+            </span><br />
+            <span>@Model.CustomerDetails?.Name</span><br />
+
+            @if (!string.IsNullOrEmpty(@Model.Billing?.Address))
+            {
+                <span class="color-light-gray font-size-default">@Model.Billing?.Address</span><br />
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.AttentionTo))
+            {
+                <span class="color-light-gray font-size-default">Att: @Model.AttentionTo</span><br />
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.CustomerDetails?.Email) || !string.IsNullOrEmpty(@Model.CustomerDetails?.ContactNumber))
+            {
+                <span class="color-light-gray font-size-default">
+                    @Model.CustomerDetails?.Email
+                    @if (!string.IsNullOrEmpty(@Model.CustomerDetails?.Email) && !string.IsNullOrEmpty(@Model.CustomerDetails?.ContactNumber))
+                    {
+                        @: , 
+                    }
+                    @Model.CustomerDetails?.ContactNumber
+                </span><br />
+            }
+        }
+        @if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Payment.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
+        {
+            <div>
+                <span class="font-size-default color-light-gray font-weight-500">@Model.Company?.Name</span><br />
+                @if (!string.IsNullOrEmpty(@Model.Company?.Billing?.Address))
+                {
+                    <span class="font-size-default color-light-gray">@Model.Company?.Billing?.Address</span><br />
+                }
+                @if (!string.IsNullOrEmpty(@Model.Company?.Billing?.TaxNumber))
+                {
+                    <span class="font-size-default color-light-gray">GSTIN: @Model.Company?.Billing?.TaxNumber</span>
+                }
+            </div>
+        }
+
+        <br />
+        <span class="font-size-default">
+            @if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
+            {
+                <text>
+                    Thank you for your payment of
+                    <span class="font-weight-500">@Model.AccountCurrency?.Code @Model.PaymentTotal /-</span>
+                    @if (@Model?.ChequeNumber != null)
+                    {
+                        @: via <u>cheque number @Model.ChequeNumber</u>
+                    }
+                    .
+                </text>
+            }
+
+            @if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Payment.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
+            {
+                <text>
+                    A payment of  <span class="font-weight-500">@Model.AccountCurrency?.Code @Model.PaymentTotal /-</span>
+                    @if (@Model?.ChequeNumber != null)
+                    {
+                        @: via <u>cheque number @Model.ChequeNumber</u>
+                    }
+                    has been made.
+                </text>
+            }
+        </span>
+        <br />
+        <br />
+        <span class="font-size-default mr-t2">Below is the bifurcation of your payment:</span>
+        <br />
+        <span class="font-size-default font-weight-500 mr-t05">
+            Payment: @Model.AccountCurrency?.Code @Model.PaymentTotal
+        </span><br />
+
+        @if (@Model?.TcsTotalTax?.AmountForAccount != null)
+        {
+            <span class="font-size-default font-weight-500">TCS: @Model.TcsTotalTax?.AmountForAccount</span><br />
+        }
+
+        @if (@Model?.TdsTotalTax?.AmountForAccount != null)
+        {
+            <span class="font-size-default font-weight-500">TDS: @Model.TdsTotalTax?.AmountForAccount</span><br />
+        }
+
+        <br />
+
+        @if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Payment.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
+        {
+            <span class="font-size-default pd-t05 font-weight-500 mr-t05 border-top">Total Payment: @Model.PaymentTotal</span>
+        }
+        else if (string.Equals(Model?.VoucherType, VoucherTypeEnums.Receipt.GetVoucherTypeEnumValue(), StringComparison.OrdinalIgnoreCase))
+        {
+            <span class="font-size-default pd-t05 font-weight-500 mr-t05 border-top">Total Receipt: @Model.PaymentTotal</span>
+        }
+
+        <br /><br />
+        <span class="font-size-default">It has been a pleasure working with you.</span>
+    </main>
+    @if (Model?.Company?.Logo?.Url?.Length > 0)
+    {
+        <img src="@Model.Company.Logo.Url"
+            height="@Model?.Company?.Logo?.Size" 
+            class="watermark-image" />
+    }
+</div>

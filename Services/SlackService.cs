@@ -39,7 +39,7 @@ namespace GiddhTemplate.Services
                     { "errorStackTrace", stackTrace }
                 };
 
-                Console.WriteLine($"Json payload: {string.Join(", ", keyValuePairs.Select(kv => $"{kv.Key}={kv.Value}"))}");
+                // Console.WriteLine($"Json payload: {string.Join(", ", keyValuePairs.Select(kv => $"{kv.Key}={kv.Value}"))}");
                 using var _httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
 
                 var json = JsonSerializer.Serialize(keyValuePairs);

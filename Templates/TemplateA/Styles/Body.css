@@ -50,12 +50,22 @@ table.entry-summary tr td {
 }
 
 .grid-view {
+  --grid-column: 3;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(var(--grid-column), 1fr);
   grid-row-gap: 10px;
   align-items: start;
 }
 
-.grid-view > .grid-item:nth-child(4n + 4) {
-  text-align: right;
+.grid-view.grid-columns-4 {
+    --grid-column: 4;
+}
+
+.watermark-image {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  opacity: 0.3;
+  transform: translate(-50%, -50%) rotate(-10deg) scale(2);
+  max-width: 60%;
 }

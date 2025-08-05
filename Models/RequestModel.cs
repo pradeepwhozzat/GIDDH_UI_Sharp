@@ -1,3 +1,4 @@
+using GiddhTemplate.Models.Enums;
 namespace InvoiceData
 {
     public class Settings
@@ -410,5 +411,8 @@ namespace InvoiceData
         public List<CommonDiscountEntry>? CommonDiscountEntries { get; set; }
         public double? OtherDiscount { get; set; }
         public string? VoucherType { get; set; }
+        public VoucherTypeEnums VoucherTypeEnums { get; set; }
+        public double? PaymentTotal { get; set; }
+        public string? ChequeNumber { get; set; }
     }
 }
