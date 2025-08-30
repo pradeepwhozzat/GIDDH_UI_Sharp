@@ -1,0 +1,258 @@
+@model InvoiceData.Root;
+@using InvoiceData;
+@using System.Net;
+@using System.Collections.Generic;
+@using System.Linq;
+
+@functions {
+    /** Cache for settings to avoid repeated property lookups */
+    private readonly Dictionary<string, Setting> _settingCache = new Dictionary<string, Setting>();
+
+    /**
+     * Gets the label for a setting if it should be displayed
+     * @param settingName The name of the setting to retrieve
+     * @return The label text or empty string if not displayed
+     * @memberof ThermalTemplate
+     */
+    public string GetLabel(string settingName)
+    {
+        if (!_settingCache.TryGetValue(settingName, out var setting))
+        {
+            setting = Model.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
+            _settingCache[settingName] = setting ??= new Setting();
+        }
+        return setting?.Display == true ? setting?.Label ?? string.Empty : string.Empty;
+    }
+
+    /**
+     * Gets the display status for a setting
+     * @param settingName The name of the setting to check
+     * @return True if the setting should be displayed
+     * @memberof ThermalTemplate
+     */
+    public bool GetDisplayStatus(string settingName)
+    {
+        if (!_settingCache.TryGetValue(settingName, out var setting))
+        {
+            setting = Model.Settings?.GetType().GetProperty(settingName)?.GetValue(Model.Settings) as Setting;
+            _settingCache[settingName] = setting ??= new Setting();
+        }
+        return setting?.Display == true;
+    }
+
+    /**
+     * Gets the account currency code or symbol based on format preference
+     * @return Currency code or symbol
+     * @memberof ThermalTemplate
+     */
+    public string GetAccountCurrencyCodeOrSymbol()
+    {
+        return Model?.CurrencyFormat == "CODE"
+            ? Model?.AccountCurrency?.Code ?? string.Empty
+            : WebUtility.HtmlDecode(Model?.AccountCurrency?.Symbol) ?? string.Empty;
+    }
+
+    /**
+     * Gets the company currency code or symbol based on format preference
+     * @return Currency code or symbol
+     * @memberof ThermalTemplate
+     */
+    public string GetCompanyCurrencyCodeOrSymbol()
+    {
+        return Model?.CurrencyFormat == "CODE"
+            ? Model?.Company?.Currency?.Code ?? string.Empty
+            : WebUtility.HtmlDecode(Model?.Company?.Currency?.Symbol) ?? string.Empty;
+    }
+
+    /**
+     * Determines if amount should be shown for company currency
+     * @return True if multiple currency and base currency display is enabled
+     * @memberof ThermalTemplate
+     */
+    public bool IsShowAmountForCompany()
+    {
+        return Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true;
+    }
+
+    /**
+     * Checks if currency is right-to-left
+     * @param code Currency code to check
+     * @return True if currency is RTL
+     * @memberof ThermalTemplate
+     */
+    public bool IsRtlCurrency(string code)
+    {
+        HashSet<string> rtlCurrencies = new HashSet<string> { "AED" };
+        return rtlCurrencies.Contains(code);
+    }
+}
+
+<main>
+    <table class="thermal-invoice-table">
+        <tbody>
+            <!-- Header Section -->
+            <tr>
+                <td class="invoice-header">
+                    <div class="invoice-title">TAX INVOICE</div>
+                    <div class="company-name">@Model?.Company?.Name</div>
+                    <div class="company-address">@Model?.Company?.Address</div>
+                    <div class="company-gstin">GSTIN @Model?.Company?.TaxNumber</div>
+                </td>
+            </tr>
+            
+            <!-- Dotted Line Separator -->
+            <tr>
+                <td class="dotted-separator" colspan="100%"></td>
+            </tr>
+
+            <!-- Customer and Invoice Details Section -->
+            <tr>
+                <td class="details-section">
+                    <table class="details-table">
+                        <tr>
+                            <td class="customer-details">
+                                <div class="customer-name-label">Customer Name</div>
+                                <div class="customer-name-value">@Model?.CustomerDetails?.Name</div>
+                            </td>
+                            <td class="invoice-details">
+                                <div class="invoice-date">
+                                    <span class="label">Invoice Date</span>
+                                    <span class="value">@Model?.VoucherDate</span>
+                                </div>
+                                <div class="invoice-number">
+                                    <span class="label">Invoice No.</span>
+                                    <span class="value">@Model?.VoucherNumber</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <!-- Dotted Line Separator -->
+            <tr>
+                <td class="dotted-separator" colspan="100%"></td>
+            </tr>
+
+            <!-- Items Table Header -->
+            <tr>
+                <td class="table-header">
+                    <table class="header-table">
+                        <tr>
+                            <td class="col-description">Description</td>
+                            <td class="col-qty">Qty.</td>
+                            <td class="col-rate">Rate/ Item</td>
+                            <td class="col-total">Total</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <!-- Dotted Line Separator -->
+            <tr>
+                <td class="dotted-separator" colspan="100%"></td>
+            </tr>
+
+            <!-- Items Section -->
+            @if (Model?.Entries != null && Model.Entries.Any())
+            {
+                @foreach (var entry in Model.Entries)
+                {
+                    <tr>
+                        <td class="item-row">
+                            <table class="item-table">
+                                <tr>
+                                    <td class="col-description">@entry?.Description</td>
+                                    <td class="col-qty">@entry?.Stock?.Quantity?.ToString("N0")</td>
+                                    <td class="col-rate">@entry?.Stock?.Rate?.AmountForAccount?.ToString("N2")</td>
+                                    <td class="col-total">@entry?.Amount?.AmountForAccount?.ToString("N2")</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                }
+            }
+
+            <!-- Dotted Line Separator -->
+            <tr>
+                <td class="dotted-separator" colspan="100%"></td>
+            </tr>
+
+            <!-- Totals Section -->
+            <tr>
+                <td class="totals-section">
+                    <table class="totals-table">
+                        <tr>
+                            <td class="total-label">totalQuantity @Model?.Entries?.Sum(e => e?.Stock?.Quantity ?? 0).ToString("N0")</td>
+                            <td class="total-amounts">
+                                <table class="amounts-table">
+                                    <tr>
+                                        <td class="amount-label">Dis./ Item</td>
+                                        <td class="amount-value">@Model?.Entries?.Sum(e => e?.SumOfDiscounts?.AmountForAccount ?? 0).ToString("N2")</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="amount-label">Taxable Amt.</td>
+                                        <td class="amount-value">@Model?.TaxableAmount?.AmountForAccount?.ToString("N2")</td>
+                                    </tr>
+                                    @if (GetDisplayStatus("TaxBifurcation") && Model?.GstTaxesTotal != null && Model.GstTaxesTotal.Any())
+                                    {
+                                        @foreach (var tax in Model.GstTaxesTotal)
+                                        {
+                                            <tr>
+                                                <td class="amount-label">@tax?.TaxType@(tax?.TaxPercent?.ToString("N0"))%</td>
+                                                <td class="amount-value">@tax?.Amount?.AmountForAccount?.ToString("N2")</td>
+                                            </tr>
+                                        }
+                                    }
+                                    <tr class="final-total">
+                                        <td class="amount-label">Invoice Total(INR)</td>
+                                        <td class="amount-value">@Model?.GrandTotal?.AmountForAccount?.ToString("N2")</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <!-- Amount in Words -->
+            <tr>
+                <td class="amount-words">
+                    @Model?.TotalInWords?.AmountForAccount
+                </td>
+            </tr>
+
+            <!-- Dotted Line Separator -->
+            <tr>
+                <td class="dotted-separator" colspan="100%"></td>
+            </tr>
+
+            <!-- QR Code Section -->
+            @if (Model?.ShowBankQr == true && !string.IsNullOrEmpty(Model?.QRCodeBase64String))
+            {
+                <tr>
+                    <td class="qr-code-section">
+                        <img src="data:image/png;base64,@Model?.QRCodeBase64String" class="qr-code" />
+                    </td>
+                </tr>
+            }
+
+            <!-- Footer Section -->
+            <tr>
+                <td class="invoice-footer">
+                    <table class="footer-table">
+                        <tr>
+                            <td class="footer-left">
+                                <div>Thank You for your business.</div>
+                                <div>We declare that this invoice shows the actual price of the services rendered and that all particulars are true and correct.</div>
+                            </td>
+                            <td class="footer-right">
+                                @Model?.Company?.Name
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</main>
