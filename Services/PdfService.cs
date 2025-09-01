@@ -233,7 +233,7 @@ namespace GiddhTemplate.Services
                 var styles = LoadStyles(templatePath);
                 // Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
 
-                string headerFile = null, bodyFile = null, footerFile = null;
+                string headerFile = null, bodyFile = null, footerFile = "Footer.cshtml";
                 bool isReceiptOrPayment = false;
                 bool isThermal = false;
 
