@@ -216,20 +216,33 @@ namespace GiddhTemplate.Services
                 // Console.WriteLine("First : " + DateTime.Now.ToString("HH:mm:ss.fff"));
 
                 string templateType = request?.TemplateType?.ToUpper();
-                string templateFolderName = templateType == "TALLY" ? "Tally" : "TemplateA";
-
+                string templateFolderName;
+                switch (templateType)
+                {
+                    case "TALLY":
+                        templateFolderName = "Tally";
+                        break;
+                    case "THERMAL":
+                        templateFolderName = "Thermal";
+                        break;
+                    default:
+                        templateFolderName = "TemplateA";
+                        break;
+                }
                 string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", templateFolderName);
                 var styles = LoadStyles(templatePath);
                 // Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
 
-                string headerFile = null, bodyFile = null;
+                string headerFile = null, bodyFile = null, footerFile = null;
                 bool isReceiptOrPayment = false;
+                bool isThermal = false;
 
                 switch (templateFolderName)
                 {
                     case "Tally":
                         headerFile = "Header.cshtml";
                         bodyFile = "Body.cshtml";
+                        footerFile = "Footer.cshtml";
                         break;
                     case "TemplateA":
                         if (
@@ -253,9 +266,14 @@ namespace GiddhTemplate.Services
                             bodyFile = "Body.cshtml";
                         }
                         break;
+                    case "Thermal":
+                        bodyFile = "Body.cshtml";
+                        isThermal = true;
+                        break;
                     default:
                         headerFile = "Header.cshtml";
                         bodyFile = "Body.cshtml";
+                        footerFile = "Footer.cshtml";
                         break;
                 }
 
@@ -272,12 +290,21 @@ namespace GiddhTemplate.Services
                     await Task.WhenAll(renderTasks);
                     body = renderTasks[0].Result;
                 }
+                else if (isThermal)
+                {
+                    renderTasks = new[]
+                    {
+                        RenderTemplate(Path.Combine(templatePath, bodyFile), request)
+                    };
+                    await Task.WhenAll(renderTasks);
+                    body = renderTasks[0].Result;
+                }
                 else
                 {
                     renderTasks = new[]
                     {
                         RenderTemplate(Path.Combine(templatePath, headerFile), request),
-                        RenderTemplate(Path.Combine(templatePath, "Footer.cshtml"), request),
+                        RenderTemplate(Path.Combine(templatePath, footerFile), request),
                         RenderTemplate(Path.Combine(templatePath, bodyFile), request)
                     };
                     await Task.WhenAll(renderTasks);
