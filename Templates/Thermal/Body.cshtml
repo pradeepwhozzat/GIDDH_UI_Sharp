@@ -3,6 +3,7 @@
 @using System.Net
 @using System.Collections.Generic
 @using System.Linq
+
 @functions {
     /** Cache for settings to avoid repeated property lookups */
     private readonly Dictionary<string, Setting> _settingCache = new Dictionary<string, Setting>();
@@ -45,28 +46,38 @@
     }
 }
 <main>
-    <table class="thermal-invoice-table">
+    <table class="thermal-invoice-table vertical-align-top">
         <tbody>
             <!-- Header Section -->
             <tr>
-                <td class="invoice-header">
-                    @if (GetDisplayStatus("FormNameInvoice"))
+                <!-- invoice-header -->
+                <td class="text-center pd-15"> 
+                    @if (GetDisplayStatus("FormNameInvoice") || GetDisplayStatus("FormNameTaxInvoice"))
                     {
-                        <div>@Model?.Settings?.FormNameInvoice?.Label</div>
+                        <p class="font-weight-500">
+                            @if (GetDisplayStatus("FormNameInvoice") && Model?.IsTaxesApplied == false)
+                            {
+                                @GetLabel("FormNameInvoice")
+                            }
+                            else
+                            {
+                                @GetLabel("FormNameTaxInvoice")
+                            }
+                        </p>
                     }
                     @if (GetDisplayStatus("HeaderCompanyName"))
                     {
-                        <div class="company-name">@Model?.Settings?.HeaderCompanyName?.Label</div>
+                        <h1 class="font-size-large font-weight-700 mr-b05">@GetLabel("HeaderCompanyName")</h1>
                     }
-                    @if (GetDisplayStatus("ShowCompanyAddress"))
+                    @if (GetDisplayStatus("ShowCompanyAddress") && !string.IsNullOrEmpty(Model?.Company?.DefaultAddress))
                     {
-                        <div class="company-address">@Model.Company.DefaultAddress</div>
+                        <address class="mr-b05">@Model.Company.DefaultAddress</address>
                     }
-                    @if (GetDisplayStatus("CompanyTaxNumber"))
+                    @if (GetDisplayStatus("CompanyTaxNumber") && !string.IsNullOrEmpty(Model?.Company?.TaxNumber))
                     {
-                        <div class="company-tax">
-                            @GetLabel("CompanyTaxNumber") @Model?.Company?.TaxNumber
-                        </div>
+                        <p>
+                           <span class="font-weight-500">@GetLabel("CompanyTaxNumber")</span> @Model?.Company?.TaxNumber
+                        </p>
                     }
                 </td>
             </tr>
@@ -76,37 +87,44 @@
             </tr>
             <!-- Customer and Voucher Details Section -->
             <tr>
-                <td class="details-section">
-                    <table class="details-table">
+            <!--  -->
+                <td class="pd-1">
+                    <table>
                         <tr>
-                            <td class="customer-details">
+                            <td class="vertical-align-top" width="50%">
                                 @if (GetDisplayStatus("CustomerName"))
                                 {
-                                    <div class="customer-name-label">@GetLabel("CustomerName")</div>
-                                    <div class="customer-name-value">@Model?.CustomerDetails?.Name</div>
+                                    <p class="font-weight-500">@Model?.CustomerDetails?.Name</p>
+                                }
+                                @if (@GetDisplayStatus("BillingAddress") && !string.IsNullOrEmpty(Model?.Billing?.Address))
+                                {
+                                    <address>@Model?.Billing?.Address</address>
                                 }
                             </td>
-                            <td class="invoice-details">
+                            <td class="text-right vertical-align-top" width="50%">
                                 @if (GetDisplayStatus("VoucherDate"))
                                 {
-                                    <div class="voucher-date">
-                                        <span class="label">@GetLabel("VoucherDate")</span>
-                                        <span class="value">@Model?.VoucherDate</span>
-                                    </div>
+                                    <p class="mr-b05">
+                                        <span class="font-weight-500">@GetLabel("VoucherDate")</span>
+                                        <span>@Model?.VoucherDate</span>
+                                    </p>
                                 }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="vertical-align-top" width="50%">
+                                @if (@GetDisplayStatus("BillingTaxNumber") && !string.IsNullOrEmpty(Model?.Billing?.TaxNumber))
+                                {
+                                    <p>@GetLabel("BillingTaxNumber"): @Model?.Billing?.TaxNumber</p>
+                                }
+                            </td>
+                            <td class="text-right vertical-align-top" width="50%">
                                 @if (GetDisplayStatus("VoucherNumber"))
                                 {
-                                    <div class="voucher-number">
-                                        <span class="label">@GetLabel("VoucherNumber")</span>
-                                        <span class="value">@Model?.VoucherNumber</span>
-                                    </div>
-                                }
-                                @if (GetDisplayStatus("formNameInvoice"))
-                                {
-                                    <div class="invoice-for">
-                                        <span class="label">@GetLabel("formNameInvoice")</span>
-                                        <span class="value">@Model?.formNameInvoice</span>
-                                    </div>
+                                    <p class="mr-b05">
+                                        <span class="font-weight-500">@GetLabel("VoucherNumber")</span>
+                                        <span>@Model?.VoucherNumber</span>
+                                    </p>
                                 }
                             </td>
                         </tr>
@@ -119,26 +137,28 @@
             </tr>
             <!-- Items Table Header -->
             <tr>
-                <td class="table-header">
-                    <table class="header-table">
-                        <tr>
-                            @if (GetDisplayStatus("Description"))
-                            {
-                                <td class="col-description">@GetLabel("Description")</td>
-                            }
-                            @if (GetDisplayStatus("Quantity"))
-                            {
-                                <td class="col-qty">@GetLabel("Quantity")</td>
-                            }
-                            @if (GetDisplayStatus("Rate"))
-                            {
-                                <td class="col-rate">@GetLabel("Rate")</td>
-                            }
-                            @if (GetDisplayStatus("Total"))
-                            {
-                                <td class="col-total">@GetLabel("Total")</td>
-                            }
-                        </tr>
+                <td class="pd-1">
+                    <table>
+                        <thead>
+                            <tr>
+                                @if (GetDisplayStatus("Description"))
+                                {
+                                    <th width="35%" class="p-0 word-break">@GetLabel("Description")</th>
+                                }
+                                @if (GetDisplayStatus("Quantity"))
+                                {
+                                    <th width="20%" class="p-0 text-right">@GetLabel("Quantity")</th>
+                                }
+                                @if (GetDisplayStatus("Rate"))
+                                {
+                                    <th width="20%" class="p-0 text-right word-break">@GetLabel("Rate")</th>
+                                }
+                                @if (GetDisplayStatus("Total"))
+                                {
+                                    <th width="25%" class="p-0 text-right no-wrap">@GetLabel("Total")</th>
+                                }
+                            </tr>
+                        </thead>
                     </table>
                 </td>
             </tr>
@@ -152,13 +172,42 @@
                 @foreach (var entry in Model.Entries)
                 {
                     <tr>
-                        <td class="item-row">
-                            <table class="item-table">
+                        <td class="pd-t05 pd-b05 pd-l1 pd-r1">
+                            <table>
                                 <tr>
-                                    <td class="col-description">@entry?.Description</td>
-                                    <td class="col-qty">@entry?.Stock?.Quantity?.ToString("N0")</td>
-                                    <td class="col-rate">@entry?.Stock?.Rate?.AmountForAccount?.ToString("N2")</td>
-                                    <td class="col-total">@entry?.Amount?.AmountForAccount?.ToString("N2")</td>
+                                    <td width="35%" class="vertical-align-top word-break">@entry?.Description</td>
+                                    <td width="20%" class="vertical-align-top text-right no-wrap">
+                                        @if (entry?.Stock?.Quantity != null) {
+                                            @entry?.Stock?.Quantity?.ToString("N0") <span>@entry?.Stock?.StockUnit?.Code</span>
+                                        } else
+                                        {
+                                            <span>-</span>
+                                        }
+                                    </td>
+                                    <td width="20%" class="vertical-align-top text-right no-wrap">
+                                        @if (entry?.Stock?.Rate != null)
+                                        {
+                                            @entry?.Stock?.Rate?.AmountForAccount?.ToString("N2")
+                                            @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && entry.Stock.Rate?.AmountForCompany != null)
+                                            {
+                                                <p class="color-light-gray font-size-small">
+                                                    @GetCompanyCurrencyCodeOrSymbol() @entry.Stock.Rate.AmountForCompany
+                                                </p>
+                                            }
+                                        } else
+                                        {
+                                            <span>-</span>
+                                        }
+                                    </td>
+                                    <td width="25%" class="vertical-align-top text-right no-wrap">
+                                        @entry?.Amount?.AmountForAccount?.ToString("N2")
+                                        @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && entry.EntryTotal?.AmountForCompany != null)
+                                        {
+                                            <p class="color-light-gray font-size-small">
+                                                @GetCompanyCurrencyCodeOrSymbol() @entry?.EntryTotal?.AmountForCompany
+                                            </p>
+                                        }
+                                    </td>
                                 </tr>
                             </table>
                         </td>
@@ -171,31 +220,30 @@
             </tr>
             <!-- Totals Section -->
             <tr>
-                <td class="totals-section">
-                    <table class="totals-table">
+                <td class="pd-15">
+                    <table>
                         <tr>
                             @if (GetDisplayStatus("TotalQuantity"))
                             {
-                                <td class="total-label">
+                                <td class="vertical-align-top p-0" width="50%">
                                     @GetLabel("TotalQuantity")
                                     @Model?.Entries?.Sum(e => e?.Stock?.Quantity ?? 0).ToString("N0")
                                 </td>
                             }
-                            <td class="total-amounts">
-                                <table class="amounts-table">
+                            <td class="vertical-align-top p-0">
+                                <table>
                                     @if (GetDisplayStatus("Discount"))
                                     {
                                         <tr>
-                                            <td class="amount-label">@GetLabel("Discount")</td>
-                                            <td class="amount-value">@Model?.Entries?.Sum(e =>
-                                                                                            e?.SumOfDiscounts?.AmountForAccount ?? 0).ToString("N2")</td>
-                                    </tr>
-                                                                        }
+                                            <td width="60%">@GetLabel("Discount")</td>
+                                            <td class="text-right p-0" width="40%">@Model?.Entries?.Sum(e => e?.SumOfDiscounts?.AmountForAccount ?? 0).ToString("N2")</td>
+                                        </tr>
+                                    }
                                     @if (GetDisplayStatus("TaxableAmount"))
                                     {
                                         <tr>
-                                            <td class="amount-label">@GetLabel("TaxableAmount")</td>
-                                            <td class="amount-value">@Model?.TaxableAmount?.AmountForAccount?.ToString("N2")
+                                            <td width="60%">@GetLabel("TaxableAmount")</td>
+                                            <td class="text-right p-0" width="40%">@Model?.TaxableAmount?.AmountForAccount?.ToString("N2")
                                             </td>
                                         </tr>
                                     }
@@ -205,16 +253,16 @@
                                         @foreach (var tax in Model.GstTaxesTotal)
                                         {
                                             <tr>
-                                                <td class="amount-label">@tax?.TaxType@(tax?.TaxPercent?.ToString("N0"))%</td>
-                                                <td class="amount-value">@tax?.Amount?.AmountForAccount?.ToString("N2")</td>
+                                                <td width="60%">@tax?.TaxType@(tax?.TaxPercent?.ToString("N0"))%</td>
+                                                <td class="text-right p-0" width="40%">@tax?.Amount?.AmountForAccount?.ToString("N2")</td>
                                             </tr>
                                         }
                                     }
                                     @if (GetDisplayStatus("GrandTotal"))
                                     {
-                                        <tr class="final-total">
-                                            <td class="amount-label">@GetLabel("GrandTotal")</td>
-                                            <td class="amount-value">@Model?.GrandTotal?.AmountForAccount?.ToString("N2")
+                                        <tr>
+                                            <td width="60%" class="pd-t05 font-weight-500">@GetLabel("GrandTotal") (@GetAccountCurrencyCodeOrSymbol())</td>
+                                            <td width="40%" class="pd-t05 text-right p-0 font-weight-500">@Model?.GrandTotal?.AmountForAccount?.ToString("N2")
                                             </td>
                                         </tr>
                                     }
@@ -226,7 +274,7 @@
             </tr>
             <!-- Amount in Words -->
             <tr>
-                <td class="amount-words">
+                <td class="pd-1 pd-t05 font-size-large font-weight-500 text-center">
                     @Model?.TotalInWords?.AmountForAccount
                 </td>
             </tr>
@@ -238,33 +286,42 @@
             @if (GetDisplayStatus("ShowQrCode") && !string.IsNullOrEmpty(Model?.QRCodeBase64String))
             {
                 <tr>
-                    <td class="qr-code-section">
-                        <img src="data:image/png;base64,@Model?.QRCodeBase64String" class="qr-code" />
+                    <td class="text-center pd-15">
+                        <img src="data:image/png;base64,@Model?.QRCodeBase64String" width="140" height="140" class="square-image" />
                     </td>
                 </tr>
             }
             <!-- Footer Section -->
             <tr>
-                <td class="invoice-footer">
-                    <table class="footer-table">
-                        <tr>
-                            <td class="footer-left">
-                                @if (GetDisplayStatus("Thanks"))
-                                {
-                                    <div>@GetLabel("Thanks")</div>
-                                }
-                                @if (GetDisplayStatus("Message1"))
-                                {
-                                    <div>@GetLabel("Message1")</div>
-                                }
-                            </td>
-                            <td class="footer-right">
-                                @if (GetDisplayStatus("FooterCompanyName"))
-                                {
-                                    <div>@Model?.Settings?.FooterCompanyName?.Label</div>
-                                }
-                            </td>
-                        </tr>
+                <td class="pd-15">
+                    <table>
+                        <tbody>
+                        @if (GetDisplayStatus("Thanks") || GetDisplayStatus("FooterCompanyName"))
+                            {
+                            <tr>
+                                <td class="pd-0 vertical-align-top font-size-small" width="50%">
+                                    @if (GetDisplayStatus("Thanks"))
+                                    {
+                                        <p>@GetLabel("Thanks")</p>
+                                    }
+                                </td>
+                                <td class="pd-0 vertical-align-top font-weight-500 text-right" width="50%">
+                                    @if (GetDisplayStatus("FooterCompanyName"))
+                                    {
+                                        <p>@GetLabel("FooterCompanyName")</p>
+                                    }
+                                </td>
+                            </tr>
+                            }
+                            @if (GetDisplayStatus("Message1"))
+                            {
+                                <tr>
+                                    <td class="pd-0 pd-t2 vertical-align-bottom" colspan="100%">
+                                        <p>@GetLabel("Message1")</p>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
                     </table>
                 </td>
             </tr>

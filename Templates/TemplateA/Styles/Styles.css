@@ -161,7 +161,6 @@ table {
 table tr th,
 table tr td {
   border: none;
-  /* border: 1px solid currentColor; */
   text-align: left;
   padding: 2px;
   word-break: break-word;
