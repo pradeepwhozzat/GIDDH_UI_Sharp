@@ -93,9 +93,15 @@ body {
 .thermal-invoice-table {
   width: 100%;
   border-collapse: collapse;
-  border: 2px solid var(--color-border);
+  border: 1px solid #e0e0e0 !important;
   margin: 0;
   font-family: var(--font-family);
+}
+
+.thermal-invoice-table th,
+.thermal-invoice-table td {
+  border: 1px solid #f0f0f0;   /* even lighter for inner cells */
+  padding: 6px;
 }
 
 .thermal-invoice-table td {
@@ -136,9 +142,9 @@ body {
 
 /* Dotted Separator */
 .dotted-separator {
-  border-top: 1px dashed #000 !important;
-    padding: 0 !important;
-    height: 1px !important;
+  border-top: 1px dashed #e0e0e0 !important; /* light grey */
+  padding: 0 !important;
+  height: 1px !important;
 }
 
 /* Details Section */

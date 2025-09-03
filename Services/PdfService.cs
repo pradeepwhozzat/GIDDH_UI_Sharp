@@ -229,12 +229,11 @@ namespace GiddhTemplate.Services
                         templateFolderName = "TemplateA";
                         break;
                 }
-
                 string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", templateFolderName);
                 var styles = LoadStyles(templatePath);
                 // Console.WriteLine("Get Styles " + DateTime.Now.ToString("HH:mm:ss"));
 
-                string headerFile = null, bodyFile = null, footerFile = null;
+                string headerFile = null, bodyFile = null, footerFile = "Footer.cshtml";
                 bool isReceiptOrPayment = false;
                 bool isThermal = false;
 
@@ -268,9 +267,7 @@ namespace GiddhTemplate.Services
                         }
                         break;
                     case "Thermal":
-                        // headerFile = "Header.cshtml";
                         bodyFile = "Body.cshtml";
-                        // footerFile = "Footer.cshtml";
                         isThermal = true;
                         break;
                     default:
