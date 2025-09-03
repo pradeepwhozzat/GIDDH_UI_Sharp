@@ -29,8 +29,8 @@ namespace GiddhTemplate.Services
                         _browser = await Puppeteer.LaunchAsync(new LaunchOptions
                         {
                             Headless = true,
-                            // ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
-                            ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
+                            ExecutablePath = "/usr/bin/google-chrome", // Server Google Chrome path
+                            // ExecutablePath = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", // Local path MacOS
                             // ExecutablePath = "C:/Program Files/Google/Chrome/Application/chrome.exe", // Local path Windows
                             Args = new[] { "--no-sandbox", "--disable-setuid-sandbox", "--lang=en-US,ar-SA" }
                         });
@@ -316,7 +316,7 @@ namespace GiddhTemplate.Services
                 // Console.WriteLine("Get Templates " + DateTime.Now.ToString("HH:mm:ss.fff"));
                 string template = CreatePdfDocument(header, body, footer, styles.Common, styles.Header, styles.Footer, styles.Body, request, styles.Background);
                 // Console.WriteLine("Get CreatePdfDocument " + DateTime.Now.ToString("HH:mm:ss.fff"));
-                Console.WriteLine(template);
+                // Console.WriteLine(template);
 
                 await page.SetContentAsync(template);
                 await page.EmulateMediaTypeAsync(MediaType.Print);

@@ -1,68 +1,68 @@
 /* Global CSS Variables */
-@property --header-footer-body-padding {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 15px;
-}
-
 @property --font-family {
   syntax: "<string>";
   inherits: true;
-  initial-value: "Arial", sans-serif;
+  initial-value: "Inter"; /* 'Roboto' | 'Open Sans' | 'Lato' | 'Inter' */
 }
-
+@property --font-weight-200 {
+  syntax: "<integer>";
+  inherits: true;
+  initial-value: 200;
+}
 @property --font-weight-400 {
   syntax: "<integer>";
   inherits: true;
   initial-value: 400;
 }
-
 @property --font-weight-500 {
   syntax: "<integer>";
   inherits: true;
   initial-value: 500;
 }
-
 @property --font-weight-700 {
   syntax: "<integer>";
   inherits: true;
   initial-value: 700;
 }
-
 @property --font-size-default {
   syntax: "<length>";
   inherits: true;
   initial-value: 14px;
 }
-
 @property --font-size-large {
   syntax: "<length>";
   inherits: true;
-  initial-value: 16px;
+  initial-value: 18px;
 }
-
 @property --font-size-medium {
   syntax: "<length>";
   inherits: true;
   initial-value: 12px;
 }
-
 @property --font-size-small {
   syntax: "<length>";
   inherits: true;
   initial-value: 10px;
 }
-
 @property --color-primary {
   syntax: "<color>";
   inherits: true;
-  initial-value: #000000;
+  initial-value: #181b50;
 }
-
-@property --color-border {
+@property --color-secondary {
   syntax: "<color>";
   inherits: true;
-  initial-value: #000000;
+  initial-value: #ffffff;
+}
+@property --color-light {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #262626;
+}
+@property --color-light-gray {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #7c7c7c;
 }
 
 :root {
@@ -82,274 +82,96 @@
 
 html,
 body {
-  color: var(--color-primary);
-  font-family: var(--font-family);
-  font-size: var(--font-size-default);
-  font-weight: var(--font-weight-400);
-  line-height: 1.2;
+  color: #000000;
+  font-family: var(--font-family, "Inter");
+  font-size: var(--font-size-default, 14px);
+  font-weight: var(--font-weight-400, 400);
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums; 
 }
 
-/* Thermal Invoice Table */
-.thermal-invoice-table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 1px solid #e0e0e0 !important;
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
-  font-family: var(--font-family);
+  padding: 0;
+  font-size: var(--font-size-default, 14px);
 }
 
-.thermal-invoice-table th,
-.thermal-invoice-table td {
-  border: 1px solid #f0f0f0;   /* even lighter for inner cells */
-  padding: 6px;
+/* Utility */
+.color-primary {
+  color: var(--color-primary);
 }
 
-.thermal-invoice-table td {
-  border: none;
-  padding: 8px 15px;
-  vertical-align: top;
+.color-secondary {
+  color: var(--color-secondary);
 }
 
-/* Header Styles */
-.invoice-header {
-  text-align: center;
-  padding: 15px;
+.color-light {
+  color: var(--color-light) !important;
 }
 
-.invoice-title {
-  font-size: var(--font-size-large);
-  font-weight: var(--font-weight-700);
-  margin-bottom: 8px;
-  letter-spacing: 2px;
+.color-light-gray {
+  color: var(--color-light-gray) !important;
 }
 
-.company-name {
-  font-size: var(--font-size-large);
-  font-weight: var(--font-weight-700);
-  margin-bottom: 5px;
+.font-size-large {
+  font-size: var(--font-size-large, 18px) !important;
 }
 
-.company-address {
-  font-size: var(--font-size-default);
-  margin-bottom: 5px;
-  line-height: 1.3;
+.font-size-small {
+  font-size: var(--font-size-small, 10px) !important;
 }
 
-.company-gstin {
-  font-size: var(--font-size-default);
-  font-weight: var(--font-weight-500);
+.font-weight-500 {
+  font-weight: var(--font-weight-500, 500);
 }
 
-/* Dotted Separator */
-.dotted-separator {
-  border-top: 1px dashed #e0e0e0 !important; /* light grey */
-  padding: 0 !important;
-  height: 1px !important;
+.font-weight-700 {
+  font-weight: var(--font-weight-700, 700);
 }
 
-/* Details Section */
-.details-section {
-  padding: 8px 15px;
+strong {
+  font-weight: var(--font-weight-700, 700);
 }
 
-.details-table {
+address {
+  white-space: pre-line;
+  font-style: normal;
+}
+
+table {
   width: 100%;
   border-collapse: collapse;
+  border-spacing: 0;
 }
 
-.details-table td {
+table tr th,
+table tr td {
   border: none;
-  padding: 0;
-  vertical-align: top;
-}
-
-.customer-details {
-  width: 50%;
-}
-
-.customer-name-label {
-  font-size: var(--font-size-default);
-  margin-bottom: 2px;
-}
-
-.customer-name-value {
-  font-size: var(--font-size-default);
-  font-weight: var(--font-weight-500);
-}
-
-.invoice-details {
-  width: 50%;
-  text-align: right;
-}
-
-.invoice-date,
-.invoice-number {
-  margin-bottom: 5px;
-}
-
-.invoice-details .label {
-  font-size: var(--font-size-default);
-  margin-right: 10px;
-}
-
-.invoice-details .value {
-  font-size: var(--font-size-default);
-  font-weight: var(--font-weight-500);
-}
-
-/* Table Header */
-.table-header {
-  padding: 8px 15px;
-}
-
-.header-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.header-table td {
-  border: none;
-  padding: 0;
-  font-weight: var(--font-weight-500);
-}
-
-.col-description {
-  width: 40%;
   text-align: left;
+  padding: 2px;
+  word-break: break-word;
 }
 
-.col-qty {
-  width: 15%;
-  text-align: center;
-}
-
-.col-rate {
-  width: 20%;
-  text-align: right;
-}
-
-.col-total {
-  width: 25%;
-  text-align: right;
-}
-
-/* Items Section */
-.item-row {
-  padding: 4px 15px;
-}
-
-.item-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.item-table td {
-  border: none;
-  padding: 0;
-  font-size: var(--font-size-default);
-}
-
-/* Totals Section */
-.totals-section {
-  padding: 8px 15px;
-}
-
-.totals-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.totals-table td {
-  border: none;
-  padding: 0;
+.vertical-align-top {
   vertical-align: top;
 }
 
-.total-label {
-  width: 50%;
-  font-size: var(--font-size-default);
+.vertical-align-middle {
+  vertical-align: middle;
 }
 
-.total-amounts {
-  width: 50%;
-}
-
-.amounts-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.amounts-table td {
-  border: none;
-  padding: 2px 0;
-  font-size: var(--font-size-default);
-}
-
-.amount-label {
-  text-align: left;
-  width: 60%;
-}
-
-.amount-value {
-  text-align: right;
-  width: 40%;
-}
-
-.final-total td {
-  font-weight: var(--font-weight-500);
-  border-top: 1px solid var(--color-border);
-  padding-top: 5px;
-}
-
-/* Amount in Words */
-.amount-words {
-  text-align: center;
-  font-size: var(--font-size-default);
-  font-weight: var(--font-weight-500);
-  padding: 10px 15px;
-}
-
-/* QR Code Section */
-.qr-code-section {
-  text-align: center;
-  padding: 10px 15px;
-}
-
-.qr-code {
-  width: 80px;
-  height: 80px;
-}
-
-/* Footer Section */
-.invoice-footer {
-  padding: 10px 15px;
-}
-
-.footer-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.footer-table td {
-  border: none;
-  padding: 0;
+.vertical-align-bottom {
   vertical-align: bottom;
 }
 
-.footer-left {
-  width: 70%;
-  font-size: var(--font-size-small);
-  line-height: 1.3;
-}
 
-.footer-right {
-  width: 30%;
-  text-align: right;
-  font-weight: var(--font-weight-500);
-  font-size: var(--font-size-default);
-}
-
-/* Utility Classes */
 .text-center {
   text-align: center !important;
 }
@@ -358,27 +180,115 @@ body {
   text-align: right !important;
 }
 
-.font-weight-500 {
-  font-weight: var(--font-weight-500);
+
+.mr-t05 {
+  margin-top: 5px !important;
 }
 
-.font-weight-700 {
-  font-weight: var(--font-weight-700);
+
+.mr-t2 {
+  margin-top: 20px !important;
+}
+
+
+.mr-b05 {
+  margin-bottom: 5px !important;
+}
+
+
+.p-0 {
+  padding: 0;
+}
+.py-0 {
+  padding-block: 0;
+}
+
+.pd-l1 {
+  padding-left: 10px !important;
+}
+
+
+.pd-t2 {
+  padding-top: 20px !important;
+}
+
+
+.pd-t05 {
+  padding-top: 5px !important;
+}
+
+.pd-b05 {
+  padding-bottom: 5px !important;
+}
+
+.pd-1 {
+  padding: 10px !important;
+}
+
+.pd-15 {
+  padding: 15px !important;
+}
+
+
+/* Need to correct name */
+.no-wrap {
+  white-space: nowrap !important;
+}
+/* Need to correct name */
+.word-break {
+  word-wrap: break-word !important;
+}
+
+
+.square-image {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* Print Media CSS */
 @media print {
-  .thermal-invoice-table {
-    border: 2px solid var(--color-border);
-    margin: 0;
+  table {
+    page-break-inside: auto;
+    page-break-after: auto;
   }
-  
-  body {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+
+  tfoot {
+    display: table-row-group; /* Ensure it's treated as a group of rows *
+    visibility: hidden; /* Hide it by default */
+  }
+
+  table:last-of-type tfoot {
+    visibility: visible; /* Only show the footer on the last table */
+  }
+
+  table.repeated-header > thead {
+    display: table-header-group !important; /* Ensure headers repeat on each page */
+  }
+
+  table.repeated-footer > tfoot {
+    display: table-footer-group !important; /* Ensure footers repeat on each page */
+  }
+
+  table.page-break-inside-avoid {
+    page-break-inside: avoid !important; /* Prevent table from being cut between pages */
   }
 }
 
+@page { 
+  @bottom-center {
+     content: "(" counter(page) ")"; /* counter(page) for current page  | counter(pages) for Total Page */
+     font-style: bold;
+     margin-bottom: 6px;
+  }
+}
+
+@page:first {
+  @bottom-center {
+     content: ""; /* Empty content to hide footer */
+     margin-bottom: 0;
+  }
+}
 @page {
   margin: 0.5in;
   size: A4;
