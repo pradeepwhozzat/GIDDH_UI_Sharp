@@ -87,7 +87,6 @@
             </tr>
             <!-- Customer and Voucher Details Section -->
             <tr>
-            <!--  -->
                 <td class="pd-1">
                     <table>
                         <tr>
@@ -175,7 +174,12 @@
                         <td class="pd-t05 pd-b05 pd-l1 pd-r1">
                             <table>
                                 <tr>
-                                    <td width="35%" class="vertical-align-top word-break">@entry?.Description</td>
+                                    <td width="35%" class="vertical-align-top word-break">
+                                        @entry?.Description
+                                        @if (!string.IsNullOrEmpty(entry.Stock.Variant?.Name)) {
+                                            <p class="color-light-gray font-size-small">@entry.Stock.Variant?.Name</p>
+                                        }
+                                    </td>
                                     <td width="20%" class="vertical-align-top text-right no-wrap">
                                         @if (entry?.Stock?.Quantity != null) {
                                             @entry?.Stock?.Quantity?.ToString("N0") <span>@entry?.Stock?.StockUnit?.Code</span>
@@ -188,10 +192,10 @@
                                         @if (entry?.Stock?.Rate != null)
                                         {
                                             @entry?.Stock?.Rate?.AmountForAccount?.ToString("N2")
-                                            @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && entry.Stock.Rate?.AmountForCompany != null)
+                                            @if (IsShowAmountForCompany() && entry.Stock.Rate?.AmountForCompany != null)
                                             {
                                                 <p class="color-light-gray font-size-small">
-                                                    @GetCompanyCurrencyCodeOrSymbol() @entry.Stock.Rate.AmountForCompany
+                                                    @entry.Stock.Rate.AmountForCompany
                                                 </p>
                                             }
                                         } else
@@ -201,10 +205,10 @@
                                     </td>
                                     <td width="25%" class="vertical-align-top text-right no-wrap">
                                         @entry?.Amount?.AmountForAccount?.ToString("N2")
-                                        @if (Model?.IsMultipleCurrency == true && Model?.DisplayBaseCurrency == true && entry.EntryTotal?.AmountForCompany != null)
+                                        @if (IsShowAmountForCompany() && entry.EntryTotal?.AmountForCompany != null)
                                         {
                                             <p class="color-light-gray font-size-small">
-                                                @GetCompanyCurrencyCodeOrSymbol() @entry?.EntryTotal?.AmountForCompany
+                                                @entry?.EntryTotal?.AmountForCompany
                                             </p>
                                         }
                                     </td>
@@ -223,14 +227,13 @@
                 <td class="pd-15">
                     <table>
                         <tr>
-                            @if (GetDisplayStatus("TotalQuantity"))
-                            {
-                                <td class="vertical-align-top p-0" width="50%">
-                                    @GetLabel("TotalQuantity")
-                                    @Model?.Entries?.Sum(e => e?.Stock?.Quantity ?? 0).ToString("N0")
-                                </td>
-                            }
-                            <td class="vertical-align-top p-0">
+                            <td class="vertical-align-top p-0" width="50%">
+                                @if (GetDisplayStatus("TotalQuantity"))
+                                {
+                                    @GetLabel("TotalQuantity") <span>@Model?.Entries?.Sum(e => e?.Stock?.Quantity ?? 0).ToString("N0")</span>
+                                }
+                            </td>
+                            <td class="vertical-align-top p-0" width="50%">
                                 <table>
                                     @if (GetDisplayStatus("Discount"))
                                     {
