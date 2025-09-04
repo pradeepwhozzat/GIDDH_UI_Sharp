@@ -1,62 +1,16 @@
-/** Main container styling for tax invoice template */
-main {
-  padding-left: var(--header-footer-body-padding, 15px);
-  padding-right: var(--header-footer-body-padding, 15px);
-}
-
-/** Tax invoice specific container adjustments */
-.tax-invoice-container {
-  font-family: var(--font-family, "Arial", sans-serif);
-  line-height: 1.4;
-}
-
 main {
   display: flex;
   justify-content: center;
   align-items: start;
+  padding-left: var(--header-footer-body-padding, 15px);
+  padding-right: var(--header-footer-body-padding, 15px);
 }
 
 main .thermal-invoice-table {
   max-width: 60%;
 }
-/** Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-  .details-section {
-    flex-direction: column;
-  }
-  
-  .invoice-details {
-    text-align: left;
-    margin-top: 10px;
-  }
-  
-  .total-row {
-    flex-direction: column;
-  }
-  
-  .total-amounts {
-    margin-top: 10px;
-  }
-  
-  .invoice-footer {
-    flex-direction: column;
-    text-align: left;
-  }
-  
-  .footer-right {
-    text-align: left;
-    margin-top: 10px;
-  }
-}
 
-/** Print specific adjustments */
-@media print {
-  main {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  
-  .tax-invoice-container {
-    page-break-inside: avoid;
-  }
+/* Dotted Separator */
+.dotted-separator {
+  border-top: 1px dashed var(--color-light-gray) !important; /* light grey */
 }
