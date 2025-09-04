@@ -184,27 +184,6 @@ pyroscope.write "backend" {
     }
 }
 EOF
-sudo tee /opt/elasticbeanstalk/deployment/env > /dev/null <<EOF
-# OpenTelemetry .NET Auto-Instrumentation
-OTEL_DOTNET_AUTO_HOME=/opt/otel
-OTEL_SERVICE_NAME=giddh-template-service
-OTEL_SERVICE_VERSION=1.0.0
-OTEL_RESOURCE_ATTRIBUTES=service.name=giddh-template-service,service.version=1.0.0,deployment.environment=\${GRAFANA_APP_ENV},server.region=\${SERVER_REGION}
-OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
-OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-OTEL_DOTNET_AUTO_TRACES_ENABLED=true
-OTEL_DOTNET_AUTO_METRICS_ENABLED=true
-OTEL_DOTNET_AUTO_LOGS_ENABLED=true
-
-# Pyroscope .NET Profiler
-CORECLR_ENABLE_PROFILING=1
-CORECLR_PROFILER={BD1A650D-AC5D-4896-B64F-D6FA25D6B26A}
-CORECLR_PROFILER_PATH=/opt/pyroscope/Pyroscope.Profiler.Native.so
-PYROSCOPE_APPLICATION_NAME=giddh-template-service
-PYROSCOPE_SERVER_ADDRESS=http://localhost:9999
-PYROSCOPE_ENVIRONMENT=\${GRAFANA_APP_ENV}
-PYROSCOPE_REGION=\${SERVER_REGION}
-EOF
 
 echo "[INFO] Restarting alloy service..."
 sudo systemctl daemon-reexec
