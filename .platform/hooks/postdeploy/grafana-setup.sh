@@ -12,7 +12,7 @@ sudo tee ${ALLOY_CONF_DIR}/endpoints.json > /dev/null <<EOF
       "server_region": "${SERVER_REGION}",
       "company": "Walkover",
       "product": "Giddh",
-      "service_name": "giddh-api-v2",
+      "service_name": "giddh-template",
       "orgId": "14",
       "logs": {
         "url": "http://loghub.msg91.com:3100/loki/api/v1/push"
