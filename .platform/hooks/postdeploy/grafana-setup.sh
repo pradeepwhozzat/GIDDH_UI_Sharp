@@ -44,8 +44,8 @@ local.file_match "logs" {
           },
           {
             "job"       = "application",
-            "namespace" = "/var/log/giddh",
-            "__path__"  = "/var/log/giddh/*.log",
+            "namespace" = "/var/log",
+            "__path__"  = "/var/log/web.stdout.log",
           },
       ]
       ignore_older_than = "24h"
