@@ -47,11 +47,6 @@ local.file_match "logs" {
             "namespace" = "/var/log/template-logs",
             "__path__"  = "/var/log/template-logs/*.log",
           },
-          {
-            "job"       = "application",
-            "namespace" = "/var/log",
-            "__path__"  = "/var/log/web.stdout.log",
-          },
       ]
       ignore_older_than = "24h"
       sync_period       = "10s"
