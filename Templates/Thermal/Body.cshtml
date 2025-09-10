@@ -261,11 +261,11 @@
                                             </tr>
                                         }
                                     }
-                                    @if (GetDisplayStatus("GrandTotal"))
+                                    @if (GetDisplayStatus("TotalInWords"))
                                     {
                                         <tr>
-                                            <td width="60%" class="pd-t05 font-weight-500">@GetLabel("GrandTotal") (@GetAccountCurrencyCodeOrSymbol())</td>
-                                            <td width="40%" class="pd-t05 text-right p-0 font-weight-500">@Model?.GrandTotal?.AmountForAccount?.ToString("N2")
+                                            <td width="60%" class="pd-t05 font-weight-500">@GetLabel("TotalInWords") (@GetAccountCurrencyCodeOrSymbol())</td>
+                                            <td width="40%" class="pd-t05 text-right p-0 font-weight-500">@Model?.TotalInWords?.AmountForAccount?.ToString("N2")
                                             </td>
                                         </tr>
                                     }
@@ -276,11 +276,14 @@
                 </td>
             </tr>
             <!-- Amount in Words -->
+            @if (GetDisplayStatus("TotalInWords"))
+            {
             <tr>
                 <td class="pd-1 pd-t05 font-size-large font-weight-500 text-center">
                     @Model?.TotalInWords?.AmountForAccount
                 </td>
             </tr>
+            }
             <!-- Separator -->
             <tr>
                 <td class="dotted-separator" colspan="100%"></td>
