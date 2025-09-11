@@ -130,54 +130,6 @@ prometheus.remote_write "metrics_write" {
       instance      = constants.hostname,
   }
 }
-
-// open telemetry config for tracing
-otelcol.receiver.otlp "trace" {
-      grpc { endpoint = "0.0.0.0:4317" }
-      http { endpoint = "0.0.0.0:4318" }
-      output { traces = [otelcol.processor.batch.trace_batch.input] }
-}
-
-otelcol.processor.batch "trace_batch" {
-      timeout = "10s"
-      send_batch_size = 10000
-      output { traces = [otelcol.exporter.otlp.trace_write.input] }
-}
-
-otelcol.exporter.otlp "trace_write" {
-      client {
-        endpoint = json_path(local.file.endpoints.content, ".tempo.url")[0]
-        tls { insecure = true }
-        headers = {
-            "X-Scope-OrgID" = json_path(local.file.endpoints.content, ".orgId")[0],
-        }
-        compression = "none"
-      }
-}
-
-// pyroscope config for profiling
-pyroscope.receive_http "default" {
-      http {
-          listen_address = "0.0.0.0"
-          listen_port    = 9999
-      }
-      forward_to = [pyroscope.write.backend.receiver]
-}
-
-pyroscope.write "backend" {
-      endpoint {
-          url = json_path(local.file.endpoints.content, ".pyroscope.url")[0]
-          headers = {
-              "X-Scope-OrgID" = json_path(local.file.endpoints.content, ".orgId")[0],
-          }
-      }
-    external_labels = {
-      env             = json_path(local.file.endpoints.content, ".environment")[0],
-      server_region   = json_path(local.file.endpoints.content, ".server_region")[0],
-      service_name    = json_path(local.file.endpoints.content, ".service_name")[0],
-      instance        = constants.hostname,
-    }
-}
 EOF
 
 echo "[INFO] Restarting alloy service..."
