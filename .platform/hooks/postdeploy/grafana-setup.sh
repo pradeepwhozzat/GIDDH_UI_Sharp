@@ -129,7 +129,7 @@ prometheus.remote_write "metrics_write" {
       service_name  = json_path(local.file.endpoints.content, ".service_name")[0],
       instance      = constants.hostname,
   }
-} 
+}
 EOF
 
 echo "[INFO] Restarting alloy service..."
